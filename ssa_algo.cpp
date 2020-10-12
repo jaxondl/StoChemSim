@@ -21,13 +21,13 @@ struct State {
 };
 
 
-Reaction reactions[2] = {
+/**Reaction reactions[2] = {
     {{'A'}, {'B'}, {1}, {1}, 2},
     {{'A','B'}, {'C'}, {1,1}, {1}, 3}
 };
 State initialState = {
     {'A','B','C'}, {5, 3, 0}
-};
+};**/
 
 void SSA(State currentState, vectorReaction reactions) {
     cout  SSA begin  endl;
