@@ -21,7 +21,7 @@ class GPUInputParser {
 
 private:
     string* lines; // lines of the input text file
-    unordered_map<string, int> species; // key is the species name, value is the tuple (index, count)
+    unordered_map<string, int*> species; // key is the species name, value is the list [index, count]
     Reaction* reactions; // All reactions in the CRN
 
     void add_reaction(double rrc, int* update_vector, int* reactant_coefs, string* names);
@@ -29,11 +29,11 @@ private:
 public:
     GPUInputParser(); // assumes the file is called "CRN.txt" and is located in "../input/"
     GPUInputParser(string fp); // takes a string giving the location of the text file instead of assuming it's in input
-    void process(); // Fills species and reactions vars by processing the input line by line
-    int* get_species(); // returns a list of tuples of the structure (species name, count), ordered by index in species' values
-    Reaction* get_reaction(); // returns a list of the reactions, ordered according to their occurence in the input file
-
-
+    void process(); // Fills species and reactions variables by processing the input line by line
+    int* get_start_state(); // returns an array with the count of each chemical species ordered alphabetically (A-Z)
+    int* get_start_props(); // returns an array with the starting propensity of each reaction, ordered by occurence in the input file.
+    Reaction* get_reactions(); // returns an array containing all the reactions ordered by occurence in the input file.
+    int** get_state_update_matrix(); // returns a matrix of the form [[-1, 1, -1, 0][2, -2, 0, 0]...], where each row updates the species count for a given reaction
 };
 
 #endif //CRN_SSA_WOLFRAM_PKG_GPUINPUTPARSER_H
