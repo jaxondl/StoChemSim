@@ -2,6 +2,7 @@
 // Created by Tarek on 10/16/2020.
 //
 #include <unordered_map>
+#include <string>
 using namespace std;
 
 #ifndef CRN_SSA_WOLFRAM_PKG_GPUINPUTPARSER_H
