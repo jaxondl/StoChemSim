@@ -7,7 +7,6 @@ using namespace std;
 #ifndef CRN_SSA_WOLFRAM_PKG_GPUINPUTPARSER_H
 #define CRN_SSA_WOLFRAM_PKG_GPUINPUTPARSER_H
 
-
 class GPUInputParser {
     class Reaction {
     private:
