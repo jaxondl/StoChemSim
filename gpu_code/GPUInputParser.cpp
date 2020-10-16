@@ -5,8 +5,11 @@
 #include "GPUInputParser.h"
 
 // Reaction
-GPUInputParser::Reaction::Reaction(double rrc, int *update_vector, int *reactant_coefs, string *rnames) {
-
+GPUInputParser::Reaction::Reaction(double rrc, int *update_vector, int *rcoefs, string *rnames) {
+    this->rrc = rrc;
+    this->update_vector = update_vector;
+    this->rcoefs = rcoefs;
+    this->rnames = rnames;
 }
 
 double GPUInputParser::Reaction::calculate_propensity(unordered_map<string, int> species) {
