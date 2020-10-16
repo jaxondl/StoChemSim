@@ -3,6 +3,8 @@
 //
 
 #include "GPUInputParser.h"
+#include <iostream>
+#include <fstream>
 
 // Reaction
 GPUInputParser::Reaction::Reaction(double rrc, int *update_vector, int *rcoefs, string *rnames) {
