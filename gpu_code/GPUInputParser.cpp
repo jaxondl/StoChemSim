@@ -55,17 +55,17 @@ GPUInputParser::GPUInputParser(string fp) {
     ifstream infile(fp);
     if(infile.is_open()) {
         string line = "";
+        this.num_species = 0;
+        this.num_reacts = 0;
 
         // First line is # species
         getline(infile, line);
         stringstream stream(line);
-        this.num_species = 0;
         stream >> num_species;
 
         // Second line is # reactions
         getline(infile, line);
         stringstream stream(line);
-        this.num_reacts = 0;
         stream >> num_reacts;
 
         this.lines = new vector<string>(2 + num_reacts, "");
@@ -90,15 +90,33 @@ void GPUInputParser::add_species(string name, int count) {
 }
 
 void GPUInputParser::process() {
-    for(auto& line : this.lines) {
-        for(auto& c : line) {
-            if(isdigit(c)) {
-                // decide if we're before or after the name, then collect total or number in reaction as appropriate
-            }
-            else if(c == "'") {
-                // Get the name of the species character by character until we reach ' again
-            }
+    string top_del = ";"; // split into left, right, and rrc parts
+    string mid_del = ","; // split into XX'ABC'YY components
+    string low_del = "'"; // split into XX, ABC, YY tokens
 
+    int index = 0;
+    for(auto& line : this.lines) {
+        double rrc;
+        vector<int> update_vector(this.num_species, 0);
+        vector<int> rcoefs;
+        vector<int> rnames;
+
+        vector<string> reaction_parts = this.tokenize(line, top_del);
+        left = reaction_parts[0];
+        right = reaction_parts[1];
+
+        stringstream stream(reaction_parts[2]);
+        stream >> rrc;
+
+        for(auto& component : this.tokenize(left, mid_del)){
+            for(auto& token : this.tokenize(component, low_del)){
+
+            }
+        }
+        for(auto& component : this.tokenize(right, mid_del)){
+            for(auto& token : this.tokenize(component, low_del)){
+
+            }
         }
     }
 }
@@ -117,4 +135,22 @@ GPUInputParser::Reaction* GPUInputParser::get_reactions() {
 
 vector<vector<int>> GPUInputParser::get_state_update_matrix() {
 
+}
+
+vector<string> GPUInputParser::tokenize(string s, string delimiter) {
+    size_t pos = 0;
+    string token;
+    vector<string> tokenized;
+    while ((pos = s.find(delimiter)) != std::string::npos) {
+        token = s.substr(0, pos);
+        tokenized.push_back(token);
+        s.erase(0, pos + delimiter.length());
+    }
+    return tokenized
+}
+
+bool GPUInputParser::isinteger(string s){
+    string::const_iterator it = s.begin();
+    while (it != s.end() && isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
 }
