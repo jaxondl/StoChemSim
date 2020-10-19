@@ -1,7 +1,6 @@
 //
 // Created by Tarek on 10/19/2020.
 //
-#include <stdio.h>
 #include "GPUInputParser.h"
 
 
