@@ -7,18 +7,25 @@
 #include <fstream>
 #include <stdexcept>
 #include <sstream>
+#include <cmath>
 using namespace std;
 
 // Reaction
-GPUInputParser::Reaction::Reaction(double rrc, int *update_vector, int *rcoefs, string *rnames) {
+GPUInputParser::Reaction::Reaction(double rrc, int *update_vector, int *rcoefs, string *rindices) {
     this->rrc = rrc;
     this->update_vector = update_vector;
     this->rcoefs = rcoefs;
-    this->rnames = rnames;
+    this->rindices = rindices;
 }
 
-double GPUInputParser::Reaction::calculate_propensity(unordered_map<string, int> species) {
-
+double GPUInputParser::Reaction::calculate_propensity(vector<int> start_state) {
+    double prop = rrc;
+    for(i = 0; i < this.rindices.size(); i++){
+        count = start_state[rindices[i]];
+        coef = rccoefs[i];
+        prop *= pow(count, coef)
+    }
+    return prop;
 }
 
 // GPUInputParser
@@ -81,14 +88,6 @@ GPUInputParser::GPUInputParser(string fp) {
     }
 }
 
-void GPUInputParser::add_reaction(double rrc, int *update_vector, int *reactant_coefs, string *names) {
-
-}
-
-void GPUInputParser::add_species(string name, int count) {
-
-}
-
 void GPUInputParser::process() {
     string top_del = ";"; // split into left, right, and rrc parts
     string mid_del = ","; // split into XX'ABC'YY components
@@ -99,7 +98,7 @@ void GPUInputParser::process() {
         double rrc = 0;
         vector<int> update_vector(this.num_species, 0);
         vector<int> rcoefs;
-        vector<int> rnames;
+        vector<int> rindices;
 
         vector<string> reaction_parts = this.tokenize(line, top_del);
         left = reaction_parts[0];
@@ -112,7 +111,7 @@ void GPUInputParser::process() {
             bool pre_name = true;
             int coef = 1;
             int count = NAN;
-            string name = "";
+            int rindex = NAN;
             for(auto& token : this.tokenize(component, low_del)){
                 // process the token as a species name
                 if(!is_integer(token)){
@@ -122,7 +121,7 @@ void GPUInputParser::process() {
                         this.index_keys[token] = index;
                         index++;
                     }
-                    name = token;
+                    rindex = this.index_keys[token];
                 }
                 // process the token as a coefficient
                 else if(pre_name){
@@ -138,17 +137,17 @@ void GPUInputParser::process() {
                 }
             }
             rcoefs.push_back(coef);
-            rnames.push_back(name);
+            rindices.push_back(rindex);
             if(!isnan(count)){
-                this.species[this.index_keys[name]] = count; // store count for first occurence
+                this.species[rindex] = count; // store count for first occurence
             }
-            update_vector[this.index_keys[name]] -= coef; // subtract coef since it is reactant
+            update_vector[rindex] -= coef; // subtract coef since it is reactant
         }
         for(auto& component : this.tokenize(right, mid_del)){
             bool pre_name = true;
             int coef = 1;
             int count = NAN;
-            string name = "";
+            int rindex = NAN;
             for(auto& token : this.tokenize(component, low_del)){
                 // process the token as a species name
                 if(!is_integer(token)){
@@ -158,7 +157,7 @@ void GPUInputParser::process() {
                         this.index_keys[token] = index;
                         index++;
                     }
-                    name = token;
+                    rindex = this.index_keys[token];
                 }
                     // process the token as a coefficient
                 else if(pre_name){
@@ -174,33 +173,37 @@ void GPUInputParser::process() {
                 }
             }
             if(!isnan(count)){
-                this.species[this.index_keys[name]] = count; // store count for first occurence
+                this.species[rindex] = count; // store count for first occurence
             }
-            update_vector[this.index_keys[name]] += coef; // add coef since it is a product
+            update_vector[rindex] += coef; // add coef since it is a product
         }
 
-        reactions.push_back(new Reaction(rrc, update_vector, rcoefs, rnames));
+        GPUInputParser::Reaction react(rrc, update_vector, rcoefs, rindices);
+
+        state_update_matrix.push_back(update_vector)
+        start_props.push_back(react.calculate_propensity())
+        reactions.push_back(react);
     }
 }
 
 unordered_map<string, int> GPUInputParser::get_index_keys(){
-
+    return index_keys;
 }
 
 vector<int> GPUInputParser::get_start_state() {
-
+    return start_state;
 }
 
 vector<int> GPUInputParser::get_start_props() {
-
+    return start_props;
 }
 
-GPUInputParser::Reaction* GPUInputParser::get_reactions() {
-
+vector<GPUInputParser::Reaction> GPUInputParser::get_reactions() {
+    return reactions;
 }
 
 vector<vector<int>> GPUInputParser::get_state_update_matrix() {
-
+    vector<vector<int>> state_update_matrix;
 }
 
 vector<string> GPUInputParser::tokenize(string s, string delimiter) {

@@ -15,17 +15,19 @@ class GPUInputParser {
         double rrc; // rate reaction constant
         vector<int> update_vector; // can be added to the count vector to update it if this reaction occurs
         vector<int> rcoefs; // coefficients of the reactants for calculating propensity
-        vector<string> rnames; // Keys to get the counts of the reactants.
+        vector<string> rindices; // Keys to get the counts of the reactants.
     public:
-        Reaction(double rrc, vector<int> update_vector, vector<int> rcoefs, vector<string> rnames);
-        double calculate_propensity(unordered_map<string, int> species); // take the species map, reaction calculates its own propensity from it
+        Reaction(double rrc, vector<int> update_vector, vector<int> rcoefs, vector<string> rindices);
+        double calculate_propensity(vector<int> start_state); // take the species map, reaction calculates its own propensity from it
     };
 
 private:
     vector<string> lines; // excludes the first two lines (they are stored in num_species & num_reacts respectively)
     vector<int> start_state; // vector showing the count of each species indexed as given by index_keys
+    vector<double> start_props;
     unordered_map<string, int> index_keys; // key is the species name, value is its numeric index
     vector<Reaction> reactions; // All reactions in the CRN
+    vector<vector<int>> state_update_matrix;
     int num_species;
     int num_reacts;
 
