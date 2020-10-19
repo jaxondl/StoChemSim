@@ -23,7 +23,7 @@ class GPUInputParser {
 
 private:
     vector<string> lines; // excludes the first two lines (they are stored in num_species & num_reacts respectively)
-    unordered_map<string, vector<int>> species; // key is the species name, value is the list [index, count]
+    unordered_map<string, int> species; // key is the species name, value is count
     unordered_map<string, int> index_keys; // key is the species name, value is its numeric index
     vector<Reaction> reactions; // All reactions in the CRN
     int num_species;
@@ -37,6 +37,7 @@ public:
     GPUInputParser(); // assumes the file is called "CRN.txt" and is located in "../input/"
     GPUInputParser(string fp); // takes a string giving the location of the text file instead of assuming it's in input
     void process(); // Fills species and reactions variables by processing the input line by line
+    unordered_map<string, int> get_index_keys();
     vector<int> get_start_state(); // returns an array with the count of each chemical species ordered as they occur in the input
     vector<int> get_start_props(); // returns an array with the starting propensity of each reaction, ordered by occurence in the input file.
     vector<Reaction> get_reactions(); // returns an array containing all the reactions ordered by occurence in the input file.

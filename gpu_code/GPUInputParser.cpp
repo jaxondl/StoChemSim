@@ -96,7 +96,7 @@ void GPUInputParser::process() {
 
     int index = 0;
     for(auto& line : this.lines) {
-        double rrc;
+        double rrc = 0;
         vector<int> update_vector(this.num_species, 0);
         vector<int> rcoefs;
         vector<int> rnames;
@@ -109,8 +109,37 @@ void GPUInputParser::process() {
         stream >> rrc;
 
         for(auto& component : this.tokenize(left, mid_del)){
+            bool pre_name = true;
+            int coef = 1;
+            int count = NAN;
+            string name = "";
             for(auto& token : this.tokenize(component, low_del)){
-
+                if(!is_integer(token)){
+                    pre_name = false;
+                    // if the species hasn't been encountered, give it an index then increment to get ready for next time.
+                    if(this.index_keys.find(token) == this.index_keys.end()){
+                        this.index_keys[token] = index;
+                        index++;
+                    }
+                    name = token;
+                }
+                else if(pre_name){
+                    // process it as a coefficient
+                    coef = 0;
+                    stringstream stream(token);
+                    stream >> coef;
+                }
+                else{
+                    // process it as a total count
+                    stringstream stream(token);
+                    count = 0;
+                    stream >> count;
+                }
+            }
+            rcoefs.push_back(coef);
+            rnames.push_back(name);
+            if(!isnan(count)){
+                this.
             }
         }
         for(auto& component : this.tokenize(right, mid_del)){
@@ -119,6 +148,10 @@ void GPUInputParser::process() {
             }
         }
     }
+}
+
+unordered_map<string, int> GPUInputParser::get_index_keys(){
+    
 }
 
 vector<int> GPUInputParser::get_start_state() {
