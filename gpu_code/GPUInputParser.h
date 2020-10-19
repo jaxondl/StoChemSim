@@ -17,20 +17,18 @@ class GPUInputParser {
         vector<int> rcoefs; // coefficients of the reactants for calculating propensity
         vector<string> rnames; // Keys to get the counts of the reactants.
     public:
-        Reaction(double rrc, vector<int> update_vector, vector<int> reactant_coefs, vector<string> rnames);
+        Reaction(double rrc, vector<int> update_vector, vector<int> rcoefs, vector<string> rnames);
         double calculate_propensity(unordered_map<string, int> species); // take the species map, reaction calculates its own propensity from it
     };
 
 private:
     vector<string> lines; // excludes the first two lines (they are stored in num_species & num_reacts respectively)
-    unordered_map<string, int> species; // key is the species name, value is count
+    vector<int> start_state; // vector showing the count of each species indexed as given by index_keys
     unordered_map<string, int> index_keys; // key is the species name, value is its numeric index
     vector<Reaction> reactions; // All reactions in the CRN
     int num_species;
     int num_reacts;
 
-    void add_reaction(double rrc, vector<int> update_vector, vector<int> reactant_coefs, vector<string> names);
-    void add_species(string name, int count);
     static vector<string> tokenize(string s, string delimiter);
     static bool is_integer(string s);
 public:

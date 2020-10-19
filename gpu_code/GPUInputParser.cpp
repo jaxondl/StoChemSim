@@ -114,23 +114,24 @@ void GPUInputParser::process() {
             int count = NAN;
             string name = "";
             for(auto& token : this.tokenize(component, low_del)){
+                // process the token as a species name
                 if(!is_integer(token)){
                     pre_name = false;
-                    // if the species hasn't been encountered, give it an index then increment to get ready for next time.
+                    // if the species hasn't been encountered, give it an index in the map then increment to get ready for next time.
                     if(this.index_keys.find(token) == this.index_keys.end()){
                         this.index_keys[token] = index;
                         index++;
                     }
                     name = token;
                 }
+                // process the token as a coefficient
                 else if(pre_name){
-                    // process it as a coefficient
                     coef = 0;
                     stringstream stream(token);
                     stream >> coef;
                 }
+                // process the token as a total count
                 else{
-                    // process it as a total count
                     stringstream stream(token);
                     count = 0;
                     stream >> count;
@@ -139,19 +140,51 @@ void GPUInputParser::process() {
             rcoefs.push_back(coef);
             rnames.push_back(name);
             if(!isnan(count)){
-                this.
+                this.species[this.index_keys[name]] = count; // store count for first occurence
             }
+            update_vector[this.index_keys[name]] -= coef; // subtract coef since it is reactant
         }
         for(auto& component : this.tokenize(right, mid_del)){
+            bool pre_name = true;
+            int coef = 1;
+            int count = NAN;
+            string name = "";
             for(auto& token : this.tokenize(component, low_del)){
-
+                // process the token as a species name
+                if(!is_integer(token)){
+                    pre_name = false;
+                    // if the species hasn't been encountered, give it an index in the map then increment to get ready for next time.
+                    if(this.index_keys.find(token) == this.index_keys.end()){
+                        this.index_keys[token] = index;
+                        index++;
+                    }
+                    name = token;
+                }
+                    // process the token as a coefficient
+                else if(pre_name){
+                    coef = 0;
+                    stringstream stream(token);
+                    stream >> coef;
+                }
+                    // process the token as a total count
+                else{
+                    stringstream stream(token);
+                    count = 0;
+                    stream >> count;
+                }
             }
+            if(!isnan(count)){
+                this.species[this.index_keys[name]] = count; // store count for first occurence
+            }
+            update_vector[this.index_keys[name]] += coef; // add coef since it is a product
         }
+
+        reactions.push_back(new Reaction(rrc, update_vector, rcoefs, rnames));
     }
 }
 
 unordered_map<string, int> GPUInputParser::get_index_keys(){
-    
+
 }
 
 vector<int> GPUInputParser::get_start_state() {
