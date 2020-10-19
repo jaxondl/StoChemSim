@@ -32,7 +32,7 @@ private:
     void add_reaction(double rrc, vector<int> update_vector, vector<int> reactant_coefs, vector<string> names);
     void add_species(string name, int count);
     static vector<string> tokenize(string s, string delimiter);
-    static bool isinteger(string s);
+    static bool is_integer(string s);
 public:
     GPUInputParser(); // assumes the file is called "CRN.txt" and is located in "../input/"
     GPUInputParser(string fp); // takes a string giving the location of the text file instead of assuming it's in input
