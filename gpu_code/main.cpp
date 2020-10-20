@@ -43,6 +43,6 @@ int test_gpu_input_generator(int num_species, int num_reactions, int scaler, int
 
 int main() {
     //test_gpu_input_parser("customCRN.txt");
-    test_gpu_input_generator(50, 200, 3, 5, "generatedCRN.txt");
+    test_gpu_input_generator(100, 3000, 3, 5, "generatedCRN.txt");
     return 0;
 }

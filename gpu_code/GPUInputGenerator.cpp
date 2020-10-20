@@ -24,22 +24,38 @@ void GPUInputGenerator::write_output(const string& fname) {
         vector<string> names = generate_names(num_species);
         
         unordered_map<string, bool> encounter_map;
+        bool all_names_used = false;
+        int nindex = 0;
         for(int i=0; i < num_reactions; i++){
             int num_reactants = rand() % 5 + 1;
             int num_products = rand() % 3 + 1;
             double rrc = (rand() % 10 + 1.0) / 10.0;
-            string line;
 
-            unordered_map<string, int> species_map;
+            unordered_map<string, bool> species_map;
             for(int j = 0; j < num_reactants; j++){
                 int coef = rand() % max_coef + 1;
-                string name = names.at(rand() % names.size());
 
-                // If the name has been used, don't use it again. You fool.
+                // If all names have been used, then use whichever. Otherwise generate them in order.
+                // TODO: Better system for ensuring all names get used instead of just in-order output.
+                string name;
+                if(all_names_used){
+                    int name_index = rand() % names.size();
+                    name = names.at(name_index);
+                }
+                else{
+                    name = names.at(nindex);
+                    nindex++;
+                    if(nindex == names.size()){
+                        all_names_used = true;
+                    }
+                }
+
+                // If the name has been used in the reaction, go back an iteration and re-generate the name.
                 if(species_map.find(name) != species_map.end()){
                     j--;
                     continue;
                 }
+                species_map[name] = true;
 
                 // If we have not encountered the species, we give it a count.
                 int count = -1;
@@ -66,13 +82,26 @@ void GPUInputGenerator::write_output(const string& fname) {
             species_map.clear();
             for(int j = 0; j < num_products; j++){
                 int coef = rand() % max_coef + 1;
-                string name = names.at(rand() % names.size());
 
-                // If the name has been used, don't use it again. You fool.
+                string name;
+                if(all_names_used){
+                    int name_index = rand() % names.size();
+                    name = names.at(name_index);
+                }
+                else{
+                    name = names.at(nindex);
+                    nindex++;
+                    if(nindex == names.size()){
+                        all_names_used = true;
+                    }
+                }
+
+                // If the name has been used in the reaction, go back an iteration and re-generate the name.
                 if(species_map.find(name) != species_map.end()){
                     j--;
                     continue;
                 }
+                species_map[name] = true;
 
                 // If we have not encountered the species, we give it a count.
                 int count = -1;
@@ -91,7 +120,7 @@ void GPUInputGenerator::write_output(const string& fname) {
                     outfile << "'" << count;
                 }
 
-                if(j != num_reactants - 1){
+                if(j != num_products - 1){
                     outfile << ",";
                 }
             }
@@ -115,11 +144,12 @@ vector<string> GPUInputGenerator::generate_names(int n) {
     for(int i = 0; i < n; i++){
         string name;
         for(int l = 0; l < letters; l++){
-            name += alpha[i];
-            if(alpha[i] == 'Z'){
-                letters++;
-            }
+            name += alpha[i % 26];
         }
+        if(alpha[i % 26] == "Z"){
+            letters++;
+        }
+        names.push_back(name);
     }
     return names;
 }
