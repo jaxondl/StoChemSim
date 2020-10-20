@@ -35,8 +35,8 @@ private:
     static vector<string> tokenize(string s, const string& delimiter);
     static bool is_integer(string s);
 public:
-    GPUInputParser(); // assumes the file is called "CRN.txt" and is located in "../input/"
-    explicit GPUInputParser(const string& fp); // takes a string giving the location of the text file instead of assuming it's in input
+    GPUInputParser(); // assumes the file is called "customCRN.txt" and is located in "../input/"
+    explicit GPUInputParser(const string& fname); // takes a string giving the location of the text file instead of assuming it's in input
     void process(); // Fills species and reactions variables by processing the input line by line
     unordered_map<string, int> get_index_keys();
     vector<int> get_start_state(); // returns an array with the count of each chemical species ordered as they occur in the input

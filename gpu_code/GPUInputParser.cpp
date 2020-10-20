@@ -62,8 +62,9 @@ GPUInputParser::GPUInputParser() {
     }
 }
 
-GPUInputParser::GPUInputParser(const string& fp) {
-    ifstream infile(fp);
+GPUInputParser::GPUInputParser(const string& fname) {
+    ifstream infile;
+    infile.open("../gpu_code/input/" + fname, ios_base::app|ios_base::in|ios_base::out);
     if(infile.is_open()) {
         string line;
         num_species = 0;
@@ -79,15 +80,12 @@ GPUInputParser::GPUInputParser(const string& fp) {
         stringstream stream2(line);
         stream2 >> num_reacts;
 
-        lines.push_back(to_string(num_species));
-        lines.push_back(to_string(num_reacts));
-
         while(getline(infile, line)){
             lines.push_back(line);
         }
     }
     else {
-        throw runtime_error("input file not found");
+        throw runtime_error("input file " + fname + " not found");
     }
 }
 
