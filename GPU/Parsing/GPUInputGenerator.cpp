@@ -17,7 +17,7 @@ GPUInputGenerator::GPUInputGenerator(int num_species, int num_reactions, int sca
 
 void GPUInputGenerator::write_output(const string& fname) {
     ofstream outfile;
-    outfile.open("../gpu_code/output/" + fname, ios_base::app|ios_base::in|ios_base::out);
+    outfile.open("../GPU/output/" + fname, ios_base::app|ios_base::in|ios_base::out);
     if(outfile.is_open()){
         outfile << num_species << '\n';
         outfile << num_reactions << '\n';

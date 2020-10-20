@@ -37,7 +37,7 @@ vector<int> GPUInputParser::Reaction::get_update_vector() {
 
 GPUInputParser::GPUInputParser() {
     ifstream infile;
-    infile.open("../gpu_code/input/CRN.txt", ios_base::app|ios_base::in|ios_base::out);
+    infile.open("../GPU/input/CRN.txt", ios_base::app|ios_base::in|ios_base::out);
     if(infile.is_open()) {
         string line;
 
@@ -64,7 +64,7 @@ GPUInputParser::GPUInputParser() {
 
 GPUInputParser::GPUInputParser(const string& fname) {
     ifstream infile;
-    infile.open("../gpu_code/input/" + fname, ios_base::app|ios_base::in|ios_base::out);
+    infile.open("../GPU/input/" + fname, ios_base::app|ios_base::in|ios_base::out);
     if(infile.is_open()) {
         string line;
         num_species = 0;

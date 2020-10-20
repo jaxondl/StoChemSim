@@ -1,8 +1,8 @@
 //
 // Created by Tarek on 10/19/2020.
 //
-#include "GPUInputParser.h"
-#include "GPUInputGenerator.h"
+#include "Parsing/GPUInputParser.h"
+#include "Parsing/GPUInputGenerator.h"
 #include <iostream>
 using namespace std;
 
@@ -42,7 +42,7 @@ int test_gpu_input_generator(int num_species, int num_reactions, int scaler, int
 }
 
 int main() {
-    //test_gpu_input_parser("customCRN.txt");
-    test_gpu_input_generator(100, 3000, 3, 5, "generatedCRN.txt");
+    test_gpu_input_parser("customCRN.txt");
+    //test_gpu_input_generator(100, 3000, 3, 5, "generatedCRN.txt");
     return 0;
 }
