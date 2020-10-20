@@ -20,7 +20,6 @@ class GPUInputParser {
         Reaction(double rrc, vector<int> update_vector, vector<int> rcoefs, vector<int> rindices);
         double calculate_propensity(vector<int> state); // take the species map, reaction calculates its own propensity from it
         vector<int> get_update_vector();
-        string to_string();
     };
 
 private:
@@ -44,6 +43,8 @@ public:
     vector<double> get_start_props(); // returns an array with the starting propensity of each reaction, ordered by occurence in the input file.
     vector<Reaction> get_reactions(); // returns an array containing all the reactions ordered by occurence in the input file.
     vector<vector<int>> get_state_update_matrix(); // returns a matrix of the form [[-1, 1, -1, 0][2, -2, 0, 0]...], where each row updates the species count for a given reaction
+    int get_num_species();
+    int get_num_reactions();
 };
 
 #endif //CRN_SSA_WOLFRAM_PKG_GPUINPUTPARSER_H

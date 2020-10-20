@@ -33,10 +33,6 @@ vector<int> GPUInputParser::Reaction::get_update_vector() {
     return update_vector;
 }
 
-string GPUInputParser::Reaction::to_string() {
-    return std::__cxx11::string();
-}
-
 // GPUInputParser
 
 GPUInputParser::GPUInputParser() {
@@ -233,4 +229,12 @@ bool GPUInputParser::is_integer(string s){
     string::const_iterator it = s.begin();
     while (it != s.end() && isdigit(*it)) ++it;
     return !s.empty() && it == s.end();
+}
+
+int GPUInputParser::get_num_species() {
+    return num_species;
+}
+
+int GPUInputParser::get_num_reactions() {
+    return num_reacts;
 }
