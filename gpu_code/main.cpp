@@ -2,12 +2,12 @@
 // Created by Tarek on 10/19/2020.
 //
 #include "GPUInputParser.h"
+#include "GPUInputGenerator.h"
 #include <iostream>
 using namespace std;
 
-
-int main() {
-    GPUInputParser my_parser = GPUInputParser();
+void test_gpu_input_parser(const string& fname) {
+    GPUInputParser my_parser = GPUInputParser(fname);
     my_parser.process();
 
     cout << "Start State: [";
@@ -34,6 +34,15 @@ int main() {
     for(const auto& elem : myMap) {
         std::cout << elem.first << " " << elem.second << " " << "\n";
     }
+}
 
+int test_gpu_input_generator(int num_species, int num_reactions, int scaler, int max_coef, const string& fname) {
+    GPUInputGenerator my_generator(num_species, num_reactions, scaler, max_coef);
+    my_generator.write_output(fname);
+}
+
+int main() {
+    //test_gpu_input_parser("customCRN.txt");
+    test_gpu_input_generator(50, 200, 3, 5, "generatedCRN.txt");
     return 0;
 }
