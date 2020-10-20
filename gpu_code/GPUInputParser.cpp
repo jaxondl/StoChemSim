@@ -8,62 +8,70 @@
 #include <stdexcept>
 #include <sstream>
 #include <cmath>
+#include <utility>
 using namespace std;
 
 // Reaction
-GPUInputParser::Reaction::Reaction(double rrc, int *update_vector, int *rcoefs, string *rindices) {
+GPUInputParser::Reaction::Reaction(double rrc, vector<int> update_vector, vector<int> rcoefs, vector<int> rindices) {
     this->rrc = rrc;
-    this->update_vector = update_vector;
-    this->rcoefs = rcoefs;
-    this->rindices = rindices;
+    this->update_vector = move(update_vector);
+    this->rcoefs = move(rcoefs);
+    this->rindices = move(rindices);
 }
 
-double GPUInputParser::Reaction::calculate_propensity(vector<int> start_state) {
+double GPUInputParser::Reaction::calculate_propensity(vector<int> state) {
     double prop = rrc;
-    for(i = 0; i < this.rindices.size(); i++){
-        count = start_state[rindices[i]];
-        coef = rccoefs[i];
-        prop *= pow(count, coef)
+    for(int i = 0; i < rindices.size(); i++){
+        int count = state.at(rindices.at(i));
+        int coef = rcoefs.at(i);
+        prop *= pow(count, coef);
     }
     return prop;
 }
 
+vector<int> GPUInputParser::Reaction::get_update_vector() {
+    return update_vector;
+}
+
+string GPUInputParser::Reaction::to_string() {
+    return std::__cxx11::string();
+}
+
 // GPUInputParser
 
-GPUInputParser::GPUInputParser() throws FileNotFoundException {
-    ifstream infile("input/CRN.txt");
+GPUInputParser::GPUInputParser() {
+    ifstream infile;
+    infile.open("CRN.txt", ios_base::app|ios_base::in|ios_base::out);
     if(infile.is_open()) {
-        string line = "";
+        string line;
 
         // First line is # species
         getline(infile, line);
         stringstream stream(line);
-        this.num_species = 0;
+        num_species = 0;
         stream >> num_species;
 
         // Second line is # reactions
         getline(infile, line);
-        stringstream stream(line);
-        this.num_reacts = 0;
-        stream >> num_reacts;
-
-        this.lines = new vector<string>(num_reacts, "");
+        stringstream stream2(line);
+        num_reacts = 0;
+        stream2 >> num_reacts;
 
         while(getline(infile, line)){
-            vector.push_back(line)
+            lines.push_back(line);
         }
     }
     else {
-        throw new FileNotFoundException("input/CRN.txt not found")
+        throw runtime_error("input/CRN.txt not found");
     }
 }
 
-GPUInputParser::GPUInputParser(string fp) {
+GPUInputParser::GPUInputParser(const string& fp) {
     ifstream infile(fp);
     if(infile.is_open()) {
-        string line = "";
-        this.num_species = 0;
-        this.num_reacts = 0;
+        string line;
+        num_species = 0;
+        num_reacts = 0;
 
         // First line is # species
         getline(infile, line);
@@ -72,19 +80,18 @@ GPUInputParser::GPUInputParser(string fp) {
 
         // Second line is # reactions
         getline(infile, line);
-        stringstream stream(line);
-        stream >> num_reacts;
+        stringstream stream2(line);
+        stream2 >> num_reacts;
 
-        this.lines = new vector<string>(2 + num_reacts, "");
-        this.lines.push_back(to_string(num_species))
-        this.lines.push_Back(to_string(num_reacts))
+        lines.push_back(to_string(num_species));
+        lines.push_back(to_string(num_reacts));
 
         while(getline(infile, line)){
-            vector.push_back(line)
+            lines.push_back(line);
         }
     }
     else {
-        throw new FileNotFoundException("input file not found")
+        throw runtime_error("input file not found");
     }
 }
 
@@ -93,95 +100,98 @@ void GPUInputParser::process() {
     string mid_del = ","; // split into XX'ABC'YY components
     string low_del = "'"; // split into XX, ABC, YY tokens
 
+    vector<int> tmp(num_species, 0);
+    start_state = tmp;
+
     int index = 0;
-    for(auto& line : this.lines) {
+    for(auto& line : lines) {
         double rrc = 0;
-        vector<int> update_vector(this.num_species, 0);
+        vector<int> update_vector(num_species, 0);
         vector<int> rcoefs;
         vector<int> rindices;
 
-        vector<string> reaction_parts = this.tokenize(line, top_del);
-        left = reaction_parts[0];
-        right = reaction_parts[1];
+        vector<string> reaction_parts = tokenize(line, top_del);
+        string left = reaction_parts[0];
+        string right = reaction_parts[1];
 
         stringstream stream(reaction_parts[2]);
         stream >> rrc;
 
-        for(auto& component : this.tokenize(left, mid_del)){
+        for(auto& component : tokenize(left, mid_del)){
             bool pre_name = true;
             int coef = 1;
-            int count = NAN;
-            int rindex = NAN;
-            for(auto& token : this.tokenize(component, low_del)){
+            int count = -1;
+            int rindex = -1;
+            for(auto& token : tokenize(component, low_del)){
                 // process the token as a species name
                 if(!is_integer(token)){
                     pre_name = false;
                     // if the species hasn't been encountered, give it an index in the map then increment to get ready for next time.
-                    if(this.index_keys.find(token) == this.index_keys.end()){
-                        this.index_keys[token] = index;
+                    if(index_keys.find(token) == index_keys.end()){
+                        index_keys[token] = index;
                         index++;
                     }
-                    rindex = this.index_keys[token];
+                    rindex = index_keys[token];
                 }
                 // process the token as a coefficient
                 else if(pre_name){
                     coef = 0;
-                    stringstream stream(token);
-                    stream >> coef;
+                    stringstream stream2(token);
+                    stream2 >> coef;
                 }
                 // process the token as a total count
                 else{
-                    stringstream stream(token);
                     count = 0;
-                    stream >> count;
+                    stringstream stream3(token);
+                    stream3 >> count;
                 }
             }
             rcoefs.push_back(coef);
             rindices.push_back(rindex);
-            if(!isnan(count)){
-                this.species[rindex] = count; // store count for first occurence
+            if(count != -1){
+                start_state.at(rindex) = count; // store count for first occurence
             }
             update_vector[rindex] -= coef; // subtract coef since it is reactant
         }
-        for(auto& component : this.tokenize(right, mid_del)){
+        for(auto& component : tokenize(right, mid_del)){
             bool pre_name = true;
             int coef = 1;
-            int count = NAN;
-            int rindex = NAN;
-            for(auto& token : this.tokenize(component, low_del)){
+            int count = -1;
+            int rindex = -1;
+            for(auto& token : tokenize(component, low_del)){
                 // process the token as a species name
                 if(!is_integer(token)){
                     pre_name = false;
                     // if the species hasn't been encountered, give it an index in the map then increment to get ready for next time.
-                    if(this.index_keys.find(token) == this.index_keys.end()){
-                        this.index_keys[token] = index;
+                    if(index_keys.find(token) == index_keys.end()){
+                        index_keys[token] = index;
                         index++;
                     }
-                    rindex = this.index_keys[token];
+                    rindex = index_keys[token];
                 }
                     // process the token as a coefficient
                 else if(pre_name){
                     coef = 0;
-                    stringstream stream(token);
-                    stream >> coef;
+                    stringstream stream2(token);
+                    stream2 >> coef;
                 }
                     // process the token as a total count
                 else{
-                    stringstream stream(token);
                     count = 0;
-                    stream >> count;
+                    stringstream stream3(token);
+                    stream3 >> count;
                 }
             }
-            if(!isnan(count)){
-                this.species[rindex] = count; // store count for first occurence
+            if(count != -1){
+                start_state[rindex] = count; // store count for first occurence
             }
             update_vector[rindex] += coef; // add coef since it is a product
         }
 
         GPUInputParser::Reaction react(rrc, update_vector, rcoefs, rindices);
 
-        state_update_matrix.push_back(update_vector)
-        start_props.push_back(react.calculate_propensity())
+        state_update_matrix.push_back(update_vector);
+        start_props.push_back(react.calculate_propensity(start_state));
         reactions.push_back(react);
     }
 }
@@ -194,7 +204,7 @@ vector<int> GPUInputParser::get_start_state() {
     return start_state;
 }
 
-vector<int> GPUInputParser::get_start_props() {
+vector<double> GPUInputParser::get_start_props() {
     return start_props;
 }
 
@@ -203,10 +213,10 @@ vector<GPUInputParser::Reaction> GPUInputParser::get_reactions() {
 }
 
 vector<vector<int>> GPUInputParser::get_state_update_matrix() {
-    vector<vector<int>> state_update_matrix;
+    return state_update_matrix;
 }
 
-vector<string> GPUInputParser::tokenize(string s, string delimiter) {
+vector<string> GPUInputParser::tokenize(string s, const string& delimiter) {
     size_t pos = 0;
     string token;
     vector<string> tokenized;
@@ -215,7 +225,8 @@ vector<string> GPUInputParser::tokenize(string s, string delimiter) {
         tokenized.push_back(token);
         s.erase(0, pos + delimiter.length());
     }
-    return tokenized
+    tokenized.push_back(s);
+    return tokenized;
 }
 
 bool GPUInputParser::is_integer(string s){
