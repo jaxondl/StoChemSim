@@ -3,6 +3,9 @@
 #include <string>
 #include <unordered_map>
 #include <random>
+#include "InputVerifier.h"
+
+
 //#include <bits/stdc++.h> 
 using namespace std;
 
@@ -96,32 +99,36 @@ void SSA(State currentState, vector<Reaction> reactions) {
 }
 
 int main() {
-    State initialState;
-    initialState.moleculeCoefficientMap["A"] = 5;
-    initialState.moleculeCoefficientMap["B"] = 3;
-    initialState.moleculeCoefficientMap["C"] = 0;
+    InputVerifier *iv = new InputVerifier;
+    bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\sample_input_SSA_file.txt");
 
-    Reaction reaction1;
-    reaction1.reactantTypes.push_back("A");
-    reaction1.productTypes.push_back("B");
-    reaction1.reactantCoefficients.push_back(1);
-    reaction1.productCoefficients.push_back(1);
-    reaction1.k = 2;
+    if (safeToRun) {
+        State initialState;
+        initialState.moleculeCoefficientMap["A"] = 5;
+        initialState.moleculeCoefficientMap["B"] = 3;
+        initialState.moleculeCoefficientMap["C"] = 0;
 
-    Reaction reaction2;
-    reaction2.reactantTypes.push_back("A");
-    reaction2.reactantTypes.push_back("B");
-    reaction2.productTypes.push_back("C");
-    reaction2.reactantCoefficients.push_back(1);
-    reaction2.reactantCoefficients.push_back(1);
-    reaction2.productCoefficients.push_back(1);
-    reaction2.k = 3;
+        Reaction reaction1;
+        reaction1.reactantTypes.push_back("A");
+        reaction1.productTypes.push_back("B");
+        reaction1.reactantCoefficients.push_back(1);
+        reaction1.productCoefficients.push_back(1);
+        reaction1.k = 2;
 
-    vector<Reaction> reactions;
-    reactions.push_back(reaction1);
-    reactions.push_back(reaction2);
+        Reaction reaction2;
+        reaction2.reactantTypes.push_back("A");
+        reaction2.reactantTypes.push_back("B");
+        reaction2.productTypes.push_back("C");
+        reaction2.reactantCoefficients.push_back(1);
+        reaction2.reactantCoefficients.push_back(1);
+        reaction2.productCoefficients.push_back(1);
+        reaction2.k = 3;
 
-    SSA(initialState, reactions);
+        vector<Reaction> reactions;
+        reactions.push_back(reaction1);
+        reactions.push_back(reaction2);
 
+        SSA(initialState, reactions);
+    }
     return 0;
 }
