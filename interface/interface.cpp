@@ -15,6 +15,10 @@ void preprocess_input (	std::vector<std::int64_t> initCounts,
 						int64_t tEnd);
 std::vector<double> run_SSA();
 
+/* =========backend code start=======
+*  please follow the fucntion prototype
+*  =========backend code end=======/
+
 /* Return the version of Library Link */
 DLLEXPORT mint WolframLibrary_getVersion() { return WolframLibraryVersion; }
 
@@ -30,13 +34,14 @@ DLLEXPORT void WolframLibrary_uninitialize(WolframLibraryData libData) {
 
 /* convert a 2-dimentional NumericArray to a 2-dimentional vector */
 static std::vector<std::vector<int64_t>> numericMatrixtoVector(const void *in0, mint const *dims) {
+	const int64_t *in = static_cast<const int64_t *>(in0);
 	std::vector<std::vector<int64_t>> out;
 	mint row = dims[0];
 	mint col = dims[1];
 	for (mint i = 0; i < row; i++) {
 		std::vector<int64_t> out_row;
 		for (mint j = 0; j < col; j++) {
-			out_row.push_back(in[i][j]);
+			out_row.push_back(in[i*col + j]);
 		}
 		out.push_back(out_row);
 	}
