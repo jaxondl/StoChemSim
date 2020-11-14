@@ -8,12 +8,13 @@
 /* function prototypes for the backend team 
    TODO: make it a header file, and link it
 */
-void preprocess_input (	std::vector<std::int64_t> initCounts,
-						std::vector<std::vector<std::int64_t>> reactCounts, 
-						std::vector<std::vector<std::int64_t>> prodCounts, 
-						std::vector<std::int64_t> rates, 
+
+void preprocess_input (	std::vector<int64_t> initCounts,
+						std::vector<std::vector<int64_t>> reactCounts, 
+						std::vector<std::vector<int64_t>> prodCounts, 
+						std::vector<int64_t> rates, 
 						int64_t tEnd);
-std::vector<double> run_SSA();
+std::vector<int64_t> run_SSA();
 
 /* =========backend code start=======
 *  please follow the fucntion prototype
@@ -59,8 +60,8 @@ static std::vector<int64_t> numericArraytoVector(const void *in0, mint const len
 }
 
 /* convert a 1-dimentional vector to a 1-dimentional NumericArray */
-static void vectortoNumericArray(void *Mout0, std::vector<double> out) {
-	double *Mout =  static_cast<double *>(Mout0);
+static void vectortoNumericArray(void *Mout0, std::vector<int64_t> out) {
+	int64_t *Mout =  static_cast<int64_t *>(Mout0);
 	for (int64_t i = 0; i < out.size(); i++) {
 		Mout[i] = out[i];
 	}
@@ -81,19 +82,19 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
 	data_in = naFuns->MNumericArray_getData(MinitCounts);
 	length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
-	std::vector<std::int64_t> initCounts = numericArraytoVector(data_in, length);
+	std::vector<int64_t> initCounts = numericArraytoVector(data_in, length);
 
 	// convert reactCounts
 	MNumericArray MreactCounts = MArgument_getMNumericArray(Args[1]);
 	data_in = naFuns->MNumericArray_getData(MreactCounts);
 	dims = naFuns->MNumericArray_getDimensions(MreactCounts);
-	std::vector<std::vector<std::int64_t>> reactCounts = numericMatrixtoVector(data_in, dims);
+	std::vector<std::vector<int64_t>> reactCounts = numericMatrixtoVector(data_in, dims);
 
 	// convert prodCounts
 	MNumericArray MprodCounts = MArgument_getMNumericArray(Args[2]);
 	data_in = naFuns->MNumericArray_getData(MprodCounts);
 	dims = naFuns->MNumericArray_getDimensions(MprodCounts);
-	std::vector<std::vector<std::int64_t>> prodCounts = numericMatrixtoVector(data_in, dims);
+	std::vector<std::vector<int64_t>> prodCounts = numericMatrixtoVector(data_in, dims);
 
 	// convert rates
 	MNumericArray Mrates = MArgument_getMNumericArray(Args[3]);
@@ -107,13 +108,13 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
 
 	// CRN SSA process: pass everything to backend
 	preprocess_input(initCounts, reactCounts, prodCounts, rates, tEnd);
-	std::vector<double> out = run_SSA();
+	std::vector<int64_t> out = run_SSA();
 
 	// output setup
 	MNumericArray Mout;
 	int64_t out_size = out.size();
 	const mint *dims_out = &out_size;
-	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
+	err = naFuns->MNumericArray_new(MNumericArray_Type_Bit64, 1, dims_out, &Mout);
 	if (err != 0) {
 			goto cleanup;
 	}
