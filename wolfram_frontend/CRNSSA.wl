@@ -31,34 +31,14 @@ init[s_List, n_] := Sequence@@(init[#, n]& /@ s)
 
 GetSpecies[rxnsys_] := Sort[Union[
 	Cases[Cases[rxnsys, rxn[r_, p_, _] :> Sequence[r, p]] /. Times | Plus -> Sequence, s_Symbol | s_Symbol[__]],
-	Cases[rxnsys, init[x_, _] :> x]]]
-GetSpecies[rxnsys_, pattern_] := Sort[Cases[GetSpecies[rxnsys], pattern]]
+	Cases[rxnsys, init[x_, _] :> x]
+]]
+GetSpecies[rxnsys_, pattern_] := Cases[GetSpecies[rxnsys], pattern]
 
 
-GetInitCounts[inits_, spcs_] := Module[{GetCount},
-	GetCount[spc_] := Module[{res},
-		res = Cases[inits, init[spc, count_] :> count];
-		If[Length[res] === 0,
-			0,
-			res[[1]]
-		]
-	];
-	GetCount /@ spcs
-]
-
-
-GetReactCounts[rxns_, spcs_] := Module[{reactExprs},
-	reactExprs = Cases[rxns,rxn[r_, _, _]:>r];
-	Outer[Coefficient[#1, #2]&, reactExprs, spcs]
-]
-
-
-GetProdCounts[rxns_, spcs_] := Module[{prodExprs},
-	prodExprs = Cases[rxns, rxn[_, p_, _] :> p];
-	Outer[Coefficient[#1, #2]&, prodExprs, spcs]
-]
-
-
+GetInitCounts[inits_, spcs_] := (Plus @@ Cases[inits, init[#, count_] :> count])& /@ spcs
+GetReactCounts[rxns_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxns, rxn[r_, _, _] :> r], spcs]
+GetProdCounts[rxns_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxns, rxn[_, p_, _] :> p], spcs]
 GetRates[rxns_] := Cases[rxns, rxn[_, _, k_] :> k]
 
 
@@ -66,7 +46,8 @@ DirectSSA[rxnsys_, tEnd_] := Module[
 	{inits = Cases[rxnsys, init[_, _]],
 	rxns = Cases[rxnsys, rxn[_, _, _]],
 	spcs = GetSpecies[rxnsys],
-	initCounts, reactCounts, prodCounts, rates},
+	initCounts, reactCounts, prodCounts, rates,
+	initCountsNA, reactCountsNA, prodCountsNA, ratesNA},
 	
 	initCounts = GetInitCounts[inits, spcs];
 	reactCounts = GetReactCounts[rxns, spcs];
