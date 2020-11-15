@@ -10,28 +10,76 @@ BeginPackage["CRNSSA`"]
 rxn::usage = "Chemical reaction, expressed as rxn[reactants, products, rate]";
 revrxn::usage = "Reversible reaction, expressed as revrxn[reactants, products, forward rate, backward rate]";
 init::usage = "Initial molecular counts, expressed as init[species or species list, quantity]";
+GetSpecies::usage =
+"GetSpecies[rxnsys] returns the species in rxnsys
+GetSpecies[rxnsys, pattern] returns the species in rxnsys that match the specified pattern"
 DirectSSA::usage =
-"Simulates a reaction system via Gillespie direct SSA, expressed as
-DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, end time]
+"DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, end time]
+Simulates the given reaction system via Gillespie direct SSA
+Backend is optimized in C++ for computational efficiency
 Note: implementation not complete";
 
 
 Begin["`Private`"]
 
 
-(* is rxn definition for no reactants necessary, and would we need a similar definition for products? *)
 rxn[Except[1, _Integer], p_, k_] := rxn[1, p, k]
+rxn[r_, Except[1, _Integer], k_] := rxn[r, 1, k]
 revrxn[r_, p_, kf_, kb_] := Sequence[rxn[r, p, kf], rxn[p, r, kb]]
 init[s_List, n_] := Sequence@@(init[#, n]& /@ s)
 
 
-(* is s_Symbol[__] necessary? why would a species be a head with arguments? *)
-GetSpecies[rxnsys_] := Union[
- Cases[Cases[rxnsys, rxn[r_, p_, _] :> Sequence[r, p]] /. Times | Plus -> Sequence, s_Symbol | s_Symbol[__]],
- Cases[rxnsys, init[x_, _] :> x]]
+GetSpecies[rxnsys_] := Sort[Union[
+	Cases[Cases[rxnsys, rxn[r_, p_, _] :> Sequence[r, p]] /. Times | Plus -> Sequence, s_Symbol | s_Symbol[__]],
+	Cases[rxnsys, init[x_, _] :> x]]]
+GetSpecies[rxnsys_, pattern_] := Sort[Cases[GetSpecies[rxnsys], pattern]]
 
 
-DirectSSA[rxnsys_, tend_] := {rxnsys, tend, GetSpecies[rxnsys]}
+GetInitCounts[inits_, spcs_] := Module[{GetCount},
+	GetCount[spc_] := Module[{res},
+		res = Cases[inits, init[spc, count_] :> count];
+		If[Length[res] === 0,
+			0,
+			res[[1]]
+		]
+	];
+	GetCount /@ spcs
+]
+
+
+GetReactCounts[rxns_, spcs_] := Module[{reactExprs},
+	reactExprs = Cases[rxns,rxn[r_, _, _]:>r];
+	Outer[Coefficient[#1, #2]&, reactExprs, spcs]
+]
+
+
+GetProdCounts[rxns_, spcs_] := Module[{prodExprs},
+	prodExprs = Cases[rxns, rxn[_, p_, _] :> p];
+	Outer[Coefficient[#1, #2]&, prodExprs, spcs]
+]
+
+
+GetRates[rxns_] := Cases[rxns, rxn[_, _, k_] :> k]
+
+
+DirectSSA[rxnsys_, tEnd_] := Module[
+	{inits = Cases[rxnsys, init[_, _]],
+	rxns = Cases[rxnsys, rxn[_, _, _]],
+	spcs = GetSpecies[rxnsys],
+	initCounts, reactCounts, prodCounts, rates},
+	
+	initCounts = GetInitCounts[inits, spcs];
+	reactCounts = GetReactCounts[rxns, spcs];
+	prodCounts = GetProdCounts[rxns, spcs];
+	rates = GetRates[rxns];
+	
+	initCountsNA = NumericArray[initCounts, "Integer64"];
+	reactCountsNA = NumericArray[reactCounts, "Integer64"];
+	prodCountsNA = NumericArray[prodCounts, "Integer64"];
+	ratesNA = NumericArray[rates, "Integer64"];
+	
+	{initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEnd}
+]
 
 
 End[]
