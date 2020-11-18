@@ -29,10 +29,22 @@ revrxn[r_, p_, kf_, kb_] := Sequence[rxn[r, p, kf], rxn[p, r, kb]]
 init[s_List, n_] := Sequence@@(init[#, n]& /@ s)
 
 
-GetSpecies[rxnsys_] := Sort[Union[
+GetUnkObjs[rxnsys_] := Cases[rxnsys, Except[rxn[_, _, _] | init[_, _]]]
+rxnsyswarnMsg = "Warning: Unknown objects detected in rxnsys. These will be ignored by Wolfram pattern matching: `1`"
+GetSpecies::rxnsyswarn = rxnsyswarnMsg
+DirectSSA::rxnsyswarn = rxnsyswarnMsg
+tenderrMsg = "Error: tEnd must be a number: `1`"
+DirectSSA::tenderr = tenderrMsg
+
+
+GetSpecies[rxnsys_] := Module[{unkObjs = GetUnkObjs[rxnsys]},
+	If[Length[unkObjs] =!= 0, Message[GetSpecies::rxnsyswarn, unkObjs]];
+
+	Sort[Union[
 	Cases[Cases[rxnsys, rxn[r_, p_, _] :> Sequence[r, p]] /. Times | Plus -> Sequence, s_Symbol | s_Symbol[__]],
 	Cases[rxnsys, init[x_, _] :> x]
-]]
+	]]
+]
 GetSpecies[rxnsys_, pattern_] := Cases[GetSpecies[rxnsys], pattern]
 
 
@@ -45,9 +57,13 @@ GetRates[rxns_] := Cases[rxns, rxn[_, _, k_] :> k]
 DirectSSA[rxnsys_, tEnd_] := Module[
 	{inits = Cases[rxnsys, init[_, _]],
 	rxns = Cases[rxnsys, rxn[_, _, _]],
-	spcs = GetSpecies[rxnsys],
+	spcs = Quiet[GetSpecies[rxnsys]],
 	initCounts, reactCounts, prodCounts, rates,
-	initCountsNA, reactCountsNA, prodCountsNA, ratesNA},
+	initCountsNA, reactCountsNA, prodCountsNA, ratesNA,
+	unkObjs = GetUnkObjs[rxnsys]},
+	
+	If[Length[unkObjs] =!= 0, Message[DirectSSA::rxnsyswarn, unkObjs]];
+	If[!NumericQ[tEnd], Message[DirectSSA::tenderr, tEnd]];
 	
 	initCounts = GetInitCounts[inits, spcs];
 	reactCounts = GetReactCounts[rxns, spcs];
@@ -57,7 +73,7 @@ DirectSSA[rxnsys_, tEnd_] := Module[
 	initCountsNA = NumericArray[initCounts, "Integer64"];
 	reactCountsNA = NumericArray[reactCounts, "Integer64"];
 	prodCountsNA = NumericArray[prodCounts, "Integer64"];
-	ratesNA = NumericArray[rates, "Integer64"];
+	ratesNA = NumericArray[rates, "Real64"];
 	
 	{initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEnd}
 ]
