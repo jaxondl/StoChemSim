@@ -7,17 +7,29 @@
 BeginPackage["CRNSSA`"]
 
 
-rxn::usage = "Chemical reaction, expressed as rxn[reactants, products, rate]";
-revrxn::usage = "Reversible reaction, expressed as revrxn[reactants, products, forward rate, backward rate]";
-init::usage = "Initial molecular counts, expressed as init[species or species list, quantity]";
+rxn::usage =
+"rxn[reactants expression, products expression, rate]
+A chemical reaction with a reactants expression,
+products expression, and rate";
+
+revrxn::usage =
+"revrxn[reactants expression, products expression, forward rate, backward rate]
+A reversible chemical reaction with a reactants expression,
+products expression, forwards rate, and backward rate";
+
+init::usage =
+"init[species, quantity] sets the initial quantity of a species
+init[species list, quantity] sets the initial quantity of every species in a species list";
+
 GetSpecies::usage =
-"GetSpecies[rxnsys] returns the species in rxnsys
-GetSpecies[rxnsys, pattern] returns the species in rxnsys that match the specified pattern"
+"GetSpecies[rxnsys] returns the species that appear in rxnsys
+GetSpecies[rxnsys, pattern] returns the species in rxnsys that match the specified pattern";
+
 DirectSSA::usage =
 "DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, end time]
 Simulates the given reaction system via Gillespie direct SSA
 Backend is optimized in C++ for computational efficiency
-Note: implementation not complete";
+Note: implementation is not complete";
 
 
 Begin["`Private`"]
@@ -33,7 +45,7 @@ GetUnkObjs[rxnsys_] := Cases[rxnsys, Except[rxn[_, _, _] | init[_, _]]]
 rxnsyswarnMsg = "Warning: Unknown objects detected in rxnsys. These will be ignored by Wolfram pattern matching: `1`"
 GetSpecies::rxnsyswarn = rxnsyswarnMsg
 DirectSSA::rxnsyswarn = rxnsyswarnMsg
-tenderrMsg = "Error: tEnd must be a number: `1`"
+tenderrMsg = "Error: tEnd (`1`) must be a number"
 DirectSSA::tenderr = tenderrMsg
 
 
