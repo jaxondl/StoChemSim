@@ -100,7 +100,12 @@ void SSA(State currentState, vector<Reaction> reactions) {
 
 int main() {
     InputVerifier *iv = new InputVerifier;
-    bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\sample_input_SSA_file.txt");
+    //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\sample_input_SSA_file.txt");
+    bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\faulty_sample_input_SSA_file_1.txt");
+    //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\faulty_sample_input_SSA_file_2.txt");
+    //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\faulty_sample_input_SSA_file_3.txt");
+    //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\faulty_sample_input_SSA_file_4.txt");
+    //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\faulty_sample_input_SSA_file_5.txt");
 
     if (safeToRun) {
         State initialState;
