@@ -1,6 +1,4 @@
 #include "inputVerifier.h"
-#include <iostream>
-#include <fstream>
 
 
 //returns true if the file has no formatting errors, false otherwise

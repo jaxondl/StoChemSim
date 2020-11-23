@@ -2,6 +2,8 @@
 #define INPUTVERIFIER_H
 
 #include <string>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -20,4 +22,4 @@ public:
 };
 
 
-#endif //SSA_IMPLEMENTATION_INPUTVERIFIER_H
+#endif //INPUTVERIFIER_H
