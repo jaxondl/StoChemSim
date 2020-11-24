@@ -1,16 +1,14 @@
-//
-// Created by user on 10/30/2020.
-//
-
-#ifndef SSA_IMPLEMENTATION_INPUTVERIFIER_H
-#define SSA_IMPLEMENTATION_INPUTVERIFIER_H
+#ifndef INPUTVERIFIER_H
+#define INPUTVERIFIER_H
 
 #include <string>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
 
-class InputVerifier {
+class inputVerifier {
 public:
     bool verifyFile(string iFile);
     string chopOffComments(string line);
@@ -24,4 +22,4 @@ public:
 };
 
 
-#endif //SSA_IMPLEMENTATION_INPUTVERIFIER_H
+#endif //INPUTVERIFIER_H

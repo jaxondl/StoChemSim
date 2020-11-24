@@ -1,14 +1,8 @@
-//
-// Created by user on 10/30/2020.
-//
-
-#include "InputVerifier.h"
-#include <iostream>
-#include <fstream>
+#include "inputVerifier.h"
 
 
 //returns true if the file has no formatting errors, false otherwise
-bool InputVerifier::verifyFile(string iFile) {
+bool inputVerifier::verifyFile(string iFile) {
     cout << "Beginning input verification." << endl;
     string fullReactionDefLine;
     string reactionDefLine = "";
@@ -304,7 +298,7 @@ bool InputVerifier::verifyFile(string iFile) {
 
 //returns true if there is an error, false if there isn't
 //only gets called on a slice that starts with a digit and contains a non-digit, non-decimal character
-bool InputVerifier::checkSingleMolecule(string molNumAndName, int lineNumber, bool errorExists) {
+bool inputVerifier::checkSingleMolecule(string molNumAndName, int lineNumber, bool errorExists) {
 
     //cout << "Now checking " << molNumAndName << " which has length " << molNumAndName.length() << endl;
     bool anyErrors = false;
@@ -374,7 +368,7 @@ bool InputVerifier::checkSingleMolecule(string molNumAndName, int lineNumber, bo
 }
 
 //returns true if there is an error, false if there isn't
-bool InputVerifier::checkReactionSlice(string reactionSlice, int lineNumber, bool errorExists) {
+bool inputVerifier::checkReactionSlice(string reactionSlice, int lineNumber, bool errorExists) {
     //determine what type of slice this is (reactant/product, ->, <->, or reaction rate)
     //cout << "checking reaction slice " << reactionSlice << " on line " << lineNumber << endl;
     if (reactionSlice.at(0) == 0 && reactionSlice.length() == 1) {
@@ -399,7 +393,7 @@ bool InputVerifier::checkReactionSlice(string reactionSlice, int lineNumber, boo
     }
 }
 
-bool InputVerifier::isReactionRate(string reactionSlice) {
+bool inputVerifier::isReactionRate(string reactionSlice) {
     if (reactionSlice.at(0) == 0 && reactionSlice.length() == 1) {
         return false;
     } else { //if it's not just the number 0
@@ -417,7 +411,7 @@ bool InputVerifier::isReactionRate(string reactionSlice) {
     }
 }
 
-bool InputVerifier::containsNonDigitNonDecimal(string reactionSlice) {
+bool inputVerifier::containsNonDigitNonDecimal(string reactionSlice) {
     for (int i = 0; i < reactionSlice.length(); i++) {
         if (!(isdigit(reactionSlice.at(i))) && reactionSlice.at(i) != '.') {
             //cout << reactionSlice.at(i) << " is not a digit or decimal." << endl;
@@ -428,7 +422,7 @@ bool InputVerifier::containsNonDigitNonDecimal(string reactionSlice) {
 }
 
 
-bool InputVerifier::isValidReactionRate(string reactionSlice, int lineNumber){ // should contain up to 1 decimal, and nothing else except digits
+bool inputVerifier::isValidReactionRate(string reactionSlice, int lineNumber){ // should contain up to 1 decimal, and nothing else except digits
     if (reactionSlice.find(".") != std::string::npos) { //if it contains a decimal
         int firstDecimalIndex = reactionSlice.find(".");
         if (reactionSlice.find(".", firstDecimalIndex + 1) != std::string::npos) {
@@ -446,7 +440,7 @@ bool InputVerifier::isValidReactionRate(string reactionSlice, int lineNumber){ /
     return true;
 }
 
-string InputVerifier::chopOffComments(string line) {
+string inputVerifier::chopOffComments(string line) {
     if (line.find("#") != std::string::npos) {
         string temp = "";
         for (int i = 0; i < line.find("#"); i++) {
