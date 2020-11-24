@@ -66,6 +66,8 @@ GetProdCounts[rxns_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxns, rxn[_, p_
 GetRates[rxns_] := Cases[rxns, rxn[_, _, k_] :> k]
 
 
+DirectSSA[rxnsys_] := DirectSSA[rxnsys, Infinity]
+
 DirectSSA[rxnsys_, tEnd_] := Module[
 	{inits = Cases[rxnsys, init[_, _]],
 	rxns = Cases[rxnsys, rxn[_, _, _]],
@@ -75,7 +77,7 @@ DirectSSA[rxnsys_, tEnd_] := Module[
 	unkObjs = GetUnkObjs[rxnsys]},
 	
 	If[Length[unkObjs] =!= 0, Message[DirectSSA::rxnsyswarn, unkObjs]];
-	If[!NumericQ[tEnd], Message[DirectSSA::tenderr, tEnd]];
+	If[!(NumericQ[tEnd] || (tEnd === Infinity)), Message[DirectSSA::tenderr, tEnd]];
 	
 	initCounts = GetInitCounts[inits, spcs];
 	reactCounts = GetReactCounts[rxns, spcs];
