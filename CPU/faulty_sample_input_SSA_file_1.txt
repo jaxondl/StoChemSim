@@ -1,7 +1,7 @@
 4 #comment
 2A 3B -> 4z 5.2 #comment
 438Uj0+ 1B <-> 3A 1.1 2.3 #comment
-0.la;sdkf -> 2A 3B 7
+0&la;sdkf -> 2A 3B 7 #this line is faulty because & is not a letter
 3z -> 0 4.3
 #comment
 

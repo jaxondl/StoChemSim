@@ -3,7 +3,7 @@
 438Uj0+ 1B <-> 3A 1.1 2.3 #comment
 0 -> 2A 3B 7
 3z -> 0 4.3
-#comment
+#this file is faulty because it only contains 4 reactions instead of 413245
 
 #comment
 
