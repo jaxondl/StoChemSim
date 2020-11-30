@@ -2,12 +2,29 @@
 #define TREE_H
 
 #include <iostream>
+#include <string>
+#include <iterator>
+#include <set>
+#include <algorithm>
+#include <vector>
+#include <utility>
 
 class tree {
 private:
-    int testInt;
+    double calculatePropensity(double reactionRate, int moleculeAmounts[], vector<pair<int, int>> reactants);
 public:
-    void testFunction();
+    struct ReactionNode {
+            double propensity;
+            double leftSum;
+            double rightSum;
+            int leftChild;
+            int rightChild;
+            int parent;
+    };
+    ReactionNode* ReactionTreeArray;
+    tree(int numReactions, int moleculeAmounts[], double reactionRates[], vector<pair<int, int>> ReactantsArray[]);
+    int searchForNode(double RV);
+    void updatePropensity(int index, double reactionRate, int moleculeAmounts[], vector<pair<int, int>> reactants);
 };
 
 
