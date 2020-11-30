@@ -22,8 +22,9 @@ int main() {
 
     //if (safeToRun) {
         decoder *inputDecoder = new decoder();
-        inputDecoder->decode("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\sample_input_SSA_file.txt");
+        //inputDecoder->decode("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\sample_input_SSA_file.txt");
 
+        /**
         int numReactions = 2;
         string moleculeTypes[6] = {"C", "B", "D", "E", "F", "A"};
         int moleculeAmounts[6] = {314, 1235, 0, 0, 0, 2345};
@@ -67,25 +68,74 @@ int main() {
         rxn2_1.second = 1;
         reactantsArray[1].push_back(rxn2_1);
 
+        **/
+
         cout << "Please input the method you would like to implement: " << endl;
         int selection;
         cin >> selection;
 
         decoder decoderObject;
-        dependency dependencyObject(moleculeTypes, moleculeAmounts, stateChangeArray, reactantsArray);
+        //dependency dependencyObject(moleculeTypes, moleculeAmounts, stateChangeArray, reactantsArray);
 
+        
+        //tree test
+        string moleculeTypes[] = {"A","B","C","D","E"};
+        int moleculeAmounts[] = {5, 3, 3, 0, 0};
+        vector<pair<int, int>> ReactantsArray[3];
+        vector<pair<int,int>> reaction1;
+        pair<int,int> reactant1 = {1, 1};
+        pair<int,int> reactant2 = {2, 1};
+        reaction1.push_back(reactant1);
+        reaction1.push_back(reactant2);
+        ReactantsArray[0] = reaction1;
+
+        vector<pair<int,int>> reaction2;
+        pair<int,int> reactant3 = {1, 1};
+        pair<int,int> reactant4 = {2, 2};
+        reaction2.push_back(reactant3);
+        reaction2.push_back(reactant4);
+        ReactantsArray[1] = reaction2;
+
+        vector<pair<int,int>> reaction3;
+        pair<int,int> reactant5 = {1, 2};
+        pair<int,int> reactant6 = {2, 1};
+        reaction3.push_back(reactant5);
+        reaction3.push_back(reactant6);
+        ReactantsArray[2] = reaction3;
+
+        double rates[] = {1.25, 2, 2.35};
+
+        tree treeObj(3, moleculeAmounts, rates, ReactantsArray);
+        tree* tree_ptr = &treeObj;
+        //tree* tree = new tree(3, moleculeAmounts, rates, ReactantsArray);
+        moleculeAmounts[1] = 2;
+        tree_ptr->updatePropensity(1, rates[1], moleculeAmounts, ReactantsArray[1]);
+        tree_ptr->updatePropensity(2, rates[2], moleculeAmounts, ReactantsArray[2]);
+        for (int i = 0; i < 3; i++) {
+            cout << "At index " << i << endl;
+            cout << tree_ptr->ReactionTreeArray[i].propensity << endl;
+            cout << tree_ptr->ReactionTreeArray[i].leftChild << endl;
+            cout << tree_ptr->ReactionTreeArray[i].rightChild << endl;
+            cout << tree_ptr->ReactionTreeArray[i].leftSum << endl;
+            cout << tree_ptr->ReactionTreeArray[i].rightSum << endl;
+        }
+        cout << tree_ptr->searchForNode(0.48);
+        
+        
+        
+        
         if (selection == 1) { //refer to the optimized SSA
             algorithm algorithmObject;
-            tree treeObject;
+            //tree treeObject;
 
             algorithmObject.testFunction();
             decoderObject.testFunction();
-            dependencyObject.testFunction();
-            treeObject.testFunction();
+            //dependencyObject.testFunction();
+            //treeObject.testFunction();
         } else if (selection == 2) { //refer to tau-leaping, etc. (future reactions)
-            dependencyObject.testFunction();
+            //dependencyObject.testFunction();
             /** method 2 specific objects **/
         }
     //}
-    return 0;
+   
 }

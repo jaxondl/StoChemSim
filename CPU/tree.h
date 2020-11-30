@@ -9,6 +9,8 @@
 #include <vector>
 #include <utility>
 
+using namespace std;
+
 class tree {
 private:
     double calculatePropensity(double reactionRate, int moleculeAmounts[], vector<pair<int, int>> reactants);
