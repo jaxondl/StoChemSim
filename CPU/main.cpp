@@ -105,7 +105,7 @@ int main() {
 
         double rates[] = {1.25, 2, 2.35};
 
-        tree treeObj(3, moleculeAmounts, rates, ReactantsArray);
+        tree treeObj(moleculeAmounts, rates, ReactantsArray);
         tree* tree_ptr = &treeObj;
         //tree* tree = new tree(3, moleculeAmounts, rates, ReactantsArray);
         moleculeAmounts[1] = 2;
@@ -128,7 +128,7 @@ int main() {
             algorithm algorithmObject;
             //tree treeObject;
 
-            algorithmObject.testFunction();
+            //algorithmObject.testFunction();
             decoderObject.testFunction();
             //dependencyObject.testFunction();
             //treeObject.testFunction();

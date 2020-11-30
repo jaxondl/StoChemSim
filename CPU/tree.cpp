@@ -2,7 +2,7 @@
 
 using namespace std;
 
-double tree::calculatePropensity(double reactionRate, int moleculeAmounts[], vector<pair<int, int>> reactants){
+double tree::calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){
     double propensity = reactionRate;
     for (pair<int, int> reactant: reactants) {
         propensity *= pow(moleculeAmounts[reactant.first], reactant.second);
@@ -10,12 +10,12 @@ double tree::calculatePropensity(double reactionRate, int moleculeAmounts[], vec
     return propensity;
 }
 
-tree::tree(int numReactions, int moleculeAmounts[], double reactionRates[], vector<pair<int, int>> ReactantsArray[]) {
+tree::tree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector) {
+    int numReactions = reactantsVector.size();
     ReactionTreeArray = new ReactionNode[numReactions];
-    //reactionCount = numReactions;
     ReactionTreeArray[0].parent = -1;
     for (int i=0; i<numReactions; i++) {
-        ReactionTreeArray[i].propensity = calculatePropensity(reactionRates[i], moleculeAmounts, ReactantsArray[i]);
+        ReactionTreeArray[i].propensity = calculatePropensity(reactionRates[i], moleculeAmounts, reactantsVector[i]);
         ReactionTreeArray[i].leftSum = 0;
         ReactionTreeArray[i].rightSum = 0;
     }
@@ -70,7 +70,7 @@ int tree::searchForNode(double RV) {
     return currentIndex;
 }
 
-void tree::updatePropensity(int index, double reactionRate, int moleculeAmounts[], vector<pair<int, int>> reactants){ //update its and every subsequent parent's propensities
+void tree::updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){ //update its and every subsequent parent's propensities
     int currentIndex = index;
     double newPropensity = calculatePropensity(reactionRate, moleculeAmounts, reactants); //recalculate propensity for that index
     double propensityChange = newPropensity - ReactionTreeArray[currentIndex].propensity;

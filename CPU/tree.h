@@ -13,7 +13,7 @@ using namespace std;
 
 class tree {
 private:
-    double calculatePropensity(double reactionRate, int moleculeAmounts[], vector<pair<int, int>> reactants);
+    double calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants);
 public:
     struct ReactionNode {
             double propensity;
@@ -24,9 +24,9 @@ public:
             int parent;
     };
     ReactionNode* ReactionTreeArray;
-    tree(int numReactions, int moleculeAmounts[], double reactionRates[], vector<pair<int, int>> ReactantsArray[]);
+    tree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector);
     int searchForNode(double RV);
-    void updatePropensity(int index, double reactionRate, int moleculeAmounts[], vector<pair<int, int>> reactants);
+    void updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants);
 };
 
 
