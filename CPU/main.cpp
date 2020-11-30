@@ -21,6 +21,9 @@ int main() {
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\faulty_sample_input_SSA_file_5.txt");
 
     //if (safeToRun) {
+        decoder *inputDecoder = new decoder();
+        inputDecoder->decode("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\sample_input_SSA_file.txt");
+
         int numReactions = 2;
         string moleculeTypes[6] = {"C", "B", "D", "E", "F", "A"};
         int moleculeAmounts[6] = {314, 1235, 0, 0, 0, 2345};

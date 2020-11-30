@@ -252,7 +252,7 @@ bool inputVerifier::verifyFile(string iFile) {
                 j++;
             }
             j++; //j now points to the start of the number
-            //moleculeName should start with a letter
+            //moleculeName should start with a letter of the alphabet
             if (!isalpha(moleculeNameOrCount.at(0))) {
                 cout << "Warning: Line " << lineNumber
                      << " contains a molecule that starts with a non-alphabet character." << endl;

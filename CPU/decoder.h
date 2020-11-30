@@ -2,12 +2,37 @@
 #define DECODER_H
 
 #include <iostream>
+#include <string>
+#include <fstream>
+#include <vector>
+#include <algorithm>
 
 class decoder {
 private:
     int testInt;
+    std::vector<std::string> listOfSpecies;
+    std::vector<int> populationSizes; //indices correspond to the indices in listOfSpecies
+    std::vector<std::vector<std::vector<int>>> stateChangeVector; //a vector of vectors of size-2 vectors
+    //each element x of stateChangeArray corresponds to one defined reaction
+    //each vector element y of a given element x is an vector with 2 integer elements
+    //the first integer is the index of the reactant/product,
+    // and the second integer is the net change in the population size of that reactant/product after the reaction occurs
+    std::vector<std::vector<std::vector<int>>> reactantVector; //a vector of vectors of size-2 vectors
+    //each element x of reactantArray corresponds to one defined reaction
+    //each vector element y of a given element x is an vector with 2 integer elements
+    //the first integer is the index of the reactant
+    //the second integer is how many copies of that reactant molecule are needed for the reaction to occur
+    std::vector<float> kValueVector; //each element is the k value of the corresponding reaction
 public:
     void testFunction();
+    void decode(std::string iFile);
+    std::string chopOffComments(std::string line);
+    void parseReactionSlice(std::string reactionSlice, bool isReversible, bool fencepost, int reactionNumber, bool isReactant);
+    void parseReverseReactionSlice(std::string reactionSlice, bool fencepost, int reactionNumber, bool isReactant);
+    void updateReactantsVector(int reactionNumber, std::string reactionSlice, bool isReactant);
+    void updateReactantsVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
+    void updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant);
+    void updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
 };
 
 #endif //DECODER_H
