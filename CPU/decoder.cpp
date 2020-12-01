@@ -36,9 +36,12 @@ void decoder::decode(string iFile) {
 
     for (int r = 0; r < numReactions; r++) {
         reactionNumber++;
+        cout << "working on reaction " << reactionNumber << endl;
         bool isReversible = false;
         bool isReactant = true; //set to false one we reach the "->" or "<->"
         bool fencepost = false; //set to true once we reach the fencepost after the while loop
+
+        bool createdNewVectorForThisReaction = false;
 
         //cout << "got here" << endl;
         if (inputFile.peek() != EOF) {
@@ -107,26 +110,30 @@ void decoder::decode(string iFile) {
                         isReactant = false;
                     }
 
-                    vector<vector<int>> stateChangesForReactions;
-                    this->stateChangeVector.push_back(
-                            stateChangesForReactions); //this will be pushed to index reactionNumber
-                    vector<int> stateChange{0, 0};
-                    this->stateChangeVector[reactionNumber].push_back(
-                            stateChange); //push an empty 2-element vector that will be modified by the below method calls
+                    if(!createdNewVectorForThisReaction) {
+                        vector <pair<int, int>> stateChangesForReactions;
+                        this->stateChangeVector.push_back(stateChangesForReactions); //this will be pushed to index reactionNumber
 
-                    vector<vector<int>> reactantsForReactions;
-                    this->reactantVector.push_back(
-                            reactantsForReactions); //this will be pushed to index reactionNumber
-                    vector<int> reactantAmount{0, 0}; //first integer is the index of the reactant species in listOfSpecies; second integer is the number of that reactant needed for the reaction to occur
-                    this->reactantVector[reactionNumber].push_back(
-                            reactantAmount); //push an empty 2-element vector that will be modified by the below method calls
+                        vector <pair<int, int>> reactantsForReactions;
+                        this->reactantVector.push_back(reactantsForReactions); //this will be pushed to index reactionNumber
+
+                        if(isReversible) { //do it again for the reverse direction reaction
+                            vector <pair<int, int>> stateChangesForReactions;
+                            this->stateChangeVector.push_back(stateChangesForReactions);
+
+                            vector <pair<int, int>> reactantsForReactions;
+                            this->reactantVector.push_back(reactantsForReactions);
+                        }
+
+                        createdNewVectorForThisReaction = true;
+                    }
 
                     //check this reaction slice; if it's a reactant, update the reactants vector and the state change vector; if it's a product, update the state change vector
                     updateReactantsVector(reactionNumber, reactionSlice, isReactant);
-                    if(isReversible) updateReactantsVectorReverse(reactionNumber, reactionSlice, isReactant);
+                    if(isReversible) updateReactantsVectorReverse(reactionNumber + 1, reactionSlice, isReactant);
 
                     updateStateChangeVector(reactionNumber, reactionSlice, isReactant);
-                    if(isReversible) updateStateChangeVectorReverse(reactionNumber, reactionSlice, isReactant);
+                    if(isReversible) updateStateChangeVectorReverse(reactionNumber + 1, reactionSlice, isReactant);
 
 
 
@@ -134,6 +141,9 @@ void decoder::decode(string iFile) {
                     j = spaceIndex + 1;
                     //cout << j << endl;
                 }
+            }
+            if (isReversible) {
+                reactionNumber++;
             }
         }
 
@@ -147,6 +157,17 @@ void decoder::decode(string iFile) {
     for (float x : this->kValueVector)
         cout << x << " ";
     cout << endl;
+    cout << "reactantVector:" << endl;
+    cout << "[ ";
+    for (vector<pair<int, int>> x : this->reactantVector) {
+        cout << "[ ";
+        for (pair<int, int> y : x) {
+            cout << "[" << y.first << "," << y.second << "]" << ", ";
+        }
+        cout << "]," << endl;
+    }
+    cout << "]" << endl;
+
 
 
 }
@@ -181,11 +202,11 @@ void decoder::parseReactionSlice(string reactionSlice, bool isReversible, bool f
         if(!fencepost) { //if fencepost is false, this must be the forward direction reaction rate of the reaction (and isReversible must be true, otherwise, something is wrong)
             //store the reaction rate
             //cout << std::stof(reactionSlice) << endl;
-            this->kValueVector.push_back(std::stof(reactionSlice));
+            this->kValueVector.push_back(std::stod(reactionSlice));
         } else { //if fencepost is true, then this is either the forward reaction rate (if not reversible) or the reverse reaction rate (if reversible)
             if (!isReversible) {
                 //cout << std::stof(reactionSlice) << endl;
-                this->kValueVector.push_back(std::stof(reactionSlice));
+                this->kValueVector.push_back(std::stod(reactionSlice));
             } else {
                 //this is the reverse reaction rate, so let parseReverseReactionSlice handle it
             }
@@ -241,16 +262,148 @@ void decoder::parseReverseReactionSlice(string reactionSlice, bool fencepost, in
     if(!containsLetter && reactionSlice != "0") { //it's a reaction rate
         if(fencepost) { //if it's not the fencepost, it's not the reverse reaction rate, and vice versa
             //cout << std::stof(reactionSlice) << endl;
-            this->kValueVector.push_back(std::stof(reactionSlice)); //store the reverse reaction rate
+            this->kValueVector.push_back(std::stod(reactionSlice)); //store the reverse reaction rate
         }
     }
 }
 
+//access this->reactantVector[reactionNumber] and store the pair {this->listOfSpecies.indexof(moleculeName), moleculeCount} if isReactant is true
 void decoder::updateReactantsVector(int reactionNumber, string reactionSlice, bool isReactant) {
+    //if the reaction slice is "->" or "<->", ignore it
+    if (reactionSlice == "->" || reactionSlice == "<->") {
+        return;
+    }
+    string moleculeName = "";
+    bool containsLetter = false;
+    for (int i = 0; i < reactionSlice.length(); i++) {
+        if (isalpha(reactionSlice.at(i))) {
+            containsLetter = true;
+        }
+    }
+    if(!containsLetter && reactionSlice != "0") { //if the reaction slice contains no letter, then it can't be a reactant or product, so it must be a reaction rate
+        //it's a reaction rate, so we can just ignore it
+    } else if (reactionSlice == "0") { //there are no reactants or no products for this reaction, so act accordingly
+        //nothing to update
+    } else { //the slice contains a letter, so it must be a reactant or a product
+        //parse until first non-digit character
+        string moleculeCount = "";
+        int i = 0;
+        while (i < reactionSlice.length()) {
+            //cout << i << endl;
+            if (isdigit(reactionSlice.at(i))) {
+                moleculeCount += reactionSlice.at(i); //copy the digits into a new string
+                //cout << "moleculeCount is now " << moleculeCount << endl;
+            } else break;
+            i++;
+        } //moleculeCount now contains the defined number of reactant/product molecules
+        //i now points to the first letter; the remaining part of the string is the molecule name
+        while (i < reactionSlice.length()) {
+            //cout << i << endl;
+            moleculeName += reactionSlice.at(i); //copy the name into a new string
+            //cout << "moleculeName is now " << moleculeName << endl;
+            i++;
+        }
+        //cout << "moleculeName is now " << moleculeName << endl;
+        //cout << "moleculeCount is now " << moleculeCount << endl;
+        //cout << "stoi(moleculeCount) is " << stoi(moleculeCount) << endl;
 
+        if (isReactant) { //if it's on the right side of the "<->" symbol
+            pair<int, int> pairing;
+            pairing.first = -1;
+
+            int moleculeIndex = -1;
+            bool found = false;
+            for (int i = 0; i < this->listOfSpecies.size(); i++) {
+                if (this->listOfSpecies[i] == moleculeName) {
+                    moleculeIndex = i;
+                    found = true;
+                    //cout << "moleculeIndex is now " << moleculeIndex << endl;
+                    break;
+                }
+            }
+
+            if (found) {
+                pairing.first = moleculeIndex;
+                pairing.second = stoi(moleculeCount);
+            }
+
+            if(pairing.first != -1) { //this should always get executed if isReactant is true; if it doesn't, something went wrong
+                cout << "pushing pair [" << pairing.first << "," << pairing.second << "]" << endl;
+                this->reactantVector[reactionNumber].push_back(pairing);
+            }
+
+        }
+    }
 }
-void decoder::updateReactantsVectorReverse(int reactionNumber, string reactionSlice, bool isReactant) {
 
+
+void decoder::updateReactantsVectorReverse(int reactionNumber, string reactionSlice, bool isReactant) {
+    //cout << "updating reactantVector for " << reactionSlice << endl;
+    //if the reaction slice is "->" or "<->", ignore it
+    if (reactionSlice == "->" || reactionSlice == "<->") {
+        return;
+    }
+    string moleculeName = "";
+    bool containsLetter = false;
+    for (int i = 0; i < reactionSlice.length(); i++) {
+        if (isalpha(reactionSlice.at(i))) {
+            containsLetter = true;
+        }
+    }
+    if(!containsLetter && reactionSlice != "0") { //if the reaction slice contains no letter, then it can't be a reactant or product, so it must be a reaction rate
+        //it's a reaction rate, so we can just ignore it
+    } else if (reactionSlice == "0") { //there are no reactants or no products for this reaction, so act accordingly
+        //nothing to update
+    } else { //the slice contains a letter, so it must be a reactant or a product
+        //parse until first non-digit character
+        string moleculeCount = "";
+        int i = 0;
+        while (i < reactionSlice.length()) {
+            //cout << i << endl;
+            if (isdigit(reactionSlice.at(i))) {
+                moleculeCount += reactionSlice.at(i); //copy the digits into a new string
+                //cout << "moleculeCount is now " << moleculeCount << endl;
+            } else break;
+            i++;
+        } //moleculeCount now contains the defined number of reactant/product molecules
+        //i now points to the first letter; the remaining part of the string is the molecule name
+        while (i < reactionSlice.length()) {
+            //cout << i << endl;
+            moleculeName += reactionSlice.at(i); //copy the name into a new string
+            //cout << "moleculeName is now " << moleculeName << endl;
+            i++;
+        }
+        //cout << "moleculeName is now " << moleculeName << endl;
+        //cout << "moleculeCount is now " << moleculeCount << endl;
+
+        if (!isReactant) { //if it's on the right side of the "<->" symbol
+            pair<int, int> pairing;
+            pairing.first = -1;
+
+            int moleculeIndex = -1;
+            bool found = false;
+            for (int i = 0; i < this->listOfSpecies.size(); i++) {
+                if (this->listOfSpecies[i] == moleculeName) {
+                    //std::cout << "Element present at index " << i;
+                    moleculeIndex = i;
+                    found = true;
+                    //cout << "moleculeIndex is now " << moleculeIndex << endl;
+                    break;
+                }
+            }
+
+            if (found) {
+                pairing.first = moleculeIndex;
+                pairing.second = stoi(moleculeCount);
+            }
+
+            if(pairing.first != -1) { //this should always get executed if isReactant is true; if it doesn't, something went wrong
+                cout << "pushing pair [" << pairing.first << "," << pairing.second << "]" << endl;
+                this->reactantVector[reactionNumber].push_back(pairing);
+            }
+
+        }
+    }
 }
 void decoder::updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant) {
 
