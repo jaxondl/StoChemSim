@@ -13,15 +13,13 @@ using namespace std;
 
 class dependency {
 private:
-    int testInt;
+    vector<vector<int>> dependencyGraph; 
 public:
-    vector<vector<int>> dependencyGraph;
+    dependency(vector<vector<pair<int, int>>> stateChangeVector, vector<vector<pair<int,int>>> reactantsVector);
 
-    dependency(string moleculeTypes[], int moleculeAmounts[], vector<vector<pair<int, int>>> stateChangeArray, vector<vector<pair<int,int>>> reactantsArray);
+    bool intersects(set<int> set1, set<int> set2);
 
-    bool intersects(set<string> set1, set<string> set2);
-
-    void testFunction();
+    vector<int> getDependentReactions(int reactionIndex);
 };
 
 
