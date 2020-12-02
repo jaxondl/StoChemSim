@@ -12,7 +12,7 @@ class inputVerifier {
 public:
     bool verifyFile(string iFile);
     string chopOffComments(string line);
-    bool checkReactionSlice(string reactionSlice, int lineNumber, bool errorExists);
+    bool checkReactionSlice(string reactionSlice, int lineNumber, bool errorExists, bool alreadyWarned);
     bool containsNonDigitNonDecimal(string reactionSlice);
     bool isReactionRate(string reactionSlice);
     bool isValidReactionRate(string reactionSlice, int lineNumber);

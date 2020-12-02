@@ -34,6 +34,11 @@ public:
     void updateReactantsVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
     void updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant);
     void updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
+    std::vector<std::string> getListOfSpecies();
+    std::vector<int> getPopulationSizes();
+    std::vector<std::vector<std::pair<int, int>>> getStateChangeVector();
+    std::vector<std::vector<std::pair<int, int>>> getReactantVector();
+    std::vector<double> getkValueVector();
 };
 
 #endif //DECODER_H
