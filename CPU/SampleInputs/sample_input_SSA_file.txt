@@ -8,4 +8,4 @@
 #comment
 
 Uj0+ 22918 #comment
-B23 32000
+B 32000
