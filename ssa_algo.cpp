@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include <random>
-#include "InputVerifier.h"
+#include "inputVerifier.h"
 
 
 //#include <bits/stdc++.h> 
@@ -99,7 +99,7 @@ void SSA(State currentState, vector<Reaction> reactions) {
 }
 
 int main() {
-    InputVerifier *iv = new InputVerifier;
+    inputVerifier *iv = new inputVerifier;
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\sample_input_SSA_file.txt");
     bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\faulty_sample_input_SSA_file_1.txt");
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\faulty_sample_input_SSA_file_2.txt");

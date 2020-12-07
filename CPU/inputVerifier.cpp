@@ -19,7 +19,7 @@ bool inputVerifier::verifyFile(string iFile) {
     ifstream inputFile;
     inputFile.open(iFile);
     if (!inputFile) {
-        cerr << "Unable to open file";
+        cerr << "Unable to open file" << endl;
         exit(1);   // call system to stop
     }
 
@@ -85,6 +85,7 @@ bool inputVerifier::verifyFile(string iFile) {
             //cout << "got here" << endl;
             if (inputFile.peek() != EOF) {
                 getline(inputFile, fullReactionDefLine);
+                bool alreadyWarnedAboutValidReactantOrProduct = false;
                 lineNumber++;
                 //cout << "Now checking line " << lineNumber << endl;
 
@@ -116,8 +117,9 @@ bool inputVerifier::verifyFile(string iFile) {
                                     i); // copy the string up to the next space (and don't include that space)
                         }
                         //cout << reactionSlice << " is about to be checked" << endl;
-                        if (checkReactionSlice(reactionSlice, lineNumber, errorExists)) { //if there is an error
+                        if (checkReactionSlice(reactionSlice, lineNumber, errorExists, alreadyWarnedAboutValidReactantOrProduct)) { //if there is an error
                             errorExists = true;
+                            alreadyWarnedAboutValidReactantOrProduct = true;
                         }
 
                         if (isReactionRate(reactionSlice)) {
@@ -221,12 +223,6 @@ bool inputVerifier::verifyFile(string iFile) {
 
     // 4) the remaining lines should define molecule populations
     // formatted as follows: molecule name, then a space, then a number
-//    if (inputFile.peek() == EOF) { // they didn't give the initial molecule populations
-//        cout << "Warning: Your input pile doesn't provide the initial molecule populations." << endl;
-//        errorExists = true;
-//    }
-
-//    else {
     while (inputFile.peek() != EOF) { // check all remaining lines
         lineNumber++;
         //cout << "Now checking line " << lineNumber << endl;
@@ -311,11 +307,6 @@ bool inputVerifier::checkSingleMolecule(string molNumAndName, int lineNumber, bo
             errorExists = true;
         }
     }
-//    if (!isalpha(molNumAndName.at(molNumAndName.length() - 1))) {
-//        cout << "Warning: A reactant or product on line " << lineNumber << " doesn't end with a letter.";
-//        anyErrors = true;
-//        errorExists = true;
-//    }
 
     //parse until first non-digit character
     while (i < molNumAndName.length()) {
@@ -351,24 +342,12 @@ bool inputVerifier::checkSingleMolecule(string molNumAndName, int lineNumber, bo
         errorExists = true;
     }
 
-    //every character in moleculeName should be a letter of the alphabet (this is not true anymore)
-//    for (i = 0; i < moleculeName.length(); i++) {
-//        if (!isalpha(moleculeName.at(i))) {
-//            cout << "Warning: Line " << lineNumber << " has an invalid molecule name." << endl;
-//            anyErrors = true;
-//            errorExists = true;
-//        }
-//        else {
-//            //cout << "molecule name parsed successfully" << endl;
-//        }
-//    }
-
     //if (!anyErrors) cout << molNumAndName << " parsed succesfully" << endl;
     return errorExists;
 }
 
 //returns true if there is an error, false if there isn't
-bool inputVerifier::checkReactionSlice(string reactionSlice, int lineNumber, bool errorExists) {
+bool inputVerifier::checkReactionSlice(string reactionSlice, int lineNumber, bool errorExists, bool alreadyWarned) {
     //determine what type of slice this is (reactant/product, ->, <->, or reaction rate)
     //cout << "checking reaction slice " << reactionSlice << " on line " << lineNumber << endl;
     if (reactionSlice.at(0) == 0 && reactionSlice.length() == 1) {
@@ -385,7 +364,11 @@ bool inputVerifier::checkReactionSlice(string reactionSlice, int lineNumber, boo
             }
         } else { //must either be "<->" or "->"
             if (reactionSlice != "<->" && reactionSlice != "->") {
-                cout << "Warning: Line " << lineNumber << " contains something that isn't '<->', '->', or a valid reactant/product, or it contains a reaction rate in the wrong spot." << endl;
+                if (!alreadyWarned) {
+                    cout << "Warning: Line " << lineNumber
+                         << " contains something that isn't '<->', '->', or a valid reactant/product, or it contains a reaction rate in the wrong spot."
+                         << endl;
+                }
                 return true; //there is an error
             }
             return false;

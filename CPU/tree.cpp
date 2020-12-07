@@ -5,7 +5,7 @@ using namespace std;
 double tree::calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){
     double propensity = reactionRate;
     for (pair<int, int> reactant: reactants) {
-        propensity *= pow(moleculeAmounts[reactant.first], reactant.second);
+        //propensity *= pow(moleculeAmounts[reactant.first], reactant.second);
     }
     return propensity;
 }
