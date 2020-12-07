@@ -49,18 +49,7 @@ double algorithm::getTotalPropensity(){
 }
 
 void algorithm::start(){
-    /**Step 1:
-     */
     while (currentTime < t_end && getTotalPropensity() != 0){
-        /**Step 1: calculate time until next reaction by doing getTimeUntilNectreaction(getTotalPropensity)
-         * step 2: update time += time until next reaction
-         * step 3: get uniform
-         * Step 4: refer to tree and pick the bucket (reaction)
-         * step 5: send reaction number to depedency graph and get the dependent reactions
-         * step 6: for loop and update props in tree w fxn
-         * step 7: update state using state change vector
-         * (repeat) 
-        */
         double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity());
         updateTime(timeUntilNextReaction);
         double uniformRV = getUniformRandomVariable();
@@ -72,3 +61,12 @@ void algorithm::start(){
         updateState(stateChangeVector, reactionIndex);
     }
 }
+/**Step 1: calculate time until next reaction by doing getTimeUntilNectreaction(getTotalPropensity)
+         * step 2: update time += time until next reaction
+         * step 3: get uniform
+         * Step 4: refer to tree and pick the bucket (reaction)
+         * step 5: send reaction number to depedency graph and get the dependent reactions
+         * step 6: for loop and update props in tree w fxn
+         * step 7: update state using state change vector
+         * (repeat) 
+        */
