@@ -7,18 +7,27 @@
 
 /* function prototypes for the backend team 
    TODO: make it a header file, and link it
+   COMMENT: I put uint32_t instead of uint8_t in the second parameter of pair for now
 */
 
-void preprocess_input (	std::vector<int64_t> initCounts,
-						std::vector<std::vector<int64_t>> reactCounts, 
-						std::vector<std::vector<int64_t>> prodCounts, 
-						std::vector<int64_t> rates, 
-						int64_t tEnd);
-std::vector<int64_t> run_SSA();
+void preprocess_input (	std::vector<uint32_t> moleculeAmounts,
+						std::vector<std::vector<std::pair<uint32_t, uint32_t>>> stateChangeArray,
+						std::vector<std::vector<std::pair<uint32_t, uint32_t>>> reactantsArray,
+						std::vector<double> kValues,
+						double tEnd);
+std::vector<double> run_SSA();
 
-/* =========backend code start=======
-*  please follow the fucntion prototype
-*  =========backend code end=======/
+// =========backend code start=======
+
+std::vector<double> run_SSA() {
+	std::vector<double> ans;
+	ans.push_back(1.2);
+	ans.push_back(2.4);
+	ans.push_back(1);
+	return ans;
+}
+
+// =========backend code end=======
 
 /* Return the version of Library Link */
 DLLEXPORT mint WolframLibrary_getVersion() { return WolframLibraryVersion; }
@@ -34,13 +43,14 @@ DLLEXPORT void WolframLibrary_uninitialize(WolframLibraryData libData) {
 }
 
 /* convert a 2-dimentional NumericArray to a 2-dimentional vector */
+template <typename Tin, typename Tout>
 static std::vector<std::vector<int64_t>> numericMatrixtoVector(const void *in0, mint const *dims) {
-	const int64_t *in = static_cast<const int64_t *>(in0);
-	std::vector<std::vector<int64_t>> out;
+	const Tin *in = static_cast<const Tin *>(in0);
+	std::vector<std::vector<Tout>> out;
 	mint row = dims[0];
 	mint col = dims[1];
 	for (mint i = 0; i < row; i++) {
-		std::vector<int64_t> out_row;
+		std::vector<T> out_row;
 		for (mint j = 0; j < col; j++) {
 			out_row.push_back(in[i*col + j]);
 		}
@@ -50,9 +60,10 @@ static std::vector<std::vector<int64_t>> numericMatrixtoVector(const void *in0, 
 }
 
 /* convert a 1-dimentional NumericArray to a 1-dimentional vector */
-static std::vector<int64_t> numericArraytoVector(const void *in0, mint const length) {
-	const int64_t *in = static_cast<const int64_t *>(in0);
-    std::vector<int64_t> out;
+template <typename Tin, typename Tout>
+static std::vector<Tout> numericArraytoVector(const void *in0, mint const length) {
+	const Tin *in = static_cast<const Tin *>(in0);
+    std::vector<Tout> out;
     for (mint i = 0; i < length; i++) {
         out.push_back(in[i]);
     }
@@ -60,8 +71,9 @@ static std::vector<int64_t> numericArraytoVector(const void *in0, mint const len
 }
 
 /* convert a 1-dimentional vector to a 1-dimentional NumericArray */
-static void vectortoNumericArray(void *Mout0, std::vector<int64_t> out) {
-	int64_t *Mout =  static_cast<int64_t *>(Mout0);
+template <typename T>
+static void vectortoNumericArray(void *Mout0, std::vector<T> out) {
+	T *Mout =  static_cast<T *>(Mout0);
 	for (int64_t i = 0; i < out.size(); i++) {
 		Mout[i] = out[i];
 	}
@@ -74,41 +86,60 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
 	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
 
 	// reused local varibles setup
-	void *data_in = NULL, *data_out = NULL;
-	mint length;
-	mint const *dims;
+	void *data_out = NULL;
 
 	// convert initCounts
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
-	data_in = naFuns->MNumericArray_getData(MinitCounts);
-	length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
-	std::vector<int64_t> initCounts = numericArraytoVector(data_in, length);
+	void *data_in = naFuns->MNumericArray_getData(MinitCounts);
+	mint length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
+	std::vector<uint32_t> moleculeAmounts = numericArraytoVector<int64_t, uint32_t>(data_in, length);
 
-	// convert reactCounts
+
+	// convert reactantsArray & stateChangeArray
 	MNumericArray MreactCounts = MArgument_getMNumericArray(Args[1]);
-	data_in = naFuns->MNumericArray_getData(MreactCounts);
-	dims = naFuns->MNumericArray_getDimensions(MreactCounts);
-	std::vector<std::vector<int64_t>> reactCounts = numericMatrixtoVector(data_in, dims);
-
-	// convert prodCounts
 	MNumericArray MprodCounts = MArgument_getMNumericArray(Args[2]);
-	data_in = naFuns->MNumericArray_getData(MprodCounts);
-	dims = naFuns->MNumericArray_getDimensions(MprodCounts);
-	std::vector<std::vector<int64_t>> prodCounts = numericMatrixtoVector(data_in, dims);
+	mint const * dims = naFuns->MNumericArray_getDimensions(MreactCounts);
+	mint reactionCount = dims[0];
+	mint moleculeCount = dims[1];
+	void* MreactCounts_in = naFuns->MNumericArray_getData(MreactCounts);
+	void* MprodCounts_in = naFuns->MNumericArray_getData(MprodCounts);
+
+	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in);
+	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);
+
+    std::vector<std::vector<std::pair<uint32_t, uint32_t>>> reactantsArray;
+	std::vector<std::vector<std::pair<uint32_t, uint32_t>>> stateChangeArray;
+    for (mint i = 0; i < reactionCount; i++) {
+		std::vector<std::pair<uint32_t, uint32_t>> reactantsArray_row;
+		std::vector<std::pair<uint32_t, uint32_t>> stateChangeArray_row;
+		for (mint j = 0; j < moleculeCount; j++) {
+			uint32_t index = (uint32_t)j;
+			uint32_t in = (uint32_t)reactIn[i*moleculeCount + j];
+			uint32_t out = (uint32_t)prodIn[i*moleculeCount + j];
+			if(in > 0) {
+				reactantsArray_row.push_back(std::pair<uint32_t, uint32_t>(index, in));
+				stateChangeArray_row.push_back(std::pair<uint32_t, uint32_t>(index, -in));
+			}
+			if(out > 0) {
+				stateChangeArray_row.push_back(std::pair<uint32_t, uint32_t>(index, out));
+			}
+		}
+        reactantsArray.push_back(reactantsArray_row);
+		stateChangeArray.push_back(stateChangeArray_row);
+    }
 
 	// convert rates
 	MNumericArray Mrates = MArgument_getMNumericArray(Args[3]);
 	data_in = naFuns->MNumericArray_getData(Mrates);
 	length = naFuns->MNumericArray_getFlattenedLength(Mrates);
-	std::vector<std::int64_t> rates = numericArraytoVector(data_in, length);
+	std::vector<double> kValues = numericArraytoVector<double, double>(data_in, length);
 
 	// convert tEnd
-	mint MtEnd = MArgument_getInteger(Args[4]);
-	int64_t tEnd = (int64_t)MtEnd;
+	mreal tEnd = MArgument_getReal(Args[4]);
 
 	// CRN SSA process: pass everything to backend
-	preprocess_input(initCounts, reactCounts, prodCounts, rates, tEnd);
-	std::vector<int64_t> out = run_SSA();
+	preprocess_input(moleculeAmounts, stateChangeArray, reactantsArray, kValues, tEnd);
+	std::vector<double> out = run_SSA();
 
 	// output setup
 	MNumericArray Mout;
@@ -116,7 +147,7 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
 	const mint *dims_out = &out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Bit64, 1, dims_out, &Mout);
 	if (err != 0) {
-			goto cleanup;
+		goto cleanup;
 	}
 	data_out = naFuns->MNumericArray_getData(Mout);
 	if (data_out == NULL) {
