@@ -66,6 +66,16 @@ GetProdCounts[rxns_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxns, rxn[_, p_
 GetRates[rxns_] := Cases[rxns, rxn[_, _, k_] :> k]
 
 
+library = LibraryLoad["interface"];
+DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
+	{LibraryDataType[NumericArray],
+	LibraryDataType[NumericArray],
+	LibraryDataType[NumericArray],
+	LibraryDataType[NumericArray],
+	Real},
+	LibraryDataType[NumericArray]]
+
+
 DirectSSA[rxnsys_] := DirectSSA[rxnsys, Infinity]
 
 DirectSSA[rxnsys_, tEnd_] := Module[
@@ -73,23 +83,26 @@ DirectSSA[rxnsys_, tEnd_] := Module[
 	rxns = Cases[rxnsys, rxn[_, _, _]],
 	spcs = Quiet[GetSpecies[rxnsys]],
 	initCounts, reactCounts, prodCounts, rates,
-	initCountsNA, reactCountsNA, prodCountsNA, ratesNA,
+	initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR,
 	unkObjs = GetUnkObjs[rxnsys]},
 	
 	If[Length[unkObjs] =!= 0, Message[DirectSSA::rxnsyswarn, unkObjs]];
-	If[!(NumericQ[tEnd] || (tEnd === Infinity)), Message[DirectSSA::tenderr, tEnd]];
+	If[tEnd === Infinity, tEndR = -1.0, tEndR = N[tEnd]];
+	If[!NumericQ[tEndR], Message[DirectSSA::tenderr, tEndR]];
 	
 	initCounts = GetInitCounts[inits, spcs];
 	reactCounts = GetReactCounts[rxns, spcs];
 	prodCounts = GetProdCounts[rxns, spcs];
 	rates = GetRates[rxns];
 	
-	initCountsNA = NumericArray[initCounts, "Integer64"];
-	reactCountsNA = NumericArray[reactCounts, "Integer64"];
-	prodCountsNA = NumericArray[prodCounts, "Integer64"];
+	initCountsNA = NumericArray[initCounts, "UnsignedInteger32"];
+	reactCountsNA = NumericArray[reactCounts, "UnsignedInteger32"];
+	prodCountsNA = NumericArray[prodCounts, "UnsignedInteger32"];
 	ratesNA = NumericArray[rates, "Real64"];
 	
-	{initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEnd}
+	params = {initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR};
+	result = DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR];
+	{result, params}
 ]
 
 
