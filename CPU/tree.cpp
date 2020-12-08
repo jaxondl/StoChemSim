@@ -11,7 +11,8 @@ double tree::calculatePropensity(double reactionRate, vector<int> moleculeAmount
 }
 
 tree::tree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector) {
-    int numReactions = reactantsVector.size();
+    cout << "Beginning Creation of Reaction Tree" << endl;
+    long numReactions = reactantsVector.size();
     ReactionTreeArray = new ReactionNode[numReactions];
     ReactionTreeArray[0].parent = -1;
     for (int i=0; i<numReactions; i++) {
@@ -36,7 +37,7 @@ tree::tree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vec
         }
     }
 
-    for (int i=numReactions-1; i>0; i--) {
+    for (long i=numReactions-1; i>0; i--) {
         double subTotalPropensity = ReactionTreeArray[i].propensity + ReactionTreeArray[i].rightSum + ReactionTreeArray[i].leftSum;
         if (i == ReactionTreeArray[ReactionTreeArray[i].parent].leftChild) {
             ReactionTreeArray[ReactionTreeArray[i].parent].leftSum += subTotalPropensity;

@@ -11,7 +11,7 @@ using namespace std;
 
 int main() {
 
-    inputVerifier *iv = new inputVerifier();
+    //inputVerifier *iv = new inputVerifier();
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\sample_input_SSA_file.txt");
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\SampleInputs\\sample_deterministic_input_file_2.txt");
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\faulty_sample_input_SSA_file_1.txt");
@@ -20,10 +20,15 @@ int main() {
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\faulty_sample_input_SSA_file_4.txt");
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\faulty_sample_input_SSA_file_5.txt");
     bool safeToRun = true;
-
     if (safeToRun) {
         decoder *inputDecoder = new decoder();
-        inputDecoder->decode("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\SampleInputs\\sample_input_SSA_file.txt");
+        inputDecoder->decode("/Users/vidursinha/Desktop/Senior-Design/crn-ssa-wolfram-pkg/CPU/SampleInputs/sample_input_SSA_file.txt");
+        vector<vector<pair<int, int>>> stateChangeVector = inputDecoder->getStateChangeVector();
+        vector<vector<pair<int, int>>> reactantsVector = inputDecoder->getReactantVector();
+        vector<double> reactionRates = inputDecoder->getkValueVector();
+        vector<int> moleculeAmounts = inputDecoder->getPopulationSizes();
+        algorithm *directSSA = new algorithm(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, 5.9);
+        //directSSA->start();
         //inputDecoder->decode("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\SampleInputs\\sample_deterministic_input_file_2.txt");
 
 //        /**

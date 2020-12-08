@@ -41,14 +41,14 @@ dependency::dependency(vector<vector<pair<int, int>>> stateChangeVector, vector<
 }
 
 bool dependency::intersects(set<int> set1, set<int> set2){
-    for(int s : set1){
-        cout << s << " ";
-    }
-    cout << endl;
-    for(int s: set2){
-        cout << s << " ";
-    }
-    cout << endl;
+    //for(int s : set1){
+    //    cout << s << " ";
+    //}
+    //cout << endl;
+    //for(int s: set2){
+    //    cout << s << " ";
+    //}
+    //cout << endl;
 
     //begin intersection algorithm
     set<int>::iterator iter1 = set1.begin();
@@ -71,8 +71,4 @@ vector<int> dependency::getDependentReactions(int reactionIndex){
     return dependencyGraph[reactionIndex]; //returns itself as well
 }
 
-/** 1 4 7 8
-     * [1] vector[1, 3, 4]
-     * [2] vector[2]
-    */
 

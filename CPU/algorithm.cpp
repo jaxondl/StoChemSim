@@ -2,7 +2,7 @@
 
 using namespace std;
 
-algorithm::algorithm(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double t_end){
+algorithm::algorithm(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double tEnd){
 
     reactionTree = new tree(moleculeAmounts, reactionRates, reactantsVector);
     dependencyGraph = new dependency(stateChangeVector, reactantsVector);
@@ -12,7 +12,7 @@ algorithm::algorithm(vector<int> moleculeAmounts, vector<double> reactionRates, 
     stateChangeVector = stateChangeVector;
     currentState = moleculeAmounts;
     currentTime = 0;
-    t_end = t_end;
+    t_end = tEnd;
 }
 
 double algorithm::getUniformRandomVariable(){
