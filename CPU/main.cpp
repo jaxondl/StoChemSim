@@ -10,7 +10,7 @@
 using namespace std;
 
 int main() {
-
+    /**
     //inputVerifier *iv = new inputVerifier();
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\sample_input_SSA_file.txt");
     //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\sample_deterministic_input_file_1.txt");
@@ -134,8 +134,9 @@ int main() {
             //treeObject.testFunction();
         } else if (selection == 2) { //refer to tau-leaping, etc. (future reactions)
             //dependencyObject.testFunction();
-            /** method 2 specific objects **/
+            method 2 specific objects
         }
-    //}
+    //} **/
+    return 0;
    
 }
