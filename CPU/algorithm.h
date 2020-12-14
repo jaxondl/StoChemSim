@@ -22,7 +22,7 @@ private:
 
     //functions
     double getUniformRandomVariable();
-    double getTimeUntilNextReaction(double propensity); //returns Exp(propensity)
+    double getTimeUntilNextReaction(double propensity);
     void updateTime(double timeUntilNextReaction);
     void updateState(vector<vector<pair<int, int>>> stateChangeVector, int reactionIndex);
     double getTotalPropensity();

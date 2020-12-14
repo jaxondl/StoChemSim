@@ -2,17 +2,17 @@
 
 using namespace std;
 
-algorithm::algorithm(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double t_end){
+algorithm::algorithm(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double tEnd){
 
     reactionTree = new tree(moleculeAmounts, reactionRates, reactantsVector);
     dependencyGraph = new dependency(stateChangeVector, reactantsVector);
 
-    reactionRates = reactionRates; // k reaction constants
-    reactantsVector = reactantsVector;
-    stateChangeVector = stateChangeVector;
-    currentState = moleculeAmounts;
-    currentTime = 0;
-    t_end = t_end;
+    this->reactionRates = reactionRates; // k reaction constants
+    this->reactantsVector = reactantsVector;
+    this->stateChangeVector = stateChangeVector;
+    this->currentState = moleculeAmounts;
+    this->currentTime = 0;
+    this->t_end = tEnd;
 }
 
 double algorithm::getUniformRandomVariable(){
@@ -30,13 +30,16 @@ void algorithm::updateTime(double timeUntilNextReaction){
 void algorithm::updateState(vector<vector<pair<int, int>>> stateChangeVector, int reactionIndex) {
     vector<pair<int, int>> chosenReactionChange = stateChangeVector[reactionIndex];
     for(pair<int, int> p: chosenReactionChange){
+        cout << "Current amount: " << currentState[p.first] << " state change: " << p.second << endl;
         currentState[p.first] += p.second; //update the state change at the associated index
     }
+
 }
 
 double algorithm::getTimeUntilNextReaction(double propensity) {
     random_device rd;
     mt19937 gen(rd());
+    cout << "HELLO THERE" << endl;
     exponential_distribution<> dis(propensity); //exponential approximation of propensity
     double RV = dis(gen);
     return RV;
@@ -49,10 +52,30 @@ double algorithm::getTotalPropensity(){
 }
 
 void algorithm::start(){
-    /**Step 1:
-     */
-    while (currentTime < t_end && getTotalPropensity() != 0){
-        /**Step 1: calculate time until next reaction by doing getTimeUntilNectreaction(getTotalPropensity)
+    while (getTotalPropensity() > 0.001){
+        double timeUntilNextReaction = 0.37; // getTimeUntilNextReaction(getTotalPropensity());
+        updateTime(timeUntilNextReaction);
+        double uniformRV = getUniformRandomVariable();
+        int reactionIndex = reactionTree->searchForNode(uniformRV);
+        updateState(stateChangeVector, reactionIndex);
+        vector<int> dependentReactionIndices = dependencyGraph->getDependentReactions(reactionIndex);
+        for(int reaction: dependentReactionIndices){
+            reactionTree->updatePropensity(reaction, reactionRates[reaction], currentState, reactantsVector[reaction]);
+        }
+        for (int molecule: currentState){
+            cout << molecule << " ";
+        }
+        cout << endl;
+        cout << getTotalPropensity() << endl;
+    }
+    double d = 0.0;
+    for (int i = 0; i< reactionRates.size(); i++){
+        cout << "Propensity at index: " << i << " " << this->reactionTree->ReactionTreeArray[i].propensity << endl;
+        d += this->reactionTree->ReactionTreeArray[i].propensity;
+    }
+    cout << d;
+}
+/**Step 1: calculate time until next reaction by doing getTimeUntilNectreaction(getTotalPropensity)
          * step 2: update time += time until next reaction
          * step 3: get uniform
          * Step 4: refer to tree and pick the bucket (reaction)
@@ -61,14 +84,3 @@ void algorithm::start(){
          * step 7: update state using state change vector
          * (repeat) 
         */
-        double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity());
-        updateTime(timeUntilNextReaction);
-        double uniformRV = getUniformRandomVariable();
-        int reactionIndex = reactionTree->searchForNode(uniformRV);
-        vector<int> dependentReactionIndices = dependencyGraph->getDependentReactions(reactionIndex);
-        for(int reaction: dependentReactionIndices){
-            reactionTree->updatePropensity(reaction, reactionRates[reaction], currentState, reactantsVector[reaction]);
-        }
-        updateState(stateChangeVector, reactionIndex);
-    }
-}

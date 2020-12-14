@@ -1,8 +1,8 @@
 4
-x1 -> y z1 2
-x2 -> y z2 2
-z1 z2 -> k 1
-k y -> 0 3
+1x1 -> 1y z1 2
+1x2 -> 1y z2 2
+1z1 1z2 -> 1k 1
+1k 1y -> 0 3
 
 #this system is deterministic
 #the final system should always be 0x1, 0x2, 0k, 20y, 0z1, 10z2

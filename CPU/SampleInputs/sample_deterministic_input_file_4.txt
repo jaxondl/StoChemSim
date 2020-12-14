@@ -1,5 +1,5 @@
 2
-x -> 2y 1
+1x -> 2y 1
 4y -> 3z 2
 
 #this system is deterministic

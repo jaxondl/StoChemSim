@@ -5,13 +5,21 @@ using namespace std;
 double tree::calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){
     double propensity = reactionRate;
     for (pair<int, int> reactant: reactants) {
-        propensity *= pow(moleculeAmounts[reactant.first], reactant.second);
+        //propensity *= pow(moleculeAmounts[reactant.first], reactant.second);
+        for (int i=0; i<reactant.second; i++) {
+            propensity *= (moleculeAmounts[reactant.first] - i);
+        }
     }
+    if(reactants.size() == 0){
+        propensity = 0;
+    }
+    cout << "prop = " << propensity << endl;
     return propensity;
 }
 
 tree::tree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector) {
-    int numReactions = reactantsVector.size();
+    cout << "Beginning Creation of Reaction Tree" << endl;
+    long numReactions = reactantsVector.size();
     ReactionTreeArray = new ReactionNode[numReactions];
     ReactionTreeArray[0].parent = -1;
     for (int i=0; i<numReactions; i++) {
@@ -36,7 +44,7 @@ tree::tree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vec
         }
     }
 
-    for (int i=numReactions-1; i>0; i--) {
+    for (long i=numReactions-1; i>0; i--) {
         double subTotalPropensity = ReactionTreeArray[i].propensity + ReactionTreeArray[i].rightSum + ReactionTreeArray[i].leftSum;
         if (i == ReactionTreeArray[ReactionTreeArray[i].parent].leftChild) {
             ReactionTreeArray[ReactionTreeArray[i].parent].leftSum += subTotalPropensity;
@@ -67,6 +75,7 @@ int tree::searchForNode(double RV) {
             leftSumTotal += checkNode.leftSum;
         }
     }
+    cout << "returned reaction index " << currentIndex << " with propensity " << ReactionTreeArray[currentIndex].propensity <<endl;
     return currentIndex;
 }
 
