@@ -1,5 +1,5 @@
-#ifndef DEPENDENCY_H
-#define DEPENDENCY_H
+#ifndef DEPENDENCYGRAPH_H
+#define DEPENDENCYGRAPH_H
 
 #include <iostream>
 #include <string>
@@ -11,16 +11,15 @@
 
 using namespace std;
 
-class dependency {
+class dependencyGraph {
 private:
-    vector<vector<int>> dependencyGraph; 
+    vector<vector<int>> dependencyGraphStructure;
 public:
-    dependency(vector<vector<pair<int, int>>> stateChangeVector, vector<vector<pair<int,int>>> reactantsVector);
+    dependencyGraph(vector<vector<pair<int, int>>> stateChangeVector, vector<vector<pair<int,int>>> reactantsVector);
 
     bool intersects(set<int> set1, set<int> set2);
 
     vector<int> getDependentReactions(int reactionIndex);
 };
 
-
-#endif //DEPENDENCY_H
+#endif

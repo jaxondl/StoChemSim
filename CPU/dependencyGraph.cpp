@@ -1,8 +1,8 @@
-#include "dependency.h"
+#include "dependencyGraph.h"
 
 using namespace std;
 
-dependency::dependency(vector<vector<pair<int, int>>> stateChangeVector, vector<vector<pair<int,int>>> reactantsVector){
+dependencyGraph::dependencyGraph(vector<vector<pair<int, int>>> stateChangeVector, vector<vector<pair<int,int>>> reactantsVector){
     cout << "Beginning Creation of Dependency Graph" << endl;
     // DEFINITION 1: Reactants(p) and products(p) are reactants and prods of reaction p. e.g. Reactants(1) = {a,b}
     // DEFINITION 2: DependsOn(a-mu), where a-mu is the propensity of chosen reaction, is the set of substances that affect its value. i.e. Reactants(mu)
@@ -27,9 +27,8 @@ dependency::dependency(vector<vector<pair<int, int>>> stateChangeVector, vector<
 
     vector<vector<int>> dummyGraph(numReactions);
 
-    //then find intersection
-    for(int i = 0; i < numReactions; i++){
-        dummyGraph[i].push_back(i);
+    for(int i = 0; i < numReactions; i++){ //then find intersection
+        dummyGraph[i].push_back(i); 
         for(int j = 0; j < numReactions; j++){
             if(j != i && intersects(affects[i], dependsOn[j])){
                 dummyGraph[i].push_back(j);
@@ -37,20 +36,10 @@ dependency::dependency(vector<vector<pair<int, int>>> stateChangeVector, vector<
         }
     }
 
-    dependencyGraph = dummyGraph;
+    dependencyGraphStructure = dummyGraph;
 }
 
-bool dependency::intersects(set<int> set1, set<int> set2){
-    //for(int s : set1){
-    //    cout << s << " ";
-    //}
-    //cout << endl;
-    //for(int s: set2){
-    //    cout << s << " ";
-    //}
-    //cout << endl;
-
-    //begin intersection algorithm
+bool dependencyGraph::intersects(set<int> set1, set<int> set2){
     set<int>::iterator iter1 = set1.begin();
     set<int>::iterator iter2 = set2.begin();
     while(iter1 != set1.end() && iter2 != set2.end()){
@@ -67,8 +56,6 @@ bool dependency::intersects(set<int> set1, set<int> set2){
     return false;
 }
 
-vector<int> dependency::getDependentReactions(int reactionIndex){
-    return dependencyGraph[reactionIndex]; //returns itself as well
+vector<int> dependencyGraph::getDependentReactions(int reactionIndex){
+    return dependencyGraphStructure[reactionIndex]; //returns itself as well
 }
-
-

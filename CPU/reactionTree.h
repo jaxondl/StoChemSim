@@ -1,5 +1,5 @@
-#ifndef TREE_H
-#define TREE_H
+#ifndef REACTIONTREE_H
+#define REACTIONTREE_H
 
 #include <iostream>
 #include <string>
@@ -11,11 +11,11 @@
 
 using namespace std;
 
-class tree {
+class reactionTree {
 private:
     double calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants);
 public:
-    struct ReactionNode {
+    struct reactionNode {
             double propensity;
             double leftSum;
             double rightSum;
@@ -23,11 +23,10 @@ public:
             int rightChild;
             int parent;
     };
-    ReactionNode* ReactionTreeArray;
-    tree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector);
+    reactionNode* reactionTreeArray;
+    reactionTree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector);
     int searchForNode(double RV);
     void updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants);
 };
 
-
-#endif //TREE_H
+#endif

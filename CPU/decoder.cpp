@@ -18,6 +18,7 @@ void decoder::decode(string iFile) {
 
     string inputLine;
     int numReactions;
+    string tEnd;
     string reactionSlice = "";
     int reactionNumber = -1; //this is used for indexing the output vectors/arrays
     bool firstEntry = true;
@@ -31,8 +32,18 @@ void decoder::decode(string iFile) {
             inputLine = inputLine.substr(0, inputLine.length() - 1);
         }
 
-        numReactions = stoi(inputLine);
-        //cout << numReactions << endl;
+        //changes made here
+
+        int spaceIndex = inputLine.find(" ");
+        numReactions = stoi(inputLine.substr(0, spaceIndex));
+        tEnd = inputLine.substr(spaceIndex + 1, inputLine.length());
+        this->tEnd = atof(tEnd.c_str());
+        
+        //numReactions = stoi(inputLine);
+        cout << "Space " << spaceIndex << endl;
+        cout << "numReactions is " << numReactions << endl;
+        cout << "tEnd is " << this->tEnd << endl;
+
     }
 
     for (int r = 0; r < numReactions; r++) {
@@ -70,8 +81,7 @@ void decoder::decode(string iFile) {
                     //find the next space
                     int spaceIndex = inputLine.find(" ", j);
                     for (int i = j; i < spaceIndex; i++) {
-                        reactionSlice += inputLine.at(i); // copy the string up to the next space
-                        // (and don't include that space)
+                        reactionSlice += inputLine.at(i); // copy the string up to the next space (and don't include that space)
                     }
                     //cout << reactionSlice << " is about to be checked" << endl;
 
@@ -709,18 +719,22 @@ void decoder::updateStateChangeVectorReverse(int reactionNumber, std::string rea
     }
 }
 
-std::vector<std::string> decoder::getListOfSpecies() {
+double decoder::getTEnd() {
+    return this->tEnd;
+}
+
+vector<string> decoder::getListOfSpecies() {
     return this->listOfSpecies;
 }
-std::vector<int> decoder::getPopulationSizes() {
+vector<int> decoder::getPopulationSizes() {
     return this->populationSizes;
 }
-std::vector<std::vector<std::pair<int, int>>> decoder::getStateChangeVector() {
+vector<vector<pair<int, int>>> decoder::getStateChangeVector() {
     return this->stateChangeVector;
 }
-std::vector<std::vector<std::pair<int, int>>> decoder::getReactantVector() {
+vector<vector<pair<int, int>>> decoder::getReactantVector() {
     return this->reactantVector;
 }
-std::vector<double> decoder::getkValueVector() {
+vector<double> decoder::getkValueVector() {
     return this->kValueVector;
 }

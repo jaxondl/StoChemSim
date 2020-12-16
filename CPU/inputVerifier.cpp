@@ -24,7 +24,7 @@ bool inputVerifier::verifyFile(string iFile) {
     }
 
     // things to verify:
-    // 1) first line contains a single number and nothing else
+    // 1) first line contains two numbers (num of reactions and t_end)
     if (inputFile.peek() != EOF) {
         //out << "got here" << endl;
         getline(inputFile,
