@@ -10,14 +10,14 @@
 using namespace std;
 
 int main() {
-    //inputVerifier *iv = new inputVerifier();
-    //bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\SampleInputs\\sample_input_SSA_file.txt");
-    bool safeToRun = true;
+    inputVerifier *iv = new inputVerifier();
+    bool safeToRun = iv->verifyFile("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\SampleInputs\\sample_input_SSA_file.txt");
+    //bool safeToRun = true;
     if (safeToRun) {
         // Create decoder object and get all needed data structures
         decoder *inputDecoder = new decoder();
-        inputDecoder->decode("/Users/vidursinha/Desktop/Senior-Design/crn-ssa-wolfram-pkg/CPU/SampleInputs/sample_input_SSA_file.txt");
-        //inputDecoder->decode("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\SampleInputs\\sample_input_SSA_file.txt");
+        //inputDecoder->decode("/Users/vidursinha/Desktop/Senior-Design/crn-ssa-wolfram-pkg/CPU/SampleInputs/sample_input_SSA_file.txt");
+        inputDecoder->decode("C:\\Users\\ccort\\CLionProjects\\ssa-implementation\\CPU\\SampleInputs\\sample_input_SSA_file.txt");
         vector<vector<pair<int, int>>> stateChangeVector = inputDecoder->getStateChangeVector();
         vector<vector<pair<int, int>>> reactantsVector = inputDecoder->getReactantVector();
         vector<double> reactionRates = inputDecoder->getkValueVector();

@@ -382,13 +382,15 @@ bool inputVerifier::checkReactionSlice(string reactionSlice, int lineNumber, boo
     }
     else { //if it's not just the number 0
         if (isdigit(reactionSlice.at(0))) { //if it starts with a digit
-            if (containsNonDigitNonDecimal(reactionSlice)) { //it's a (valid?) reactant/product definition
+            if (containsNonDigitNonDecimal(reactionSlice)) { //it's a (possibly valid) reactant/product definition
                 return checkSingleMolecule(reactionSlice, lineNumber, errorExists);
-                //return false;
             } else { //it's a reaction rate, so it should contain up to 1 decimal and the rest digits
                 return !isValidReactionRate(reactionSlice, lineNumber); //only gets called if whole string is digits and decimals
             }
-        } else { //must either be "<->" or "->"
+        } else { //must either be "<->" or "->" OR it must be a valid reactant/product name
+            if (isalpha(reactionSlice.at(0))) { //if it starts with an alphabet character, then it's valid
+                return false;
+            }
             if (reactionSlice != "<->" && reactionSlice != "->") {
                 if (!alreadyWarned) {
                     cout << "Warning: Line " << lineNumber
