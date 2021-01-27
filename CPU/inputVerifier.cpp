@@ -34,11 +34,7 @@ bool inputVerifier::verifyFile(string iFile) {
         //cout << fullReactionDefLine << endl;
         fullReactionDefLine = chopOffComments(fullReactionDefLine); //get rid of the comments, if any
         //cout << fullReactionDefLine << endl;
-        //if there is a space at the end of the line, remove it
-        if (fullReactionDefLine.at(fullReactionDefLine.length() - 1) == ' ') {
-            fullReactionDefLine = fullReactionDefLine.substr(0, fullReactionDefLine.length() -
-                                                                1); //remove the very last character
-        }
+
         //cout << "Now checking line " << lineNumber << endl;
         //cout << reactionDefLine.length() << endl;
 
@@ -73,11 +69,12 @@ bool inputVerifier::verifyFile(string iFile) {
             if(reactionSlice.at(i) == '.') numDecimals++;
             else if (!(isdigit(reactionSlice.at(i)))) {
                 cout << "Warning: Your first line contains an invalid tEnd value." << endl;
+                cout << reactionSlice.at(i) << endl;
                 errorExists = true;
             }
         }
         if (numDecimals > 1) {
-            cout << "Warning: Your first line contains an invalid tEnd value." << endl;
+            cout << "Warning: Your first line contains too many decimals in the tEnd value." << endl;
             errorExists = true;
         }
 
@@ -119,12 +116,6 @@ bool inputVerifier::verifyFile(string iFile) {
                 fullReactionDefLine = chopOffComments(fullReactionDefLine);
 
                 if (!fullReactionDefLine.empty()) {
-                    //if there is a space at the end of the line, remove it
-                    if (fullReactionDefLine.at(fullReactionDefLine.length() - 1) == ' ') {
-                        fullReactionDefLine = fullReactionDefLine.substr(0, fullReactionDefLine.length() -
-                                                                            1); //remove the very last character
-                    }
-
                     // number of times "<->" or "->" shows up
                     int numForward = 0;
                     int numReversible = 0;
@@ -255,14 +246,6 @@ bool inputVerifier::verifyFile(string iFile) {
         if (!firstEntry) getline(inputFile, moleculeDefLine); //the first time we enter, the line has already been read
         firstEntry = false;
         moleculeDefLine = chopOffComments(moleculeDefLine);
-
-        //if there is a space at the end of the line, remove it
-        if (!moleculeDefLine.empty()) {
-            if (moleculeDefLine.at(moleculeDefLine.length() - 1) == ' ') {
-                moleculeDefLine = moleculeDefLine.substr(0,
-                                                         moleculeDefLine.length() - 1); //remove the very last character
-            }
-        }
 
         //make sure line contains a space
         if (moleculeDefLine.find(" ") != std::string::npos) {
@@ -459,6 +442,14 @@ string inputVerifier::chopOffComments(string line) {
         }
         line = temp;
     }
+
+    //if there is a space at the end of the line, remove it
+    if (!line.empty()) {
+        if (line.at(line.length() - 1) == ' ') {
+            line = line.substr(0, line.length() - 1); //remove the very last character
+        }
+    }
+
     return line;
 }
 
