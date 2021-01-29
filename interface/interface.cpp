@@ -442,30 +442,8 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
 
 	allStates = process::getAllStates();
 	allTimes = process::getAllTimes();
-
-	// output setup
-	MNumericArray Mout;
-	int64_t out_size = out.size();
-	const mint *dims_out = &out_size;
-	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
-	if (err != 0) {
-		goto cleanup;
-	}
-	data_out = naFuns->MNumericArray_getData(Mout);
-	if (data_out == NULL) {
-		goto cleanup;
-	}
 	
-	// convert output to a NumericArray
-	vectortoNumericArray(data_out, out);
-
-	// pass the result back
-	MArgument_setMNumericArray(res, Mout);
 	return LIBRARY_NO_ERROR;
-
-	cleanup:
-	naFuns->MNumericArray_free(Mout);
-	return err;
 }
 
 
