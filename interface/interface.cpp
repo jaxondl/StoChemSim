@@ -353,8 +353,8 @@ static void vectortoNumericArray(void *Mout0, vector<T> out) {
 	}
 }
 
-template <typename Tin, Tout>
-static void matrixtoNumericArray(void *Mout0, vector<<vector<Tin>>> out) {
+template <typename Tin, typename Tout>
+static void matrixtoNumericArray(void *Mout0, vector<vector<Tin>> out) {
 	Tout *Mout = static_cast<Tout *>(Mout0);
 	int64_t row = out.size();
 	int64_t col = out[0].size();
@@ -366,8 +366,8 @@ static void matrixtoNumericArray(void *Mout0, vector<<vector<Tin>>> out) {
 }
 
 template <typename T1, typename T2>
-static void reactantsAndStateChangeArrayConstruction(const int64_t *reactIn, const int64_t *prodIn, vector<vector<pair<T1, T2>>>& reactantsArray, vector<vector<pair<T1, T2>>>& stateChangeArray) {
-	for (mint i = 0; i < reactionCount; i++) {
+static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint moleculeCount, const int64_t *reactIn, const int64_t *prodIn, vector<vector<pair<T1, T2>>>& reactantsArray, vector<vector<pair<T1, T2>>>& stateChangeArray) {
+    for (mint i = 0; i < reactionCount; i++) {
 		vector<pair<T1, T2>> reactantsArray_row;
 		vector<pair<T1, T2>> stateChangeArray_row;
 		for (mint j = 0; j < moleculeCount; j++) {
@@ -420,8 +420,8 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
 
     vector<vector<pair<int, int>>> reactantsArray;
 	vector<vector<pair<int, int>>> stateChangeArray;
-    reactantsAndStateChangeArrayConstruction<int, int>(reactIn, prodIn, reactantsArray, stateChangeArray);
-
+    reactantsAndStateChangeArrayConstruction<int, int>(reactionCount, moleculeCount, reactIn, prodIn, reactantsArray, stateChangeArray);
+    
 	// convert rates
 	MNumericArray Mrates = MArgument_getMNumericArray(Args[3]);
 	data_in = naFuns->MNumericArray_getData(Mrates);
@@ -432,40 +432,17 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
 	mreal tEnd = MArgument_getReal(Args[4]);
 
 	// CRN SSA process: pass everything to backend
-	process = new directMethodSSA(
-					moleculeAmounts,
-					kValues,
-					reactantsArray,
-					stateChangeArray,
-					(double)tEnd);
-	process::start();
+	directMethodSSA *process = new directMethodSSA(
+        moleculeAmounts,
+        kValues,
+        reactantsArray,
+        stateChangeArray,
+        (double)tEnd);
+	process->start();
 
-	allStates = process::getAllStates();
-	allTimes = process::getAllTimes();
-
-	// output setup
-	MNumericArray Mout;
-	int64_t out_size = out.size();
-	const mint *dims_out = &out_size;
-	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
-	if (err != 0) {
-		goto cleanup;
-	}
-	data_out = naFuns->MNumericArray_getData(Mout);
-	if (data_out == NULL) {
-		goto cleanup;
-	}
-	
-	// convert output to a NumericArray
-	vectortoNumericArray(data_out, out);
-
-	// pass the result back
-	MArgument_setMNumericArray(res, Mout);
+	allStates = process->getAllStates();
+	allTimes = process->getAllTimes();
 	return LIBRARY_NO_ERROR;
-
-	cleanup:
-	naFuns->MNumericArray_free(Mout);
-	return err;
 }
 
 
@@ -519,7 +496,7 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	int64_t row = allStates.size();
 	int64_t col = allStates[0].size();
 	int64_t out_size[2] = {row, col};
-	const mint *dims_out = &out_size;
+	const mint *dims_out = out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Bit64, 2, dims_out, &Mout);
 	if (err != 0) {
 		goto cleanup;

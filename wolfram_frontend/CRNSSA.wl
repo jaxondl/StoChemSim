@@ -51,7 +51,6 @@ DirectSSA::tenderr = tenderrMsg
 
 GetSpecies[rxnsys_] := Module[{unkObjs = GetUnkObjs[rxnsys]},
 	If[Length[unkObjs] =!= 0, Message[GetSpecies::rxnsyswarn, unkObjs]];
-
 	Sort[Union[
 	Cases[Cases[rxnsys, rxn[r_, p_, _] :> Sequence[r, p]] /. Times | Plus -> Sequence, s_Symbol | s_Symbol[__]],
 	Cases[rxnsys, init[x_, _] :> x]
@@ -73,7 +72,9 @@ DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
 	LibraryDataType[NumericArray],
 	LibraryDataType[NumericArray],
 	Real},
-	LibraryDataType[NumericArray]]
+	"Void"];
+GetStates = LibraryFunctionLoad[library, "getStates", {}, LibraryDataType[NumericArray]];
+GetTimes = LibraryFunctionLoad[library, "getTimes", {}, LibraryDataType[NumericArray]];
 
 
 DirectSSA[rxnsys_] := DirectSSA[rxnsys, Infinity]
@@ -101,8 +102,10 @@ DirectSSA[rxnsys_, tEnd_] := Module[
 	ratesNA = NumericArray[rates, "Real64"];
 	
 	params = {initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR};
-	result = DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR];
-	{result, params}
+	DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR];
+	states = GetStates[];
+	times = GetTimes[];
+	{states, times, params}
 ]
 
 
