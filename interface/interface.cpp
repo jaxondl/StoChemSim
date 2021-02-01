@@ -380,7 +380,7 @@ static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint mo
 			}
 			if(out > 0) {
                 if (in > 0) {
-				    stateChangeArray_row.back().second() += out;
+				    stateChangeArray_row.back().second += out;
                 } else {
                     stateChangeArray_row.push_back(pair<T1, T2>(index, out));
                 }
@@ -394,6 +394,9 @@ static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint mo
 // ****** gloabl storage for returns *******
 vector<vector<int>> allStates;
 vector<double> allTimes;
+
+// ****** debug global *******
+vector<int> debugging;
 
 /* CRN SSA main function */
 EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
@@ -446,6 +449,16 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
 
 	allStates = process->getAllStates();
 	allTimes = process->getAllTimes();
+
+    // debug 
+    for (auto i : stateChangeArray) {
+        for (auto j : i) {
+            debugging.push_back(j.first);
+            debugging.push_back(0);
+            debugging.push_back(i.second);
+        }
+        debugging.push_back(1000);
+    }
 
 	return LIBRARY_NO_ERROR;
 }
@@ -512,6 +525,41 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	
 	// convert output to a NumericArray
 	matrixtoNumericArray<int, mint>(data_out, allStates);
+
+	// pass the result back
+	MArgument_setMNumericArray(res, Mout);
+	return LIBRARY_NO_ERROR;
+
+	cleanup:
+	naFuns->MNumericArray_free(Mout);
+	return err;
+}
+
+EXTERN_C DLLEXPORT int getTimes(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
+	// debug setup
+	int err = LIBRARY_FUNCTION_ERROR;
+	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
+
+	// reused local varibles setup
+	void *data_in = NULL, *data_out = NULL;
+	mint length;
+	mint const *dims;
+
+	// output setup
+	MNumericArray Mout;
+	int64_t out_size = debugging.size();
+	const mint *dims_out = &out_size;
+	err = naFuns->MNumericArray_new(MNumericArray_Type_Bit64, 1, dims_out, &Mout);
+	if (err != 0) {
+		goto cleanup;
+	}
+	data_out = naFuns->MNumericArray_getData(Mout);
+	if (data_out == NULL) {
+		goto cleanup;
+	}
+	
+	// convert output to a NumericArray
+	vectortoNumericArray<mint>(data_out, debugging);
 
 	// pass the result back
 	MArgument_setMNumericArray(res, Mout);
