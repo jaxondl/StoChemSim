@@ -455,7 +455,7 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
         for (auto j : i) {
             debugging.push_back(j.first);
             debugging.push_back(0);
-            debugging.push_back(i.second);
+            debugging.push_back(j.second);
         }
         debugging.push_back(1000);
     }
@@ -535,7 +535,7 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	return err;
 }
 
-EXTERN_C DLLEXPORT int getTimes(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
+EXTERN_C DLLEXPORT int getDebug(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
 	// debug setup
 	int err = LIBRARY_FUNCTION_ERROR;
 	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
@@ -559,7 +559,7 @@ EXTERN_C DLLEXPORT int getTimes(WolframLibraryData libData, mint Argc, MArgument
 	}
 	
 	// convert output to a NumericArray
-	vectortoNumericArray<mint>(data_out, debugging);
+	vectortoNumericArray<int>(data_out, debugging);
 
 	// pass the result back
 	MArgument_setMNumericArray(res, Mout);

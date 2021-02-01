@@ -31,6 +31,9 @@ Simulates the given reaction system via Gillespie direct SSA
 Backend is optimized in C++ for computational efficiency
 Note: implementation is not complete";
 
+GetDebug::usage =
+"GetDebug[] returns debug information for development";
+
 
 Begin["`Private`"]
 
@@ -75,6 +78,7 @@ DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
 	"Void"];
 GetStates = LibraryFunctionLoad[library, "getStates", {}, LibraryDataType[NumericArray]];
 GetTimes = LibraryFunctionLoad[library, "getTimes", {}, LibraryDataType[NumericArray]];
+GetDebug = LibraryFunctionLoad[library, "getDebug", {}, LibraryDataType[NumericArray]];
 
 
 DirectSSA[rxnsys_] := DirectSSA[rxnsys, Infinity]
@@ -96,9 +100,9 @@ DirectSSA[rxnsys_, tEnd_] := Module[
 	prodCounts = GetProdCounts[rxns, spcs];
 	rates = GetRates[rxns];
 	
-	initCountsNA = NumericArray[initCounts, "UnsignedInteger32"];
-	reactCountsNA = NumericArray[reactCounts, "UnsignedInteger32"];
-	prodCountsNA = NumericArray[prodCounts, "UnsignedInteger32"];
+	initCountsNA = NumericArray[initCounts, "Integer32"];
+	reactCountsNA = NumericArray[reactCounts, "Integer64"];
+	prodCountsNA = NumericArray[prodCounts, "Integer64"];
 	ratesNA = NumericArray[rates, "Real64"];
 	
 	params = {initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR};
