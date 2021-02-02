@@ -110,9 +110,6 @@ double reactionTree::calculatePropensity(double reactionRate, vector<int> molecu
             propensity *= (moleculeAmounts[reactant.first] - i);
         }
     }
-    if(reactants.size() == 0){
-        propensity = 0;
-    }
     return propensity;
 }
 
