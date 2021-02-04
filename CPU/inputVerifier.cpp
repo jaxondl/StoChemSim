@@ -42,18 +42,28 @@ bool inputVerifier::verifyFile(string iFile) {
         if (fullReactionDefLine.empty()) { //if the line is only comments, keep checking the next line until you get to a non-comment-only line
             while(fullReactionDefLine.empty()) {
                 getline(inputFile,fullReactionDefLine);
+                if(fullReactionDefLine.empty()) {
+                    cout << "Warning: Your file only contains commented lines." << endl;
+                    return false;
+                }
                 lineNumber++;
                 fullReactionDefLine = chopOffComments(fullReactionDefLine);
             }
         }
 
         int spaceIndex = fullReactionDefLine.find(" ");
+        if(spaceIndex == std::string::npos) {
+            cout << "Warning: Your first non-comment line is incomplete." << endl;
+            return false;
+        }
         for (int i = 0; i < spaceIndex; i++) {
             reactionSlice += fullReactionDefLine.at(
                     i); // copy the string up to the next space (and don't include that space)
         } //this should be the number of reactions, an integer
 
+        //cout << reactionSlice.length() << endl;
         for (int i = 0; i < reactionSlice.length(); i++) {
+            //cout << "checking index " << i << " of line " << lineNumber << " which is " << reactionSlice.at(i) << endl;
             if (!(isdigit(reactionSlice.at(i))) && !errorExists) {
                 //first line contains a character that is not a number!
                 cout << "Warning: Your first line contains a non-int number of reactions." << endl;
