@@ -26,13 +26,10 @@ GetSpecies::usage =
 GetSpecies[rxnsys, pattern] returns the species in rxnsys that match the specified pattern";
 
 DirectSSA::usage =
-"DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, end time]
-Simulates the given reaction system via Gillespie direct SSA
+"{states, times} = DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, end time]
+Simulates the given reaction system via Gillespie Direct SSA
 Backend is optimized in C++ for computational efficiency
 Note: implementation is not complete";
-
-GetDebug::usage =
-"GetDebug[] returns debug information for development";
 
 
 Begin["`Private`"]
@@ -92,7 +89,7 @@ DirectSSA[rxnsys_, tEnd_] := Module[
 	unkObjs = GetUnkObjs[rxnsys]},
 	
 	If[Length[unkObjs] =!= 0, Message[DirectSSA::rxnsyswarn, unkObjs]];
-	If[tEnd === Infinity, tEndR = -1.0, tEndR = N[tEnd]];
+	If[tEnd === Infinity, tEndR = 1000000.0, tEndR = N[tEnd]];
 	If[!NumericQ[tEndR], Message[DirectSSA::tenderr, tEndR]];
 	
 	initCounts = GetInitCounts[inits, spcs];
@@ -105,11 +102,8 @@ DirectSSA[rxnsys_, tEnd_] := Module[
 	prodCountsNA = NumericArray[prodCounts, "Integer64"];
 	ratesNA = NumericArray[rates, "Real64"];
 	
-	params = {initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR};
 	DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR];
-	states = GetStates[];
-	times = GetTimes[];
-	{states, times, params}
+	{GetStates[], GetTimes[]}
 ]
 
 

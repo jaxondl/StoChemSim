@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    182333,       3549]
-NotebookOptionsPosition[    177613,       3458]
-NotebookOutlinePosition[    178140,       3477]
-CellTagsIndexPosition[    178097,       3474]
+NotebookDataLength[    183173,       3586]
+NotebookOptionsPosition[    178451,       3495]
+NotebookOutlinePosition[    178979,       3514]
+CellTagsIndexPosition[    178936,       3511]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -294,14 +294,15 @@ Cell[CellGroupData[{
 Cell[BoxData[
  RowBox[{
   RowBox[{"{", 
-   RowBox[{"states1", ",", " ", "times1", ",", " ", "params1"}], "}"}], " ", 
-  "=", " ", 
+   RowBox[{"states1", ",", " ", "times1"}], "}"}], " ", "=", " ", 
   RowBox[{"DirectSSA", "[", 
    RowBox[{"rxnsys1", ",", " ", "1000"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.81472914943776*^9, 3.8147291765769897`*^9}, {
   3.81515205459922*^9, 3.815152078406739*^9}, {3.815171982356272*^9, 
-  3.815171982563717*^9}, {3.8212033531342363`*^9, 3.8212033845648108`*^9}},
- CellLabel->"In[7]:=",ExpressionUUID->"77c1fb6b-12dc-4da7-a958-5c5a4452f187"],
+  3.815171982563717*^9}, {3.8212033531342363`*^9, 3.8212033845648108`*^9}, {
+  3.8217981911583867`*^9, 
+  3.8217981924698024`*^9}},ExpressionUUID->"77c1fb6b-12dc-4da7-a958-\
+5c5a4452f187"],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -323,8 +324,9 @@ Cell[BoxData[
                  BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -358,8 +360,9 @@ Cell[BoxData[
                 None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -453,8 +456,9 @@ XPBAeLxWRVCliKCKCz5beLyWRVAliaCKCfvXkek/bM2IcA==
                  BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -487,8 +491,9 @@ XPBAeLxWRVCliKCKCz5beLyWRVAliaCKCfvXkek/bM2IcA==
                 None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -609,8 +614,9 @@ kiYrvXjYH2xlyPIOidqnTjLk/wBX72uH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -643,8 +649,9 @@ kiYrvXjYH2xlyPIOidqnTjLk/wBX72uH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -699,8 +706,9 @@ kiYrvXjYH2xlyPIOidqnTjLk/wBX72uH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -734,8 +742,9 @@ kiYrvXjYH2xlyPIOidqnTjLk/wBX72uH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -792,8 +801,9 @@ kiYrvXjYH2xlyPIOidqnTjLk/wBX72uH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -827,8 +837,9 @@ kiYrvXjYH2xlyPIOidqnTjLk/wBX72uH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -885,8 +896,9 @@ kiYrvXjYH2xlyPIOidqnTjLk/wBX72uH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -919,8 +931,9 @@ kiYrvXjYH2xlyPIOidqnTjLk/wBX72uH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1097,8 +1110,7 @@ Cell[CellGroupData[{
 Cell[BoxData[
  RowBox[{
   RowBox[{"{", 
-   RowBox[{"states2", ",", " ", "times2", ",", " ", "params2"}], "}"}], " ", 
-  "=", " ", 
+   RowBox[{"states2", ",", " ", "times2"}], "}"}], " ", "=", " ", 
   RowBox[{"DirectSSA", "[", 
    RowBox[{"rxnsys2", ",", "  ", "1000"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.814727554850992*^9, 3.81472756962504*^9}, {
@@ -1107,8 +1119,9 @@ Cell[BoxData[
   3.8151534593825464`*^9, 3.8151534609194007`*^9}, {3.8151642455137043`*^9, 
   3.8151642456005144`*^9}, {3.815171986564534*^9, 3.815171986915563*^9}, {
   3.8212034543170433`*^9, 3.8212034696368375`*^9}, {3.8212035105545745`*^9, 
-  3.82120351670812*^9}},
- CellLabel->"In[14]:=",ExpressionUUID->"68cdc8e7-1037-4072-a876-28eae94d6ab4"],
+  3.82120351670812*^9}, {3.8217982061258345`*^9, 
+  3.821798207308633*^9}},ExpressionUUID->"68cdc8e7-1037-4072-a876-\
+28eae94d6ab4"],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -1130,8 +1143,9 @@ Cell[BoxData[
                  BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1165,8 +1179,9 @@ Cell[BoxData[
                 None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1306,8 +1321,9 @@ Ge3OfAT9fJsSM++tpf8BeYcQig==
                  BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1340,8 +1356,9 @@ Ge3OfAT9fJsSM++tpf8BeYcQig==
                 None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1486,8 +1503,9 @@ A9fDvuTeOQRlq0WC89p0NPed72q6lg5a7Q0H9lA6chaOvs+rOozU09NCFnWH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1520,8 +1538,9 @@ A9fDvuTeOQRlq0WC89p0NPed72q6lg5a7Q0H9lA6chaOvs+rOozU09NCFnWH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1576,8 +1595,9 @@ A9fDvuTeOQRlq0WC89p0NPed72q6lg5a7Q0H9lA6chaOvs+rOozU09NCFnWH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1612,8 +1632,9 @@ A9fDvuTeOQRlq0WC89p0NPed72q6lg5a7Q0H9lA6chaOvs+rOozU09NCFnWH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1669,8 +1690,9 @@ A9fDvuTeOQRlq0WC89p0NPed72q6lg5a7Q0H9lA6chaOvs+rOozU09NCFnWH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1704,8 +1726,9 @@ A9fDvuTeOQRlq0WC89p0NPed72q6lg5a7Q0H9lA6chaOvs+rOozU09NCFnWH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1761,8 +1784,9 @@ A9fDvuTeOQRlq0WC89p0NPed72q6lg5a7Q0H9lA6chaOvs+rOozU09NCFnWH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1795,8 +1819,9 @@ A9fDvuTeOQRlq0WC89p0NPed72q6lg5a7Q0H9lA6chaOvs+rOozU09NCFnWH
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -1978,8 +2003,7 @@ Cell[CellGroupData[{
 Cell[BoxData[
  RowBox[{
   RowBox[{"{", 
-   RowBox[{"states3", ",", " ", "times3", ",", " ", "params3"}], "}"}], " ", 
-  "=", " ", 
+   RowBox[{"states3", ",", " ", "times3"}], "}"}], " ", "=", " ", 
   RowBox[{"DirectSSA", "[", 
    RowBox[{"rxnsys3", ",", " ", "1000"}], "]"}]}]], "Input",
  CellChangeTimes->{{3.8121608648864627`*^9, 3.812160882763273*^9}, {
@@ -1990,8 +2014,9 @@ Cell[BoxData[
    3.8147259288562293`*^9}, {3.815152340599249*^9, 3.815152341590205*^9}, {
    3.815164470338443*^9, 3.815164470416237*^9}, {3.815171990045226*^9, 
    3.815172011707431*^9}, {3.821203497485325*^9, 3.821203498428014*^9}, {
-   3.8212035317816176`*^9, 3.8212035447004104`*^9}},
- CellLabel->"In[20]:=",ExpressionUUID->"b6268b37-be13-4b8c-a833-d45a91bc13ff"],
+   3.8212035317816176`*^9, 3.8212035447004104`*^9}, {3.821798210189833*^9, 
+   3.8217982121405516`*^9}},ExpressionUUID->"b6268b37-be13-4b8c-a833-\
+d45a91bc13ff"],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -2013,8 +2038,9 @@ Cell[BoxData[
                  BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -2048,8 +2074,9 @@ Cell[BoxData[
                 None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -2471,8 +2498,9 @@ x/8Zngf52r35fvFvU57viz//P81ABuc=
                  BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -2505,8 +2533,9 @@ x/8Zngf52r35fvFvU57viz//P81ABuc=
                 None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                 "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                Dynamic[{
-                 Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                  AbsoluteCurrentValue[Magnification]}]], 
+                 Automatic, 
+                  3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                   Magnification])}]], 
               GridBox[{{
                  RowBox[{
                    TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -3060,8 +3089,9 @@ p40DyRvtbeq1cal6szpTUwfrOAFHmpbpYCQt5NZ8Rx1sy8w9nVo3He8sDfb7
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -3094,8 +3124,9 @@ p40DyRvtbeq1cal6szpTUwfrOAFHmpbpYCQt5NZ8Rx1sy8w9nVo3He8sDfb7
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -3151,8 +3182,9 @@ p40DyRvtbeq1cal6szpTUwfrOAFHmpbpYCQt5NZ8Rx1sy8w9nVo3He8sDfb7
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -3187,8 +3219,9 @@ p40DyRvtbeq1cal6szpTUwfrOAFHmpbpYCQt5NZ8Rx1sy8w9nVo3He8sDfb7
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -3247,8 +3280,9 @@ p40DyRvtbeq1cal6szpTUwfrOAFHmpbpYCQt5NZ8Rx1sy8w9nVo3He8sDfb7
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -3283,8 +3317,9 @@ p40DyRvtbeq1cal6szpTUwfrOAFHmpbpYCQt5NZ8Rx1sy8w9nVo3He8sDfb7
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -3343,8 +3378,9 @@ p40DyRvtbeq1cal6szpTUwfrOAFHmpbpYCQt5NZ8Rx1sy8w9nVo3He8sDfb7
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -3378,8 +3414,9 @@ p40DyRvtbeq1cal6szpTUwfrOAFHmpbpYCQt5NZ8Rx1sy8w9nVo3He8sDfb7
                   None, BaseStyle -> {}, Evaluator -> Automatic, Method -> 
                   "Preemptive"], Alignment -> {Center, Center}, ImageSize -> 
                  Dynamic[{
-                   Automatic, 3.5 CurrentValue["FontCapHeight"]/
-                    AbsoluteCurrentValue[Magnification]}]], 
+                   Automatic, 
+                    3.5 (CurrentValue["FontCapHeight"]/AbsoluteCurrentValue[
+                    Magnification])}]], 
                 GridBox[{{
                    RowBox[{
                     TagBox["\"Type: \"", "SummaryItemAnnotation"], 
@@ -3456,8 +3493,8 @@ Cell[BoxData["True"], "Output",
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1428., 741.75},
-WindowMargins->{{Automatic, 960}, {Automatic, 0}},
+WindowSize->{1440., 747.75},
+WindowMargins->{{Automatic, 957}, {Automatic, -6}},
 TaggingRules->{
  "WelcomeScreenSettings" -> {"FEStarting" -> False}, "TryRealOnly" -> False},
 Magnification:>1.1 Inherited,
@@ -3496,58 +3533,58 @@ Cell[11537, 264, 632, 11, 30, "Input",ExpressionUUID->"5e11963f-61a3-4efc-a463-6
 Cell[12172, 277, 657, 11, 35, "Output",ExpressionUUID->"70bf6377-ddf9-4df5-9ee6-e175a8293004"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[12866, 293, 512, 10, 30, "Input",ExpressionUUID->"77c1fb6b-12dc-4da7-a958-5c5a4452f187"],
-Cell[13381, 305, 33271, 662, 125, "Output",ExpressionUUID->"733f39f9-aa06-416b-a378-f12e18a31017"]
+Cell[12866, 293, 523, 11, 30, "Input",ExpressionUUID->"77c1fb6b-12dc-4da7-a958-5c5a4452f187"],
+Cell[13392, 306, 33543, 674, 125, "Output",ExpressionUUID->"733f39f9-aa06-416b-a378-f12e18a31017"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[46689, 972, 388, 9, 30, "Input",ExpressionUUID->"1db6d0df-0b10-4715-871d-35bed52e0e6b"],
-Cell[47080, 983, 298, 4, 35, "Output",ExpressionUUID->"c6d1d3d4-9c6d-45ca-8ddd-1d29a176cc16"]
+Cell[46972, 985, 388, 9, 30, "Input",ExpressionUUID->"1db6d0df-0b10-4715-871d-35bed52e0e6b"],
+Cell[47363, 996, 298, 4, 35, "Output",ExpressionUUID->"c6d1d3d4-9c6d-45ca-8ddd-1d29a176cc16"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[47427, 993, 380, 6, 58, "Subtitle",ExpressionUUID->"a94da052-b5f9-4bc7-a8af-06681168a31e"],
-Cell[47810, 1001, 356, 7, 30, "Input",ExpressionUUID->"bf7c058b-b978-4ea2-a4dc-9c9ea226610a"],
-Cell[48169, 1010, 946, 20, 114, "Input",ExpressionUUID->"9abb1f7f-8a2b-4bba-9e64-c50d159e10c2"],
+Cell[47710, 1006, 380, 6, 58, "Subtitle",ExpressionUUID->"a94da052-b5f9-4bc7-a8af-06681168a31e"],
+Cell[48093, 1014, 356, 7, 30, "Input",ExpressionUUID->"bf7c058b-b978-4ea2-a4dc-9c9ea226610a"],
+Cell[48452, 1023, 946, 20, 114, "Input",ExpressionUUID->"9abb1f7f-8a2b-4bba-9e64-c50d159e10c2"],
 Cell[CellGroupData[{
-Cell[49140, 1034, 269, 4, 30, "Input",ExpressionUUID->"9e7d3b02-71b0-4bc6-8852-9b56cc4de20b"],
-Cell[49412, 1040, 730, 11, 35, "Output",ExpressionUUID->"1e36361b-b77c-4a74-b597-cc50b5e0659e"]
+Cell[49423, 1047, 269, 4, 30, "Input",ExpressionUUID->"9e7d3b02-71b0-4bc6-8852-9b56cc4de20b"],
+Cell[49695, 1053, 730, 11, 35, "Output",ExpressionUUID->"1e36361b-b77c-4a74-b597-cc50b5e0659e"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[50179, 1056, 567, 14, 30, "Input",ExpressionUUID->"3834eb3a-3752-4ce7-95d2-d728d425aa38"],
-Cell[50749, 1072, 234, 4, 35, "Output",ExpressionUUID->"996b7c08-4e7a-49cd-829b-ec4e3713f8f6"]
+Cell[50462, 1069, 567, 14, 30, "Input",ExpressionUUID->"3834eb3a-3752-4ce7-95d2-d728d425aa38"],
+Cell[51032, 1085, 234, 4, 35, "Output",ExpressionUUID->"996b7c08-4e7a-49cd-829b-ec4e3713f8f6"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[51020, 1081, 207, 4, 30, "Input",ExpressionUUID->"726a76c9-08b1-4e85-a2c2-bd97e25e4eee"],
-Cell[51230, 1087, 230, 4, 35, "Output",ExpressionUUID->"c588c6c9-372f-4d55-b4b8-2ae297987209"]
+Cell[51303, 1094, 207, 4, 30, "Input",ExpressionUUID->"726a76c9-08b1-4e85-a2c2-bd97e25e4eee"],
+Cell[51513, 1100, 230, 4, 35, "Output",ExpressionUUID->"c588c6c9-372f-4d55-b4b8-2ae297987209"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[51497, 1096, 768, 14, 30, "Input",ExpressionUUID->"68cdc8e7-1037-4072-a876-28eae94d6ab4"],
-Cell[52268, 1112, 37632, 733, 125, "Output",ExpressionUUID->"b087c32c-cc42-483d-9fc9-16e82e612495"]
+Cell[51780, 1109, 773, 14, 30, "Input",ExpressionUUID->"68cdc8e7-1037-4072-a876-28eae94d6ab4"],
+Cell[52556, 1125, 37904, 745, 125, "Output",ExpressionUUID->"b087c32c-cc42-483d-9fc9-16e82e612495"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[89937, 1850, 490, 10, 30, "Input",ExpressionUUID->"e2927102-b771-428a-9bf7-52f269744449"],
-Cell[90430, 1862, 326, 5, 35, "Output",ExpressionUUID->"e0b85bc5-0f7f-42c8-bc16-a69debc6e1fe"]
+Cell[90497, 1875, 490, 10, 30, "Input",ExpressionUUID->"e2927102-b771-428a-9bf7-52f269744449"],
+Cell[90990, 1887, 326, 5, 35, "Output",ExpressionUUID->"e0b85bc5-0f7f-42c8-bc16-a69debc6e1fe"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[90805, 1873, 418, 6, 58, "Subtitle",ExpressionUUID->"cac518be-760f-4e04-892e-7b19f51723f0"],
-Cell[91226, 1881, 511, 9, 30, "Input",ExpressionUUID->"3ffb72a0-fef1-4d8d-b7d0-99d1956131fd"],
-Cell[91740, 1892, 1483, 31, 155, "Input",ExpressionUUID->"9fe609a4-5ad6-46db-842b-92f8411dd608"],
+Cell[91365, 1898, 418, 6, 58, "Subtitle",ExpressionUUID->"cac518be-760f-4e04-892e-7b19f51723f0"],
+Cell[91786, 1906, 511, 9, 30, "Input",ExpressionUUID->"3ffb72a0-fef1-4d8d-b7d0-99d1956131fd"],
+Cell[92300, 1917, 1483, 31, 155, "Input",ExpressionUUID->"9fe609a4-5ad6-46db-842b-92f8411dd608"],
 Cell[CellGroupData[{
-Cell[93248, 1927, 267, 4, 30, "Input",ExpressionUUID->"91f69302-2363-4b50-b2d9-04bf77b24472"],
-Cell[93518, 1933, 618, 9, 35, "Output",ExpressionUUID->"ae0825cc-fad2-45c7-b649-5341488f7b61"]
+Cell[93808, 1952, 267, 4, 30, "Input",ExpressionUUID->"91f69302-2363-4b50-b2d9-04bf77b24472"],
+Cell[94078, 1958, 618, 9, 35, "Output",ExpressionUUID->"ae0825cc-fad2-45c7-b649-5341488f7b61"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[94173, 1947, 766, 16, 30, "Input",ExpressionUUID->"f92615d0-9019-478c-b222-a80eb17baabc"],
-Cell[94942, 1965, 477, 7, 35, "Output",ExpressionUUID->"59db5194-f9bc-44d1-be3b-15e4e21b1500"]
+Cell[94733, 1972, 766, 16, 30, "Input",ExpressionUUID->"f92615d0-9019-478c-b222-a80eb17baabc"],
+Cell[95502, 1990, 477, 7, 35, "Output",ExpressionUUID->"59db5194-f9bc-44d1-be3b-15e4e21b1500"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[95456, 1977, 944, 16, 30, "Input",ExpressionUUID->"b6268b37-be13-4b8c-a833-d45a91bc13ff"],
-Cell[96403, 1995, 80492, 1439, 125, "Output",ExpressionUUID->"e95c0190-3f7c-443b-818c-b4259263dc26"]
+Cell[96016, 2002, 950, 16, 30, "Input",ExpressionUUID->"b6268b37-be13-4b8c-a833-d45a91bc13ff"],
+Cell[96969, 2020, 80764, 1451, 125, "Output",ExpressionUUID->"e95c0190-3f7c-443b-818c-b4259263dc26"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[176932, 3439, 389, 9, 30, "Input",ExpressionUUID->"622aad92-7ed7-487c-ac8e-8e953174b96b"],
-Cell[177324, 3450, 249, 3, 35, "Output",ExpressionUUID->"263e0968-7938-4203-8129-572739625c72"]
+Cell[177770, 3476, 389, 9, 30, "Input",ExpressionUUID->"622aad92-7ed7-487c-ac8e-8e953174b96b"],
+Cell[178162, 3487, 249, 3, 35, "Output",ExpressionUUID->"263e0968-7938-4203-8129-572739625c72"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
