@@ -1,0 +1,11 @@
+3 15
+1x1 -> 1y 1z1 1
+1x2 -> 1y 1z2 1
+1z1 1z2 1y -> 0 1
+
+#this system is deterministic
+#the final system should always be 0x1, 0x2, Wy, Mz1, Nz2, where W = max(x1n, x2n), M = max (0,x1n-x2n), N = max(0, x2n - x1n)
+#with the initial values below, this outcome should always be 0x1, 0x2, 750y, 0z1, 250z2
+
+x1 500 #x1n = 500
+x2 750 #x2n = 750
