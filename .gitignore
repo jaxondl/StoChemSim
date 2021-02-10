@@ -1,5 +1,5 @@
 .idea/
-CMakeLists.txt
 cmake-build-debug
 cmake-build-debug-mingw
 .vs/
+.DS_Store
