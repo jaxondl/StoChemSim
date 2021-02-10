@@ -16,6 +16,8 @@ void decoder::decode(string iFile) {
         exit(1);   // call system to stop
     }
 
+    //cout << "Beginning decoding." << endl;
+
     string inputLine;
     int numReactions;
     string tEnd;
@@ -24,12 +26,17 @@ void decoder::decode(string iFile) {
     bool firstEntry = true;
 
     if (inputFile.peek() != EOF) {
-        //out << "got here" << endl;
+        //cout << "got here" << endl;
         getline(inputFile, inputLine);
         inputLine = chopOffComments(inputLine);
 
-        if (inputLine.at(inputLine.length() - 1) == ' ') { //if there is a space at the end of the line, remove it
-            inputLine = inputLine.substr(0, inputLine.length() - 1);
+        //cout << "got here" << endl;
+
+        if (inputLine.empty()) { //if the line is only comments, keep checking the next line until you get to a non-comment-only line
+            while(inputLine.empty()) {
+                getline(inputFile,inputLine);
+                inputLine = chopOffComments(inputLine);
+            }
         }
 
         //changes made here
@@ -63,11 +70,6 @@ void decoder::decode(string iFile) {
             inputLine = chopOffComments(inputLine);
 
             if (!inputLine.empty()) {
-                //if there is a space at the end of the line, remove it
-                if (inputLine.at(inputLine.length() - 1) == ' ') {
-                    inputLine = inputLine.substr(0, inputLine.length() - 1);
-                }
-
                 if (inputLine.find("<->") != std::string::npos) { //if the reaction definition line contains "<->"
                     isReversible = true;
                 }
@@ -187,13 +189,6 @@ void decoder::decode(string iFile) {
         firstEntry = false;
         inputLine = chopOffComments(inputLine);
 
-        //if there is a space at the end of the line, remove it
-        if (!inputLine.empty()) {
-            if (inputLine.at(inputLine.length() - 1) == ' ') {
-                inputLine = inputLine.substr(0, inputLine.length() - 1); //remove the very last character
-            }
-        }
-
         //get the molecule name
         string moleculeName = "";
         int j = 0;
@@ -289,6 +284,14 @@ string decoder::chopOffComments(string line) {
         }
         line = temp;
     }
+
+    //if there is a space at the end of the line, remove it
+    if (!line.empty()) {
+        if (line.at(line.length() - 1) == ' ') {
+            line = line.substr(0, line.length() - 1); //remove the very last character
+        }
+    }
+
     return line;
 }
 
