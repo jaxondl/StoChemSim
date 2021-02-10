@@ -1,4 +1,4 @@
-4 0.005 #comment
+4 20 #comment
 2A 3B -> 4z 5.2 #reaction index is 0 for this reaction
 4Uj0+ B <-> 3A 1.1 2.3 #since this is a reversible reaction, its forward direction will be reaction index 1, and its reverse direction will be reaction index 2
 0 -> 2A 3B 7
