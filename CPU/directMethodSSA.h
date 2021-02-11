@@ -21,6 +21,9 @@ private:
     vector<double> allTimes;
     double currentTime;
     double tEnd;
+    bool tInfinity;
+    bool statesOnly;
+    bool finalOnly;
 
     double getUniformRandomVariable();
     double getTimeUntilNextReaction(double propensity);
@@ -29,9 +32,11 @@ private:
     double getTotalPropensity();
 
 public:
-    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double t_end);
+    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double t_end, bool statesOnly, bool finalOnly, bool tInfinity);
     vector<vector<int>> getAllStates();
     vector<double> getAllTimes();
+    vector<int> getCurrentState();
+    double getCurrentTime();
     void start();
 };
 

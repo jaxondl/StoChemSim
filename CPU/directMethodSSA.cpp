@@ -2,7 +2,7 @@
 
 using namespace std;
 
-directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double tEnd){
+directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double tEnd, bool statesOnly, bool finalOnly, bool tInfinity){
     this->reactionTree = new class reactionTree(moleculeAmounts, reactionRates, reactantsVector);
     this->dependencyGraph = new class dependencyGraph(stateChangeVector, reactantsVector);
     this->allStates.push_back(moleculeAmounts);
@@ -13,6 +13,12 @@ directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> rea
     this->currentState = moleculeAmounts;
     this->currentTime = 0;
     this->tEnd = tEnd;
+    this->statesOnly = statesOnly;
+    this->finalOnly = finalOnly;
+    this->tInfinity = tInfinity;
+    if (this->statesOnly) {
+        this->tInfinity = true; 
+    }
 }
 
 double directMethodSSA::getUniformRandomVariable(){
@@ -57,23 +63,33 @@ vector<double> directMethodSSA::getAllTimes(){
     return allTimes;
 }
 
+vector<int> directMethodSSA::getCurrentState(){
+    return currentState;
+}
+
+double directMethodSSA::getCurrentTime(){
+    return currentTime;
+}
+
 void directMethodSSA::start(){
-    while (getTotalPropensity() > 0.001 && currentTime < tEnd){
-        double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity());
-        updateTime(timeUntilNextReaction);
-        allTimes.push_back(currentTime);
+    while (getTotalPropensity() > 0.001 && (currentTime < tEnd || tInfinity)){
+        if (!statesOnly) {
+            double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity());
+            if(currentTime + timeUntilNextReaction > tEnd && !tInfinity)
+                break;
+            updateTime(timeUntilNextReaction);
+            allTimes.push_back(currentTime);
+        }
         double uniformRV = getUniformRandomVariable();
         int reactionIndex = reactionTree->searchForNode(uniformRV);
         updateState(stateChangeVector, reactionIndex);
-        allStates.push_back(currentState);
+        if (!finalOnly) {
+            allStates.push_back(currentState);
+        }
         vector<int> dependentReactionIndices = dependencyGraph->getDependentReactions(reactionIndex);
         for(int reaction: dependentReactionIndices){
             reactionTree->updatePropensity(reaction, reactionRates[reaction], currentState, reactantsVector[reaction]);
         }
     }
-    // If we pass tEnd, remove the last time and state before sending 
-    if (currentTime > tEnd) {
-        allTimes.pop_back();
-        allStates.pop_back();
-    }
+    // If we pass tEnd, remove the last time and state before sending
 }
