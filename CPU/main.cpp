@@ -26,13 +26,13 @@ int main(int argc, char** argv) {
         vector<double> reactionRates = inputDecoder->getkValueVector();
         vector<int> moleculeAmounts = inputDecoder->getPopulationSizes();
         vector<string> speciesList = inputDecoder->getListOfSpecies();
-        double tEnd = inputDecoder->getTEnd();
+        //double tEnd = inputDecoder->getTEnd();
 
         // Create SSA object and begin algorithm
         bool so = false;
         bool fo = false;
         bool ti = false;
-        tEnd = tEndCommandLine;
+        double tEnd = tEndCommandLine;
         if(tEnd <= 0)
             ti = true;
         for(int i = 4; i < argc; i++){
