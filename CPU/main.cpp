@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
     inputVerifier *iv = new inputVerifier();
     string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\CPU\\SampleInputs\\sample_input_SSA_file.txt
     string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\CPU\\output.txt
+    double tEndCommandLine = stod(argv[3]);
     bool safeToRun = iv->verifyFile(inputFilePath);
     if (safeToRun) {
         // Create decoder object and get all needed data structures
@@ -28,24 +29,67 @@ int main(int argc, char** argv) {
         double tEnd = inputDecoder->getTEnd();
 
         // Create SSA object and begin algorithm
-        directMethodSSA *directSSA = new directMethodSSA(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, tEnd);
+        bool so = false;
+        bool fo = false;
+        bool ti = false;
+        tEnd = tEndCommandLine;
+        if(tEnd <= 0)
+            ti = true;
+        for(int i = 4; i < argc; i++){
+            string argument = argv[i];
+            if (argument =="-so")
+                so = true;
+            else if (argument == "-fo")
+                fo = true;
+        }
+
+        directMethodSSA *directSSA = new directMethodSSA(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, tEnd, so, fo, ti);
         directSSA->start();
 
         // Print the results of the SSA - all states at all times, sequentially
         vector<double> allTimes = directSSA->getAllTimes();
         vector<vector<int>> allStates = directSSA->getAllStates();
+        vector<int> currentState = directSSA->getCurrentState();
+        double currentTime = directSSA->getCurrentTime();
 
         ofstream outfile;
         outfile.open(outputFilePath);
-        outfile << "Iteration" << "\t\tTime(s) " << "\t\t\tState" << endl;
-        for(int i = 0; i < allTimes.size(); i++){
-            outfile << i << "\t\t\t\t" << setprecision(5) << scientific << allTimes[i] << "\t\t\t";
-            for(int j = 0; j < allStates[i].size(); j++){
-                outfile << speciesList[j];
-                outfile << ": " << allStates[i][j];
-                outfile << "\t";
+        if(fo){
+            if(so) // final state only
+                outfile << "Final State:" << endl;
+            else { // final time and state only
+                outfile << "Final Time" << "\t\t\tFinal State" << endl;
+                outfile << setprecision(5) << scientific << currentTime << "\t\t\t";
             }
-            outfile << endl;
+            for(int i = 0; i < currentState.size(); i++){
+                    outfile << speciesList[i];
+                    outfile << ": " << currentState[i];
+                    outfile << "\t";
+            }
+        }
+        else if(so){ // only states (NO TIME)
+            outfile << "Iteration" << "\tState" << endl;
+            for(int i = 0; i < allStates.size(); i++){
+                outfile << i << "\t\t\t";
+                for(int j = 0; j < allStates[i].size(); j++){
+                    outfile << speciesList[j];
+                    outfile << ": " << allStates[i][j];
+                    outfile << "\t";
+                }
+                outfile << endl;
+            }
+        }
+        else{
+            outfile << "Iteration" << "\t\tTime(s)" << "\t\t\t\tState" << endl;
+            for(int i = 0; i < allTimes.size(); i++){
+                outfile << i << "\t\t\t\t" << setprecision(5) << scientific << allTimes[i] << "\t\t\t";
+                for(int j = 0; j < allStates[i].size(); j++){
+                    outfile << speciesList[j];
+                    outfile << ": " << allStates[i][j];
+                    outfile << "\t";
+                }
+                outfile << endl;
+            }
         }
         outfile.close();
     }
