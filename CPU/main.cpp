@@ -35,6 +35,8 @@ int main(int argc, char** argv) {
         double tEnd = tEndCommandLine;
         if(tEnd <= 0)
             ti = true;
+        else
+            cout << "tEnd is " << tEnd << endl;
         for(int i = 4; i < argc; i++){
             string argument = argv[i];
             if (argument =="-so")
