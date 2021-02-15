@@ -2,7 +2,7 @@
 
 using namespace std;
 
-directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double tEnd, bool statesOnly, bool finalOnly, bool tInfinity){
+directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration){
     this->reactionTree = new class reactionTree(moleculeAmounts, reactionRates, reactantsVector);
     this->dependencyGraph = new class dependencyGraph(stateChangeVector, reactantsVector);
     this->allStates.push_back(moleculeAmounts);
@@ -12,12 +12,14 @@ directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> rea
     this->stateChangeVector = stateChangeVector;
     this->currentState = moleculeAmounts;
     this->currentTime = 0;
-    this->tEnd = tEnd;
+    this->currentIteration = 0;
+    this->endValue = endValue;
     this->statesOnly = statesOnly;
     this->finalOnly = finalOnly;
-    this->tInfinity = tInfinity;
+    this->endInfinity = endInfinity;
+    this->endByIteration = endByIteration;
     if (this->statesOnly) {
-        this->tInfinity = true; 
+        this->endInfinity = true; 
     }
 }
 
@@ -71,11 +73,15 @@ double directMethodSSA::getCurrentTime(){
     return currentTime;
 }
 
+int directMethodSSA::getCurrentIteration(){
+    return currentIteration;
+}
+
 void directMethodSSA::start(){
-    while (getTotalPropensity() > 0.001 && (currentTime < tEnd || tInfinity)){
+    while (getTotalPropensity() > 0.001 && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))){
         if (!statesOnly) {
             double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity());
-            if(currentTime + timeUntilNextReaction > tEnd && !tInfinity)
+            if(currentTime + timeUntilNextReaction > endValue && !endInfinity)
                 break;
             updateTime(timeUntilNextReaction);
             allTimes.push_back(currentTime);
@@ -90,6 +96,7 @@ void directMethodSSA::start(){
         for(int reaction: dependentReactionIndices){
             reactionTree->updatePropensity(reaction, reactionRates[reaction], currentState, reactantsVector[reaction]);
         }
+        currentIteration++;
     }
-    // If we pass tEnd, remove the last time and state before sending
+    // If we pass endValue, remove the last time and state before sending
 }

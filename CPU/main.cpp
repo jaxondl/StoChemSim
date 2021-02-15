@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
     inputVerifier *iv = new inputVerifier();
     string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\CPU\\SampleInputs\\sample_input_SSA_file.txt
     string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\CPU\\output.txt
-    double tEndCommandLine = stod(argv[3]);
+    double endValue = stod(argv[3]);
     bool safeToRun = iv->verifyFile(inputFilePath);
     if (safeToRun) {
         // Create decoder object and get all needed data structures
@@ -26,14 +26,13 @@ int main(int argc, char** argv) {
         vector<double> reactionRates = inputDecoder->getkValueVector();
         vector<int> moleculeAmounts = inputDecoder->getPopulationSizes();
         vector<string> speciesList = inputDecoder->getListOfSpecies();
-        //double tEnd = inputDecoder->getTEnd();
 
         // Create SSA object and begin algorithm
         bool so = false;
         bool fo = false;
         bool ti = false;
-        double tEnd = tEndCommandLine;
-        if(tEnd <= 0)
+        bool it = false; // iterations limit
+        if(endValue <= 0)
             ti = true;
         for(int i = 4; i < argc; i++){
             string argument = argv[i];
@@ -41,9 +40,12 @@ int main(int argc, char** argv) {
                 so = true;
             else if (argument == "-fo")
                 fo = true;
+            else if (argument == "-it")
+                it = true;
+            
         }
 
-        directMethodSSA *directSSA = new directMethodSSA(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, tEnd, so, fo, ti);
+        directMethodSSA *directSSA = new directMethodSSA(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, endValue, so, fo, ti, it);
         directSSA->start();
 
         // Print the results of the SSA - all states at all times, sequentially
@@ -51,15 +53,24 @@ int main(int argc, char** argv) {
         vector<vector<int>> allStates = directSSA->getAllStates();
         vector<int> currentState = directSSA->getCurrentState();
         double currentTime = directSSA->getCurrentTime();
+        int currentIteration = directSSA->getCurrentIteration();
 
         ofstream outfile;
         outfile.open(outputFilePath);
+        int iterationWidth = 15;
+        char separator = ' ';
         if(fo){
             if(so) // final state only
                 outfile << "Final State:" << endl;
             else { // final time and state only
-                outfile << "Final Time" << "\t\t\tFinal State" << endl;
-                outfile << setprecision(5) << scientific << currentTime << "\t\t\t";
+                if(it){
+                    outfile << "Final Iteration" << "\t\t\tFinal State" << endl;
+                    outfile << left << setw(iterationWidth) << setfill(separator) << currentIteration << "\t\t\t";
+                }
+                else {
+                    outfile << "Final Time" << "\t\t\tFinal State" << endl;
+                    outfile << setprecision(5) << scientific << currentTime << "\t\t\t";
+                }
             }
             for(int i = 0; i < currentState.size(); i++){
                     outfile << speciesList[i];
@@ -68,9 +79,9 @@ int main(int argc, char** argv) {
             }
         }
         else if(so){ // only states (NO TIME)
-            outfile << "Iteration" << "\tState" << endl;
+            outfile << "Iteration" << "\t\t\tState" << endl;
             for(int i = 0; i < allStates.size(); i++){
-                outfile << i << "\t\t\t";
+                outfile << left << setw(iterationWidth) << setfill(separator) << i << "\t\t";
                 for(int j = 0; j < allStates[i].size(); j++){
                     outfile << speciesList[j];
                     outfile << ": " << allStates[i][j];
@@ -80,9 +91,9 @@ int main(int argc, char** argv) {
             }
         }
         else{
-            outfile << "Iteration" << "\t\tTime(s)" << "\t\t\t\tState" << endl;
+            outfile << "Iteration" << "\t\t\tTime(s)" << "\t\t\tState" << endl;
             for(int i = 0; i < allTimes.size(); i++){
-                outfile << i << "\t\t\t\t" << setprecision(5) << scientific << allTimes[i] << "\t\t\t";
+                outfile << left << setw(iterationWidth) << setfill(separator) << i << "\t\t" << setprecision(5) << scientific << allTimes[i] << "\t\t";
                 for(int j = 0; j < allStates[i].size(); j++){
                     outfile << speciesList[j];
                     outfile << ": " << allStates[i][j];
