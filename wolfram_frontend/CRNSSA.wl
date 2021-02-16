@@ -26,10 +26,11 @@ GetSpecies::usage =
 GetSpecies[rxnsys, pattern] returns the species in rxnsys that match the specified pattern";
 
 DirectSSA::usage =
-"{states, times} = DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, end time]
+"{states, times} = DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, Options]
 Simulates the given reaction system via Gillespie Direct SSA
 Backend is optimized in C++ for computational efficiency
-Note: implementation is not complete";
+Options include timeEnd (Real), iterEnd (Integer),
+useIter (Boolean), statesOnly (Boolean), finalOnly (Boolean)";
 
 
 Begin["`Private`"]
@@ -45,8 +46,10 @@ GetUnkObjs[rxnsys_] := Cases[rxnsys, Except[rxn[_, _, _] | init[_, _]]]
 rxnsyswarnMsg = "Warning: Unknown objects detected in rxnsys. These will be ignored by Wolfram pattern matching: `1`"
 GetSpecies::rxnsyswarn = rxnsyswarnMsg
 DirectSSA::rxnsyswarn = rxnsyswarnMsg
-tenderrMsg = "Error: tEnd (`1`) must be a number"
-DirectSSA::tenderr = tenderrMsg
+timeenderrMsg = "Error: timeEnd (`1`) must be a real number greater than zero"
+DirectSSA::timeenderr = timeenderrMsg
+iterenderrMsg = "Error: iterEnd (`1`) must be an integer greater than zero"
+DirectSSA::iterenderr = iterenderrMsg
 
 
 GetSpecies[rxnsys_] := Module[{unkObjs = GetUnkObjs[rxnsys]},
@@ -54,8 +57,7 @@ GetSpecies[rxnsys_] := Module[{unkObjs = GetUnkObjs[rxnsys]},
 	Sort[Union[
 	Cases[Cases[rxnsys, rxn[r_, p_, _] :> Sequence[r, p]] /. Times | Plus -> Sequence, s_Symbol | s_Symbol[__]],
 	Cases[rxnsys, init[x_, _] :> x]
-	]]
-]
+	]]]
 GetSpecies[rxnsys_, pattern_] := Cases[GetSpecies[rxnsys], pattern]
 
 
@@ -73,24 +75,59 @@ DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
 	LibraryDataType[NumericArray],
 	Real},
 	"Void"];
+(*DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
+	{LibraryDataType[NumericArray],
+	LibraryDataType[NumericArray],
+	LibraryDataType[NumericArray],
+	LibraryDataType[NumericArray],
+	Real,
+	Integer,
+	True|False,
+	True|False,
+	True|False,
+	True|False},
+	"Void"];*)
 GetStates = LibraryFunctionLoad[library, "getStates", {}, LibraryDataType[NumericArray]];
 GetTimes = LibraryFunctionLoad[library, "getTimes", {}, LibraryDataType[NumericArray]];
 GetDebug = LibraryFunctionLoad[library, "getDebug", {}, LibraryDataType[NumericArray]];
 
 
-DirectSSA[rxnsys_] := DirectSSA[rxnsys, Infinity]
-
-DirectSSA[rxnsys_, tEnd_] := Module[
+Options[DirectSSA] = {
+	"timeEnd" -> Infinity,
+	"iterEnd" -> Infinity,
+	"useIter" -> False,
+	"statesOnly" -> False,
+	"finalOnly" -> False
+	}
+DirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	{inits = Cases[rxnsys, init[_, _]],
 	rxns = Cases[rxnsys, rxn[_, _, _]],
 	spcs = Quiet[GetSpecies[rxnsys]],
+	timeEnd = OptionValue["timeEnd"],
+	iterEnd = OptionValue["iterEnd"],
+	useIter = OptionValue["useIter"],
+	statesOnly = OptionValue["statesOnly"],
+	finalOnly = OptionValue["finalOnly"],
 	initCounts, reactCounts, prodCounts, rates,
-	initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR,
+	initCountsNA, reactCountsNA, prodCountsNA, ratesNA,
+	timeEndR, iterEndI, infTime, infIter, inf,
 	unkObjs = GetUnkObjs[rxnsys]},
 	
-	If[Length[unkObjs] =!= 0, Message[DirectSSA::rxnsyswarn, unkObjs]];
-	If[tEnd === Infinity, tEndR = 1000000.0, tEndR = N[tEnd]];
-	If[!NumericQ[tEndR], Message[DirectSSA::tenderr, tEndR]];
+	If[Length[unkObjs] =!= 0,
+		Message[DirectSSA::rxnsyswarn, unkObjs]];
+	If[timeEnd === Infinity || timeEnd <= 0 || !NumericQ[timeEnd],
+		timeEndR = 1000000.0; infTime = True,
+		timeEndR = N[timeEnd]; infTime = False];
+	If[((timeEnd =!= Infinity && !NumericQ[timeEnd]) || timeEnd <= 0.0) && useIter === False, 
+		Message[DirectSSA::timeenderr, timeEnd]];
+	If[iterEnd === Infinity || iterEnd <= 0 || !IntegerQ[iterEnd],
+		iterEndI = 1000000; infIter = True,
+		iterEndI = Round[iterEnd]; infIter = False];
+	If[((iterEnd =!= Infinity && !IntegerQ[iterEnd]) || iterEnd <= 0) && useIter === True,
+		Message[DirectSSA::iterenderr, iterEnd]];
+	If[(infTime === True && useIter === False) || (infIter === True && useIter === True),
+		inf = True,
+		inf = False];
 	
 	initCounts = GetInitCounts[inits, spcs];
 	reactCounts = GetReactCounts[rxns, spcs];
@@ -102,9 +139,10 @@ DirectSSA[rxnsys_, tEnd_] := Module[
 	prodCountsNA = NumericArray[prodCounts, "Integer64"];
 	ratesNA = NumericArray[rates, "Real64"];
 	
-	DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, tEndR];
+	DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR];
+	(*DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, statesOnly, finalOnly]*);
 	{GetStates[], GetTimes[]}
-]
+	]
 
 
 End[]

@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     27053,        626]
-NotebookOptionsPosition[     23731,        556]
-NotebookOutlinePosition[     24257,        575]
-CellTagsIndexPosition[     24214,        572]
+NotebookDataLength[     57950,       1284]
+NotebookOptionsPosition[     54182,       1206]
+NotebookOutlinePosition[     54985,       1231]
+CellTagsIndexPosition[     54880,       1226]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -93,7 +93,7 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-b3df7b26-95b9-4b95-bb3c-68f7ea8733a2", {
+                  "Info-12c82221-d4fb-43e0-8884-1bde8115f5c0", {
                    "DirectSSA", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic], 
@@ -103,7 +103,7 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-b3df7b26-95b9-4b95-bb3c-68f7ea8733a2", {
+                  "Info-12c82221-d4fb-43e0-8884-1bde8115f5c0", {
                    "GetSpecies", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic], 
@@ -113,7 +113,7 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-b3df7b26-95b9-4b95-bb3c-68f7ea8733a2", {
+                  "Info-12c82221-d4fb-43e0-8884-1bde8115f5c0", {
                    "init", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic], 
@@ -123,7 +123,7 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-b3df7b26-95b9-4b95-bb3c-68f7ea8733a2", {
+                  "Info-12c82221-d4fb-43e0-8884-1bde8115f5c0", {
                    "revrxn", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic], 
@@ -133,7 +133,7 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-b3df7b26-95b9-4b95-bb3c-68f7ea8733a2", {
+                  "Info-12c82221-d4fb-43e0-8884-1bde8115f5c0", {
                    "rxn", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic]}
@@ -175,8 +175,652 @@ Cell[BoxData[
    3.8151648858897715`*^9, 3.815171973797851*^9, 3.8151720223714066`*^9, {
    3.8212033295508657`*^9, 3.8212033503397827`*^9}, 3.8212035559423313`*^9, 
    3.8212062175396996`*^9, 3.821288614430803*^9, 3.822410470150005*^9, 
-   3.8224106842612095`*^9},
- CellLabel->"Out[2]=",ExpressionUUID->"ef357783-ef34-4d68-8b35-e0b68cc5e045"]
+   3.8224106842612095`*^9, 3.8224155095732803`*^9, 3.8224320593105097`*^9, 
+   3.8224329491865034`*^9, 3.8224347290554433`*^9, 3.822435032247174*^9, 
+   3.822435069555363*^9, 3.822435482973343*^9},
+ CellLabel->"Out[2]=",ExpressionUUID->"2c5cb87f-2f0f-4890-b27d-8208b34b62ba"],
+
+Cell[BoxData[
+ InterpretationBox[
+  StyleBox[
+   FrameBox[
+    DynamicModuleBox[{System`InformationDump`open$$ = False, 
+     System`InformationDump`mouseOver$$ = False}, 
+     PaneSelectorBox[{True->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False,
+             BaseStyle -> None],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"{states, times} = DirectSSA[{rxn1, rxn2, ..., \
+init1, init2, ...}, Options]\\nSimulates the given reaction system via \
+Gillespie Direct SSA\\nBackend is optimized in C++ for computational \
+efficiency\\nOptions include timeEnd (Real), iterEnd (Integer),\\nuseIter \
+(Boolean), statesOnly (Boolean), finalOnly (Boolean)\"\>", 
+             "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          PaneBox[GridBox[{
+             {
+              
+              DynamicModuleBox[{System`InformationDump`open$$ = {
+               False, False, False, False, False, False, False, False, False, 
+                False, False, False}}, 
+               StyleBox[GridBox[{
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Definitions\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"Definitions\"",
+                    TooltipStyle->"TextStyling"],
+                    Annotation[#, "Definitions", "Tooltip"]& ], GridBox[{
+                    {
+                    RowBox[{
+                    RowBox[{"DirectSSA", "[", 
+                    RowBox[{"CRNSSA`Private`rxnsys_", ",", 
+                    RowBox[{"OptionsPattern", "[", "]"}]}], "]"}], ":=", 
+                    RowBox[{"Module", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`inits", "=", 
+                    RowBox[{"Cases", "[", 
+                    RowBox[{"CRNSSA`Private`rxnsys", ",", 
+                    RowBox[{"init", "[", 
+                    RowBox[{"_", ",", "_"}], "]"}]}], "]"}]}], ",", 
+                    RowBox[{"CRNSSA`Private`rxns", "=", 
+                    RowBox[{"Cases", "[", 
+                    RowBox[{"CRNSSA`Private`rxnsys", ",", 
+                    RowBox[{"rxn", "[", 
+                    RowBox[{"_", ",", "_", ",", "_"}], "]"}]}], "]"}]}], ",", 
+                    RowBox[{"CRNSSA`Private`spcs", "=", 
+                    RowBox[{"Quiet", "[", 
+                    RowBox[{"GetSpecies", "[", "CRNSSA`Private`rxnsys", "]"}],
+                     "]"}]}], ",", 
+                    RowBox[{"CRNSSA`Private`timeEnd", "=", 
+                    RowBox[{"OptionValue", "[", "\<\"timeEnd\"\>", "]"}]}], 
+                    ",", 
+                    RowBox[{"CRNSSA`Private`iterEnd", "=", 
+                    RowBox[{"OptionValue", "[", "\<\"iterEnd\"\>", "]"}]}], 
+                    ",", 
+                    RowBox[{"CRNSSA`Private`useIter", "=", 
+                    RowBox[{"OptionValue", "[", "\<\"useIter\"\>", "]"}]}], 
+                    ",", 
+                    RowBox[{"CRNSSA`Private`statesOnly", "=", 
+                    RowBox[{"OptionValue", "[", "\<\"statesOnly\"\>", "]"}]}],
+                     ",", 
+                    RowBox[{"CRNSSA`Private`finalOnly", "=", 
+                    RowBox[{"OptionValue", "[", "\<\"finalOnly\"\>", "]"}]}], 
+                    ",", "CRNSSA`Private`initCounts", ",", 
+                    "CRNSSA`Private`reactCounts", ",", 
+                    "CRNSSA`Private`prodCounts", ",", "CRNSSA`Private`rates", 
+                    ",", "CRNSSA`Private`initCountsNA", ",", 
+                    "CRNSSA`Private`reactCountsNA", ",", 
+                    "CRNSSA`Private`prodCountsNA", ",", 
+                    "CRNSSA`Private`ratesNA", ",", "CRNSSA`Private`timeEndR", 
+                    ",", "CRNSSA`Private`iterEndI", ",", 
+                    "CRNSSA`Private`infTime", ",", "CRNSSA`Private`infIter", 
+                    ",", "CRNSSA`Private`inf", ",", 
+                    RowBox[{"CRNSSA`Private`unkObjs", "=", 
+                    RowBox[{
+                    "CRNSSA`Private`GetUnkObjs", "[", "CRNSSA`Private`rxnsys",
+                     "]"}]}]}], "}"}], ",", 
+                    RowBox[{
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Length", "[", "CRNSSA`Private`unkObjs", "]"}], "=!=",
+                     "0"}], ",", 
+                    RowBox[{"Message", "[", 
+                    RowBox[{
+                    StyleBox[
+                    RowBox[{"DirectSSA", "::", "rxnsyswarn"}], "MessageName"],
+                     ",", "CRNSSA`Private`unkObjs"}], "]"}]}], "]"}], ";", 
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`timeEnd", "===", "\[Infinity]"}], 
+                    "||", 
+                    RowBox[{"CRNSSA`Private`timeEnd", "\[LessEqual]", "0"}], "||", 
+                    RowBox[{"!", 
+                    RowBox[{
+                    "NumericQ", "[", "CRNSSA`Private`timeEnd", "]"}]}]}], ",", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`timeEndR", "=", "1.`*^6"}], ";", 
+                    RowBox[{"CRNSSA`Private`infTime", "=", "True"}]}], ",", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`timeEndR", "=", 
+                    RowBox[{"N", "[", "CRNSSA`Private`timeEnd", "]"}]}], ";", 
+                    RowBox[{"CRNSSA`Private`infTime", "=", "False"}]}]}], 
+                    "]"}], ";", 
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`timeEnd", "=!=", "\[Infinity]"}], 
+                    "&&", 
+                    RowBox[{"!", 
+                    RowBox[{
+                    "NumericQ", "[", "CRNSSA`Private`timeEnd", "]"}]}]}], 
+                    ")"}], "||", 
+                    RowBox[{
+                    "CRNSSA`Private`timeEnd", "\[LessEqual]", "0.`"}]}], 
+                    ")"}], "&&", 
+                    RowBox[{"CRNSSA`Private`useIter", "===", "False"}]}], ",", 
+                    RowBox[{"Message", "[", 
+                    RowBox[{
+                    StyleBox[
+                    RowBox[{"DirectSSA", "::", "timeenderr"}], "MessageName"],
+                     ",", "CRNSSA`Private`timeEnd"}], "]"}]}], "]"}], ";", 
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`iterEnd", "===", "\[Infinity]"}], 
+                    "||", 
+                    RowBox[{"CRNSSA`Private`iterEnd", "\[LessEqual]", "0"}], "||", 
+                    RowBox[{"!", 
+                    RowBox[{
+                    "IntegerQ", "[", "CRNSSA`Private`iterEnd", "]"}]}]}], ",", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`iterEndI", "=", "1000000"}], ";", 
+                    RowBox[{"CRNSSA`Private`infIter", "=", "True"}]}], ",", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`iterEndI", "=", 
+                    RowBox[{"Round", "[", "CRNSSA`Private`iterEnd", "]"}]}], 
+                    ";", 
+                    RowBox[{"CRNSSA`Private`infIter", "=", "False"}]}]}], 
+                    "]"}], ";", 
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`iterEnd", "=!=", "\[Infinity]"}], 
+                    "&&", 
+                    RowBox[{"!", 
+                    RowBox[{
+                    "IntegerQ", "[", "CRNSSA`Private`iterEnd", "]"}]}]}], 
+                    ")"}], "||", 
+                    RowBox[{"CRNSSA`Private`iterEnd", "\[LessEqual]", "0"}]}],
+                     ")"}], "&&", 
+                    RowBox[{"CRNSSA`Private`useIter", "===", "True"}]}], ",", 
+                    RowBox[{"Message", "[", 
+                    RowBox[{
+                    StyleBox[
+                    RowBox[{"DirectSSA", "::", "iterenderr"}], "MessageName"],
+                     ",", "CRNSSA`Private`iterEnd"}], "]"}]}], "]"}], ";", 
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`infTime", "===", "True"}], "&&", 
+                    RowBox[{"CRNSSA`Private`useIter", "===", "False"}]}], 
+                    ")"}], "||", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`infIter", "===", "True"}], "&&", 
+                    RowBox[{"CRNSSA`Private`useIter", "===", "True"}]}], 
+                    ")"}]}], ",", 
+                    RowBox[{"CRNSSA`Private`inf", "=", "True"}], ",", 
+                    RowBox[{"CRNSSA`Private`inf", "=", "False"}]}], "]"}], 
+                    ";", 
+                    RowBox[{"CRNSSA`Private`initCounts", "=", 
+                    RowBox[{"CRNSSA`Private`GetInitCounts", "[", 
+                    RowBox[{
+                    "CRNSSA`Private`inits", ",", "CRNSSA`Private`spcs"}], 
+                    "]"}]}], ";", 
+                    RowBox[{"CRNSSA`Private`reactCounts", "=", 
+                    RowBox[{"CRNSSA`Private`GetReactCounts", "[", 
+                    RowBox[{
+                    "CRNSSA`Private`rxns", ",", "CRNSSA`Private`spcs"}], 
+                    "]"}]}], ";", 
+                    RowBox[{"CRNSSA`Private`prodCounts", "=", 
+                    RowBox[{"CRNSSA`Private`GetProdCounts", "[", 
+                    RowBox[{
+                    "CRNSSA`Private`rxns", ",", "CRNSSA`Private`spcs"}], 
+                    "]"}]}], ";", 
+                    RowBox[{"CRNSSA`Private`rates", "=", 
+                    RowBox[{
+                    "CRNSSA`Private`GetRates", "[", "CRNSSA`Private`rxns", 
+                    "]"}]}], ";", 
+                    RowBox[{"CRNSSA`Private`initCountsNA", "=", 
+                    RowBox[{"NumericArray", "[", 
+                    RowBox[{
+                    "CRNSSA`Private`initCounts", ",", "\<\"Integer32\"\>"}], 
+                    "]"}]}], ";", 
+                    RowBox[{"CRNSSA`Private`reactCountsNA", "=", 
+                    RowBox[{"NumericArray", "[", 
+                    RowBox[{
+                    "CRNSSA`Private`reactCounts", ",", "\<\"Integer64\"\>"}], 
+                    "]"}]}], ";", 
+                    RowBox[{"CRNSSA`Private`prodCountsNA", "=", 
+                    RowBox[{"NumericArray", "[", 
+                    RowBox[{
+                    "CRNSSA`Private`prodCounts", ",", "\<\"Integer64\"\>"}], 
+                    "]"}]}], ";", 
+                    RowBox[{"CRNSSA`Private`ratesNA", "=", 
+                    RowBox[{"NumericArray", "[", 
+                    RowBox[{"CRNSSA`Private`rates", ",", "\<\"Real64\"\>"}], 
+                    "]"}]}], ";", 
+                    RowBox[{"CRNSSA`Private`DirectBackend", "[", 
+                    RowBox[{
+                    "CRNSSA`Private`initCountsNA", ",", 
+                    "CRNSSA`Private`reactCountsNA", ",", 
+                    "CRNSSA`Private`prodCountsNA", ",", 
+                    "CRNSSA`Private`ratesNA", ",", 
+                    "CRNSSA`Private`timeEndR"}], "]"}], ";", "Null", ";", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"CRNSSA`Private`GetStates", "[", "]"}], ",", 
+                    RowBox[{"CRNSSA`Private`GetTimes", "[", "]"}]}], 
+                    "}"}]}]}], "]"}]}]}
+                    },
+                    DefaultBaseStyle->"Column",
+                    GridBoxAlignment->{"Columns" -> {{Left}}},
+                    
+                    GridBoxItemSize->{
+                    "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}]},
+                  {
+                   PaneSelectorBox[{True->
+                    ButtonBox[
+                    PaneSelectorBox[{False->
+                    TemplateBox[{"\[ThickSpace]", "\"\[ThickSpace]\"", 
+                    StyleBox[
+                    "\"Options\"", "InformationRowLabel", StripOnInput -> 
+                    False], 
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "DownPointerOpener"]]},
+                    "RowWithSeparators"], True->
+                    TemplateBox[{"\[ThickSpace]", "\"\[ThickSpace]\"", 
+                    StyleBox[
+                    "\"Options\"", "InformationRowLabel", StripOnInput -> 
+                    False], 
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "DownPointerOpenerHot"]]},
+                    "RowWithSeparators"]}, Dynamic[
+                    CurrentValue["MouseOver"]],
+                    FrameMargins->0,
+                    ImageSize->Automatic],
+                    Appearance->None,
+                    BaseStyle->None,
+                    
+                    ButtonFunction:>(Part[System`InformationDump`open$$, 9] = 
+                    False),
+                    Evaluator->Automatic,
+                    FrameMargins->0,
+                    ImageMargins->0,
+                    Method->"Preemptive"], False->
+                    ButtonBox[
+                    PaneSelectorBox[{False->
+                    TemplateBox[{"\[ThickSpace]", "\"\[ThickSpace]\"", 
+                    StyleBox[
+                    "\"Options\"", "InformationRowLabel", StripOnInput -> 
+                    False], 
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "RightPointerOpener"]]},
+                    "RowWithSeparators"], True->
+                    TemplateBox[{"\[ThickSpace]", "\"\[ThickSpace]\"", 
+                    StyleBox[
+                    "\"Options\"", "InformationRowLabel", StripOnInput -> 
+                    False], 
+                    DynamicBox[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", "RightPointerOpenerHot"]]},
+                    "RowWithSeparators"]}, Dynamic[
+                    CurrentValue["MouseOver"]],
+                    FrameMargins->0,
+                    ImageSize->Automatic],
+                    Appearance->None,
+                    BaseStyle->None,
+                    
+                    ButtonFunction:>(Part[System`InformationDump`open$$, 9] = 
+                    True),
+                    Evaluator->Automatic,
+                    FrameMargins->0,
+                    ImageMargins->0,
+                    Method->"Preemptive"]}, Dynamic[
+                    FEPrivate`Part[System`InformationDump`open$$, 9]]], 
+                   PaneSelectorBox[{True->GridBox[{
+                    {
+                    RowBox[{"\<\"timeEnd\"\>", "\[Rule]", "\[Infinity]"}]},
+                    {
+                    RowBox[{"\<\"iterEnd\"\>", "\[Rule]", "\[Infinity]"}]},
+                    {
+                    RowBox[{"\<\"useIter\"\>", "\[Rule]", "False"}]},
+                    {
+                    RowBox[{"\<\"statesOnly\"\>", "\[Rule]", "False"}]},
+                    {
+                    RowBox[{"\<\"finalOnly\"\>", "\[Rule]", "False"}]},
+                    {
+                    StyleBox[
+                    
+                    TemplateBox[{
+                    "\"(\"", "\"\[InvisibleSpace]\"", "5", "\" total)\""},
+                    "RowDefault"], "InformationRowOpener",
+                    StripOnInput->False]}
+                    },
+                    BaselinePosition->{Baseline, {1, 1}},
+                    DefaultBaseStyle->"Column",
+                    GridBoxAlignment->{"Columns" -> {{Left}}},
+                    GridBoxItemSize->{
+                    "Columns" -> {{Automatic}}, "Rows" -> {{1.}}}], False->
+                    RowBox[{
+                    RowBox[{"\<\"timeEnd\"\>", "\[Rule]", "\[Infinity]"}], 
+                    "\[ThinSpace]", 
+                    StyleBox["\<\"\[Ellipsis]\"\>", "InformationRowOpener",
+                    StripOnInput->False], "\[ThinSpace]", 
+                    StyleBox[
+                    
+                    TemplateBox[{
+                    "\"(\"", "\"\[InvisibleSpace]\"", "5", "\" total)\""},
+                    "RowDefault"], "InformationRowOpener",
+                    StripOnInput->False]}]}, Dynamic[
+                    FEPrivate`Part[System`InformationDump`open$$, 9]],
+                    BaselinePosition->Baseline,
+                    ImageSize->Automatic]},
+                  {
+                   TagBox[
+                    TooltipBox[
+                    StyleBox["\<\" Full Name\"\>", "InformationRowLabel",
+                    StripOnInput->False],
+                    "\"FullName\"",
+                    TooltipStyle->"TextStyling"],
+                    
+                    Annotation[#, "FullName", 
+                    "Tooltip"]& ], "\<\"CRNSSA`DirectSSA\"\>"}
+                 },
+                 AutoDelete->False,
+                 GridBoxAlignment->{"Columns" -> {Right, Left}},
+                 GridBoxDividers->None,
+                 GridBoxItemSize->{"Columns" -> {Automatic, Automatic}},
+                 GridBoxSpacings->{"Columns" -> {
+                    Offset[0.27999999999999997`], {
+                    Offset[0.5599999999999999]}, 
+                    Offset[0.27999999999999997`]}, "Rows" -> {
+                    Offset[0.2], {
+                    Offset[0.8]}, 
+                    Offset[0.2]}}], "DialogStyle",
+                StripOnInput->False],
+               DynamicModuleValues:>{}]}
+            },
+            DefaultBaseStyle->"Column",
+            GridBoxAlignment->{"Columns" -> {{Left}}},
+            GridBoxDividers->{"Columns" -> {{False}}, "Rows" -> {{False}}},
+            
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+            GridBoxSpacings->{"Columns" -> {
+                Offset[0.27999999999999997`], {
+                 Offset[0.5599999999999999]}, 
+                Offset[0.27999999999999997`]}, "Rows" -> {
+                Offset[0.2], {
+                 Offset[3.6]}, 
+                Offset[0.2]}}],
+           FrameMargins->6], ""},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpener"]], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "UpPointerOpenerHot"]]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, False],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"], False->
+      TagBox[GridBox[{
+         {
+          ItemBox[
+           PaneBox[
+            StyleBox["\<\" Symbol\"\>", "InformationTitleText",
+             StripOnInput->False],
+            FrameMargins->{{4, 0}, {-1, 1}}],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           PaneBox[
+            
+            StyleBox["\<\"{states, times} = DirectSSA[{rxn1, rxn2, ..., \
+init1, init2, ...}, Options]\\nSimulates the given reaction system via \
+Gillespie Direct SSA\\nBackend is optimized in C++ for computational \
+efficiency\\nOptions include timeEnd (Real), iterEnd (Integer),\\nuseIter \
+(Boolean), statesOnly (Boolean), finalOnly (Boolean)\"\>", 
+             "InformationUsageText",
+             StripOnInput->False,
+             LineSpacing->{1.5, 1.5, 3.}],
+            FrameMargins->{{10, 10}, {8, 10}}],
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False], 
+          ItemBox["\<\"\"\>",
+           BaseStyle->"InformationUsageSubtitleBackground",
+           StripOnInput->False]},
+         {
+          ItemBox[
+           TagBox[
+            ButtonBox[
+             PaneSelectorBox[{False->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{11., {4., 7.}}], True->
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpenerHot"],
+               ImageSizeCache->{11., {4., 7.}}]}, Dynamic[
+              System`InformationDump`mouseOver$$]],
+             Alignment->Left,
+             Appearance->{"Default" -> None},
+             
+             ButtonFunction:>FEPrivate`Set[
+              System`InformationDump`open$$, True],
+             Evaluator->Automatic,
+             FrameMargins->{{9, 0}, {0, 0}},
+             ImageMargins->0,
+             ImageSize->Full,
+             Method->"Preemptive"],
+            
+            EventHandlerTag[{
+             "MouseEntered" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, True], 
+              "MouseExited" :> 
+              FEPrivate`Set[System`InformationDump`mouseOver$$, False], 
+              Method -> "Preemptive", PassEventsDown -> Automatic, 
+              PassEventsUp -> True}]],
+           BaseStyle->"InformationTitleBackground",
+           StripOnInput->False], "\[SpanFromLeft]"}
+        },
+        AutoDelete->False,
+        FrameStyle->Directive[
+          GrayLevel[0.8], 
+          Thickness[Tiny]],
+        GridBoxAlignment->{"Columns" -> {Left, Right}, "Rows" -> {{Center}}},
+        GridBoxDividers->{
+         "Columns" -> {{None}}, "Rows" -> {False, {True}, False}},
+        GridBoxItemSize->{
+         "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+       "Grid"]}, Dynamic[System`InformationDump`open$$],
+      BaselinePosition->Baseline,
+      FrameMargins->0,
+      ImageSize->Automatic],
+     DynamicModuleValues:>{}],
+    BaseStyle->"InformationGridFrame",
+    StripOnInput->False], "InformationGridPlain",
+   StripOnInput->False],
+  InformationData[
+   Association[
+   "ObjectType" -> "Symbol", "Usage" -> 
+    "{states, times} = DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, \
+Options]\nSimulates the given reaction system via Gillespie Direct SSA\n\
+Backend is optimized in C++ for computational efficiency\nOptions include \
+timeEnd (Real), iterEnd (Integer),\nuseIter (Boolean), statesOnly (Boolean), \
+finalOnly (Boolean)", "Documentation" -> None, "OwnValues" -> None, 
+    "UpValues" -> None, "DownValues" -> 
+    Information`InformationValueForm[
+     DownValues, CRNSSA`DirectSSA, {CRNSSA`DirectSSA[
+         Pattern[CRNSSA`Private`rxnsys, 
+          Blank[]], 
+         OptionsPattern[]] :> 
+       Module[{CRNSSA`Private`inits = Cases[CRNSSA`Private`rxnsys, 
+            CRNSSA`init[
+             Blank[], 
+             Blank[]]], CRNSSA`Private`rxns = Cases[CRNSSA`Private`rxnsys, 
+            CRNSSA`rxn[
+             Blank[], 
+             Blank[], 
+             Blank[]]], CRNSSA`Private`spcs = Quiet[
+            CRNSSA`GetSpecies[CRNSSA`Private`rxnsys]], CRNSSA`Private`timeEnd = 
+          OptionValue["timeEnd"], CRNSSA`Private`iterEnd = 
+          OptionValue["iterEnd"], CRNSSA`Private`useIter = 
+          OptionValue["useIter"], CRNSSA`Private`statesOnly = 
+          OptionValue["statesOnly"], CRNSSA`Private`finalOnly = 
+          OptionValue["finalOnly"], CRNSSA`Private`initCounts, 
+          CRNSSA`Private`reactCounts, CRNSSA`Private`prodCounts, 
+          CRNSSA`Private`rates, CRNSSA`Private`initCountsNA, 
+          CRNSSA`Private`reactCountsNA, CRNSSA`Private`prodCountsNA, 
+          CRNSSA`Private`ratesNA, CRNSSA`Private`timeEndR, 
+          CRNSSA`Private`iterEndI, CRNSSA`Private`infTime, 
+          CRNSSA`Private`infIter, CRNSSA`Private`inf, CRNSSA`Private`unkObjs = 
+          CRNSSA`Private`GetUnkObjs[CRNSSA`Private`rxnsys]}, 
+         If[Length[CRNSSA`Private`unkObjs] =!= 0, 
+           Message[
+            MessageName[CRNSSA`DirectSSA, "rxnsyswarn"], 
+            CRNSSA`Private`unkObjs]]; If[
+           Or[
+           CRNSSA`Private`timeEnd === Infinity, CRNSSA`Private`timeEnd <= 0, 
+            Not[
+             NumericQ[CRNSSA`Private`timeEnd]]], 
+           CRNSSA`Private`timeEndR = 1.*^6; CRNSSA`Private`infTime = True, 
+           CRNSSA`Private`timeEndR = N[CRNSSA`Private`timeEnd]; 
+           CRNSSA`Private`infTime = False]; If[
+           And[
+            Or[
+             And[CRNSSA`Private`timeEnd =!= Infinity, 
+              Not[
+               NumericQ[CRNSSA`Private`timeEnd]]], CRNSSA`Private`timeEnd <= 
+             0.], CRNSSA`Private`useIter === False], 
+           Message[
+            MessageName[CRNSSA`DirectSSA, "timeenderr"], 
+            CRNSSA`Private`timeEnd]]; If[
+           Or[
+           CRNSSA`Private`iterEnd === Infinity, CRNSSA`Private`iterEnd <= 0, 
+            Not[
+             IntegerQ[CRNSSA`Private`iterEnd]]], 
+           CRNSSA`Private`iterEndI = 1000000; CRNSSA`Private`infIter = True, 
+           CRNSSA`Private`iterEndI = Round[CRNSSA`Private`iterEnd]; 
+           CRNSSA`Private`infIter = False]; If[
+           And[
+            Or[
+             And[CRNSSA`Private`iterEnd =!= Infinity, 
+              Not[
+               IntegerQ[CRNSSA`Private`iterEnd]]], CRNSSA`Private`iterEnd <= 
+             0], CRNSSA`Private`useIter === True], 
+           Message[
+            MessageName[CRNSSA`DirectSSA, "iterenderr"], 
+            CRNSSA`Private`iterEnd]]; If[
+           Or[
+            And[
+            CRNSSA`Private`infTime === True, CRNSSA`Private`useIter === 
+             False], 
+            And[
+            CRNSSA`Private`infIter === True, CRNSSA`Private`useIter === 
+             True]], CRNSSA`Private`inf = True, CRNSSA`Private`inf = False]; 
+         CRNSSA`Private`initCounts = 
+          CRNSSA`Private`GetInitCounts[
+           CRNSSA`Private`inits, CRNSSA`Private`spcs]; 
+         CRNSSA`Private`reactCounts = 
+          CRNSSA`Private`GetReactCounts[
+           CRNSSA`Private`rxns, CRNSSA`Private`spcs]; 
+         CRNSSA`Private`prodCounts = 
+          CRNSSA`Private`GetProdCounts[
+           CRNSSA`Private`rxns, CRNSSA`Private`spcs]; 
+         CRNSSA`Private`rates = CRNSSA`Private`GetRates[CRNSSA`Private`rxns]; 
+         CRNSSA`Private`initCountsNA = 
+          NumericArray[CRNSSA`Private`initCounts, "Integer32"]; 
+         CRNSSA`Private`reactCountsNA = 
+          NumericArray[CRNSSA`Private`reactCounts, "Integer64"]; 
+         CRNSSA`Private`prodCountsNA = 
+          NumericArray[CRNSSA`Private`prodCounts, "Integer64"]; 
+         CRNSSA`Private`ratesNA = 
+          NumericArray[CRNSSA`Private`rates, "Real64"]; 
+         CRNSSA`Private`DirectBackend[
+          CRNSSA`Private`initCountsNA, CRNSSA`Private`reactCountsNA, 
+           CRNSSA`Private`prodCountsNA, CRNSSA`Private`ratesNA, 
+           CRNSSA`Private`timeEndR]; Null; {
+           CRNSSA`Private`GetStates[], 
+           CRNSSA`Private`GetTimes[]}]}], "SubValues" -> None, 
+    "DefaultValues" -> None, "NValues" -> None, "FormatValues" -> None, 
+    "Options" -> {
+     "timeEnd" -> DirectedInfinity[1], "iterEnd" -> DirectedInfinity[1], 
+      "useIter" -> False, "statesOnly" -> False, "finalOnly" -> False}, 
+    "Attributes" -> {}, "FullName" -> "CRNSSA`DirectSSA"], False]]], "Print",
+ CellTags->
+  "Info-12c82221-d4fb-43e0-8884-1bde8115f5c0",ExpressionUUID->"868fe9d9-0fe8-\
+455b-9f73-b4176176f6ea"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -228,14 +872,18 @@ Cell[BoxData[{
    3.8147294727465734`*^9, 3.814729479738203*^9}, {3.8151520992945943`*^9, 
    3.8151521803901787`*^9}, 3.8151524649685187`*^9, 3.8151526511679187`*^9, {
    3.815164676233562*^9, 3.8151646775131454`*^9}, {3.815164853384704*^9, 
-   3.815164861904892*^9}, {3.822410493232013*^9, 3.82241050004828*^9}},
+   3.815164861904892*^9}, {3.822410493232013*^9, 3.82241050004828*^9}, {
+   3.822415554186577*^9, 3.8224155551280203`*^9}},
  CellLabel->"In[3]:=",ExpressionUUID->"4ac59a20-336b-40bd-8b3f-f93ee47e266c"],
 
 Cell[BoxData[
  RowBox[{"{", 
   RowBox[{"x", ",", "y", ",", "z"}], "}"}]], "Output",
- CellChangeTimes->{3.8224106878080006`*^9},
- CellLabel->"Out[5]=",ExpressionUUID->"2e90069f-9567-4d41-8a38-34d50c2b12f4"]
+ CellChangeTimes->{3.8224106878080006`*^9, 3.822415523360089*^9, 
+  3.8224155567565975`*^9, 3.8224320615904107`*^9, 3.822432950311461*^9, 
+  3.8224347311947165`*^9, 3.822435033496831*^9, 3.822435070810006*^9, 
+  3.8224354965938997`*^9},
+ CellLabel->"Out[5]=",ExpressionUUID->"ae7f76ce-922f-4bce-8b45-c5071249650f"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -263,8 +911,10 @@ Cell[BoxData[
    3.8151647819809732`*^9, 3.81516484283656*^9, 3.815164887227393*^9, 
    3.8151719768529797`*^9, 3.8151720253374777`*^9, {3.8212033343287177`*^9, 
    3.8212033512570457`*^9}, 3.821203556590396*^9, 3.821206217990493*^9, 
-   3.8212886167017274`*^9, 3.822410688092696*^9},
- CellLabel->"Out[6]=",ExpressionUUID->"38a8957a-b1cf-419a-ac90-90a585038d27"]
+   3.8212886167017274`*^9, 3.822410688092696*^9, 3.822415557709005*^9, 
+   3.8224320630016675`*^9, 3.822432950886922*^9, 3.822434733034799*^9, 
+   3.8224350342548027`*^9, 3.8224350715290823`*^9, 3.822435497556326*^9},
+ CellLabel->"Out[6]=",ExpressionUUID->"b791cd2e-ef58-4332-824f-16397ccc057f"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -274,9 +924,7 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"{", 
     RowBox[{"states1", ",", " ", "times1"}], "}"}], " ", "=", " ", 
-   RowBox[{"DirectSSA", "[", 
-    RowBox[{"rxnsys1", ",", " ", "1000"}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
+   RowBox[{"DirectSSA", "[", "rxnsys1", "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Normal", "[", 
    RowBox[{"states1", "[", 
@@ -287,19 +935,22 @@ Cell[BoxData[{
   3.81515205459922*^9, 3.815152078406739*^9}, {3.815171982356272*^9, 
   3.815171982563717*^9}, {3.8212033531342363`*^9, 3.8212033845648108`*^9}, {
   3.8217981911583867`*^9, 3.8217981924698024`*^9}, {3.8224105205309443`*^9, 
-  3.8224105290332623`*^9}},
+  3.8224105290332623`*^9}, {3.822415527985489*^9, 3.822415543639947*^9}, {
+  3.822415573647689*^9, 3.822415583074106*^9}, {3.8224320688939047`*^9, 
+  3.8224320720863314`*^9}, {3.822432960693721*^9, 3.822432963457307*^9}, {
+  3.8224347448900785`*^9, 3.8224347649593887`*^9}, {3.8224349243997383`*^9, 
+  3.822434958864498*^9}, {3.822435076789012*^9, 3.8224350818634696`*^9}, {
+  3.8224351179070077`*^9, 3.822435209447111*^9}, {3.8224355004565663`*^9, 
+  3.8224355033229*^9}},
  CellLabel->"In[7]:=",ExpressionUUID->"77c1fb6b-12dc-4da7-a958-5c5a4452f187"],
 
 Cell[BoxData["True"], "Output",
  CellChangeTimes->{
-  3.8147291780350904`*^9, 3.8147301016307487`*^9, 3.814730574646409*^9, 
-   3.814730802388991*^9, 3.814732381613818*^9, 3.8147351001328497`*^9, 
-   3.81473544306411*^9, 3.814750669706415*^9, 3.815152321817235*^9, 
-   3.8151526150895967`*^9, 3.815164508950159*^9, 3.8151648889970317`*^9, {
-   3.8151719775052066`*^9, 3.8151719831840253`*^9}, 3.8151720255927954`*^9, 
-   3.8212033614895825`*^9, 3.821203398919496*^9, 3.821203557020722*^9, 
-   3.821206218240838*^9, 3.8212886174168167`*^9, 3.8224106893756723`*^9},
- CellLabel->"Out[8]=",ExpressionUUID->"d900b758-f6bc-4dd6-9b69-eb27ee4e033b"]
+  3.8224329735891857`*^9, {3.8224347396540875`*^9, 3.822434762020251*^9}, {
+   3.8224349256373906`*^9, 3.8224349607185354`*^9}, 3.822435035232188*^9, {
+   3.822435072325982*^9, 3.822435082275366*^9}, {3.8224351185363245`*^9, 
+   3.8224352129437547`*^9}, 3.822435504739111*^9},
+ CellLabel->"Out[8]=",ExpressionUUID->"db5b5d4d-e860-430d-825e-9fd9c8dcb545"]
 }, Open  ]]
 }, Open  ]],
 
@@ -344,8 +995,9 @@ Cell[BoxData[{
 Cell[BoxData[
  RowBox[{"{", 
   RowBox[{"x1", ",", "x2", ",", "y"}], "}"}]], "Output",
- CellChangeTimes->{3.822410691700859*^9},
- CellLabel->"Out[11]=",ExpressionUUID->"a627f9eb-672f-43f5-b278-55e0a5944dbd"]
+ CellChangeTimes->{3.822410691700859*^9, 3.8224352220913105`*^9, 
+  3.822435509011679*^9},
+ CellLabel->"Out[11]=",ExpressionUUID->"bfb206dd-be4e-4191-8e9c-85171a614a93"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -370,8 +1022,8 @@ Cell[BoxData[
  RowBox[{"{", 
   RowBox[{"0", ",", "250", ",", "500"}], "}"}]], "Output",
  CellChangeTimes->{3.8212062222371597`*^9, 3.8212886213512955`*^9, 
-  3.8224106926531363`*^9},
- CellLabel->"Out[12]=",ExpressionUUID->"86a4dd25-23f1-479a-975e-7e9ec5eab9a1"]
+  3.8224106926531363`*^9, 3.8224352231225224`*^9, 3.8224355097297583`*^9},
+ CellLabel->"Out[12]=",ExpressionUUID->"3ee81119-4415-4124-89bd-12ded50bd088"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -381,9 +1033,7 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"{", 
     RowBox[{"states2", ",", " ", "times2"}], "}"}], " ", "=", " ", 
-   RowBox[{"DirectSSA", "[", 
-    RowBox[{"rxnsys2", ",", "  ", "1000"}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
+   RowBox[{"DirectSSA", "[", "rxnsys2", "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Normal", "[", 
    RowBox[{"states2", "[", 
@@ -397,7 +1047,8 @@ Cell[BoxData[{
   3.8151642456005144`*^9}, {3.815171986564534*^9, 3.815171986915563*^9}, {
   3.8212034543170433`*^9, 3.8212034696368375`*^9}, {3.8212035105545745`*^9, 
   3.82120351670812*^9}, {3.8217982061258345`*^9, 3.821798207308633*^9}, {
-  3.822410578678011*^9, 3.8224105792619867`*^9}},
+  3.822410578678011*^9, 3.8224105792619867`*^9}, {3.822435512874345*^9, 
+  3.822435513491729*^9}},
  CellLabel->"In[13]:=",ExpressionUUID->"68cdc8e7-1037-4072-a876-28eae94d6ab4"],
 
 Cell[BoxData["True"], "Output",
@@ -412,8 +1063,8 @@ Cell[BoxData["True"], "Output",
    3.815164251128344*^9, 3.815164513041199*^9, 3.8151648910006747`*^9, 
    3.8151719872616367`*^9, 3.815172028196259*^9, 3.8212034777829742`*^9, 
    3.8212035598255663`*^9, 3.821206223238789*^9, 3.821288622499786*^9, 
-   3.8224106936225395`*^9},
- CellLabel->"Out[14]=",ExpressionUUID->"18dd23be-a6bc-47e3-a37c-346958265a3b"]
+   3.8224106936225395`*^9, 3.8224352239483147`*^9, 3.8224355138926215`*^9},
+ CellLabel->"Out[14]=",ExpressionUUID->"0c4d90e1-a213-46f9-9a6c-cf35885832d9"]
 }, Open  ]]
 }, Open  ]],
 
@@ -470,8 +1121,8 @@ Cell[BoxData[{
 Cell[BoxData[
  RowBox[{"{", 
   RowBox[{"x1", ",", "x2", ",", "y", ",", "z1", ",", "z2"}], "}"}]], "Output",
- CellChangeTimes->{3.8224106952527637`*^9},
- CellLabel->"Out[17]=",ExpressionUUID->"d21bacdc-00a3-4053-b665-203ac4c9119f"]
+ CellChangeTimes->{3.8224106952527637`*^9, 3.822435516653268*^9},
+ CellLabel->"Out[17]=",ExpressionUUID->"bd1dc6ae-4dea-4a87-a3df-32c3795f76cd"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -501,8 +1152,8 @@ Cell[BoxData[
    3.8151530118258724`*^9, 3.815164401967228*^9, 3.8151645163326516`*^9, 
    3.8151648936775227`*^9, 3.815172030672635*^9, 3.8212035649471893`*^9, 
    3.8212036553416553`*^9, 3.8212062275292473`*^9, 3.8212886259614687`*^9, 
-   3.8224106962249193`*^9},
- CellLabel->"Out[18]=",ExpressionUUID->"0ad018f8-6523-4da9-bc86-404966763f9c"]
+   3.8224106962249193`*^9, 3.822435518291853*^9},
+ CellLabel->"Out[18]=",ExpressionUUID->"ffdd9ada-fa34-4e7f-9f8d-cc8aeb12c43d"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -512,9 +1163,7 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"{", 
     RowBox[{"states3", ",", " ", "times3"}], "}"}], " ", "=", " ", 
-   RowBox[{"DirectSSA", "[", 
-    RowBox[{"rxnsys3", ",", " ", "1000"}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
+   RowBox[{"DirectSSA", "[", "rxnsys3", "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Normal", "[", 
    RowBox[{"states3", "[", 
@@ -530,7 +1179,8 @@ Cell[BoxData[{
    3.815164470338443*^9, 3.815164470416237*^9}, {3.815171990045226*^9, 
    3.815172011707431*^9}, {3.821203497485325*^9, 3.821203498428014*^9}, {
    3.8212035317816176`*^9, 3.8212035447004104`*^9}, {3.821798210189833*^9, 
-   3.8217982121405516`*^9}, {3.822410640741945*^9, 3.822410641158665*^9}},
+   3.8217982121405516`*^9}, {3.822410640741945*^9, 3.822410641158665*^9}, {
+   3.822435521549177*^9, 3.8224355218503675`*^9}},
  CellLabel->"In[19]:=",ExpressionUUID->"b6268b37-be13-4b8c-a833-d45a91bc13ff"],
 
 Cell[BoxData["True"], "Output",
@@ -548,14 +1198,14 @@ Cell[BoxData["True"], "Output",
    3.8147506711934404`*^9, 3.8151530709743214`*^9, 3.8151645170706806`*^9, 
    3.8151648942361727`*^9, {3.81517199070144*^9, 3.8151720312610607`*^9}, 
    3.821203590754567*^9, 3.8212036567732644`*^9, 3.8212062281286464`*^9, 
-   3.8212886265170355`*^9, 3.8224106970666037`*^9},
- CellLabel->"Out[20]=",ExpressionUUID->"ee77d000-7fc4-4972-8961-b83dcc8af4b6"]
+   3.8212886265170355`*^9, 3.8224106970666037`*^9, 3.8224355223131266`*^9},
+ CellLabel->"Out[20]=",ExpressionUUID->"32462897-9836-4576-a86d-6cad48f8eb8e"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{950.25, 468.75},
-WindowMargins->{{0, Automatic}, {Automatic, 0}},
+WindowSize->{960., 478.5},
+WindowMargins->{{-4.875, Automatic}, {Automatic, -4.875}},
 TaggingRules->{
  "WelcomeScreenSettings" -> {"FEStarting" -> False}, "TryRealOnly" -> False},
 Magnification:>1.1 Inherited,
@@ -567,10 +1217,16 @@ ExpressionUUID->"8a9966d4-13ea-4f76-9a73-3ff830b13d05"
 
 (* Internal cache information *)
 (*CellTagsOutline
-CellTagsIndex->{}
+CellTagsIndex->{
+ "Info-12c82221-d4fb-43e0-8884-1bde8115f5c0"->{
+  Cell[7356, 182, 29449, 640, 200, "Print",ExpressionUUID->"868fe9d9-0fe8-455b-9f73-b4176176f6ea",
+   CellTags->"Info-12c82221-d4fb-43e0-8884-1bde8115f5c0"]}
+ }
 *)
 (*CellTagsIndex
-CellTagsIndex->{}
+CellTagsIndex->{
+ {"Info-12c82221-d4fb-43e0-8884-1bde8115f5c0", 54698, 1220}
+ }
 *)
 (*NotebookFileOutline
 Notebook[{
@@ -580,51 +1236,53 @@ Cell[815, 28, 525, 13, 74, "Input",ExpressionUUID->"e7a7664c-981c-41b9-b2ad-3bcf
 Cell[1343, 43, 197, 3, 31, "Input",ExpressionUUID->"8acb8700-aa44-4b5e-a852-0474740d5f06"],
 Cell[CellGroupData[{
 Cell[1565, 50, 197, 3, 31, "Input",ExpressionUUID->"0fa98d4e-a4fe-4b94-816c-fe5c54aeef97"],
-Cell[1765, 55, 5418, 123, 104, "Output",ExpressionUUID->"ef357783-ef34-4d68-8b35-e0b68cc5e045"]
+Cell[1765, 55, 5588, 125, 104, "Output",ExpressionUUID->"2c5cb87f-2f0f-4890-b27d-8208b34b62ba"],
+Cell[7356, 182, 29449, 640, 200, "Print",ExpressionUUID->"868fe9d9-0fe8-455b-9f73-b4176176f6ea",
+ CellTags->"Info-12c82221-d4fb-43e0-8884-1bde8115f5c0"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[7220, 183, 602, 8, 58, "Subtitle",ExpressionUUID->"26cee006-515b-4511-9df5-a84f93ecb4e8"],
+Cell[36842, 827, 602, 8, 58, "Subtitle",ExpressionUUID->"26cee006-515b-4511-9df5-a84f93ecb4e8"],
 Cell[CellGroupData[{
-Cell[7847, 195, 1912, 36, 158, "Input",ExpressionUUID->"4ac59a20-336b-40bd-8b3f-f93ee47e266c"],
-Cell[9762, 233, 205, 4, 35, "Output",ExpressionUUID->"2e90069f-9567-4d41-8a38-34d50c2b12f4"]
+Cell[37469, 839, 1964, 37, 158, "Input",ExpressionUUID->"4ac59a20-336b-40bd-8b3f-f93ee47e266c"],
+Cell[39436, 878, 398, 7, 35, "Output",ExpressionUUID->"ae7f76ce-922f-4bce-8b45-c5071249650f"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[10004, 242, 632, 11, 31, "Input",ExpressionUUID->"5e11963f-61a3-4efc-a463-60c5b3d560c0"],
-Cell[10639, 255, 679, 11, 35, "Output",ExpressionUUID->"38a8957a-b1cf-419a-ac90-90a585038d27"]
+Cell[39871, 890, 632, 11, 31, "Input",ExpressionUUID->"5e11963f-61a3-4efc-a463-60c5b3d560c0"],
+Cell[40506, 903, 847, 13, 35, "Output",ExpressionUUID->"b791cd2e-ef58-4332-824f-16397ccc057f"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[11355, 271, 813, 19, 53, "Input",ExpressionUUID->"77c1fb6b-12dc-4da7-a958-5c5a4452f187"],
-Cell[12171, 292, 641, 9, 35, "Output",ExpressionUUID->"d900b758-f6bc-4dd6-9b69-eb27ee4e033b"]
+Cell[41390, 921, 1223, 23, 53, "Input",ExpressionUUID->"77c1fb6b-12dc-4da7-a958-5c5a4452f187"],
+Cell[42616, 946, 406, 6, 35, "Output",ExpressionUUID->"db5b5d4d-e860-430d-825e-9fd9c8dcb545"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[12861, 307, 380, 6, 58, "Subtitle",ExpressionUUID->"a94da052-b5f9-4bc7-a8af-06681168a31e"],
+Cell[43071, 958, 380, 6, 58, "Subtitle",ExpressionUUID->"a94da052-b5f9-4bc7-a8af-06681168a31e"],
 Cell[CellGroupData[{
-Cell[13266, 317, 1176, 24, 158, "Input",ExpressionUUID->"9abb1f7f-8a2b-4bba-9e64-c50d159e10c2"],
-Cell[14445, 343, 206, 4, 35, "Output",ExpressionUUID->"a627f9eb-672f-43f5-b278-55e0a5944dbd"]
+Cell[43476, 968, 1176, 24, 158, "Input",ExpressionUUID->"9abb1f7f-8a2b-4bba-9e64-c50d159e10c2"],
+Cell[44655, 994, 255, 5, 35, "Output",ExpressionUUID->"bfb206dd-be4e-4191-8e9c-85171a614a93"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[14688, 352, 567, 14, 31, "Input",ExpressionUUID->"3834eb3a-3752-4ce7-95d2-d728d425aa38"],
-Cell[15258, 368, 261, 5, 35, "Output",ExpressionUUID->"86a4dd25-23f1-479a-975e-7e9ec5eab9a1"]
+Cell[44947, 1004, 567, 14, 31, "Input",ExpressionUUID->"3834eb3a-3752-4ce7-95d2-d728d425aa38"],
+Cell[45517, 1020, 309, 5, 35, "Output",ExpressionUUID->"3ee81119-4415-4124-89bd-12ded50bd088"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[15556, 378, 1062, 22, 53, "Input",ExpressionUUID->"68cdc8e7-1037-4072-a876-28eae94d6ab4"],
-Cell[16621, 402, 893, 13, 35, "Output",ExpressionUUID->"18dd23be-a6bc-47e3-a37c-346958265a3b"]
+Cell[45863, 1030, 1074, 21, 53, "Input",ExpressionUUID->"68cdc8e7-1037-4072-a876-28eae94d6ab4"],
+Cell[46940, 1053, 941, 13, 35, "Output",ExpressionUUID->"0c4d90e1-a213-46f9-9a6c-cf35885832d9"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[17563, 421, 418, 6, 58, "Subtitle",ExpressionUUID->"cac518be-760f-4e04-892e-7b19f51723f0"],
+Cell[47930, 1072, 418, 6, 58, "Subtitle",ExpressionUUID->"cac518be-760f-4e04-892e-7b19f51723f0"],
 Cell[CellGroupData[{
-Cell[18006, 431, 1717, 36, 200, "Input",ExpressionUUID->"9fe609a4-5ad6-46db-842b-92f8411dd608"],
-Cell[19726, 469, 230, 4, 35, "Output",ExpressionUUID->"d21bacdc-00a3-4053-b665-203ac4c9119f"]
+Cell[48373, 1082, 1717, 36, 200, "Input",ExpressionUUID->"9fe609a4-5ad6-46db-842b-92f8411dd608"],
+Cell[50093, 1120, 252, 4, 35, "Output",ExpressionUUID->"bd1dc6ae-4dea-4a87-a3df-32c3795f76cd"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[19993, 478, 766, 16, 31, "Input",ExpressionUUID->"f92615d0-9019-478c-b222-a80eb17baabc"],
-Cell[20762, 496, 505, 8, 35, "Output",ExpressionUUID->"0ad018f8-6523-4da9-bc86-404966763f9c"]
+Cell[50382, 1129, 766, 16, 31, "Input",ExpressionUUID->"f92615d0-9019-478c-b222-a80eb17baabc"],
+Cell[51151, 1147, 527, 8, 35, "Output",ExpressionUUID->"ffdd9ada-fa34-4e7f-9f8d-cc8aeb12c43d"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[21304, 509, 1237, 24, 53, "Input",ExpressionUUID->"b6268b37-be13-4b8c-a833-d45a91bc13ff"],
-Cell[22544, 535, 1147, 16, 35, "Output",ExpressionUUID->"ee77d000-7fc4-4972-8961-b83dcc8af4b6"]
+Cell[51715, 1160, 1253, 23, 53, "Input",ExpressionUUID->"b6268b37-be13-4b8c-a833-d45a91bc13ff"],
+Cell[52971, 1185, 1171, 16, 35, "Output",ExpressionUUID->"32462897-9836-4576-a86d-6cad48f8eb8e"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
