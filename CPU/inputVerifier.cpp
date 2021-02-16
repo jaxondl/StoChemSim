@@ -39,28 +39,34 @@ bool inputVerifier::verifyFile(string iFile) {
         //cout << "Now checking line " << lineNumber << endl;
         //cout << reactionDefLine.length() << endl;
 
-        if (fullReactionDefLine.empty()) { //if the line is only comments, keep checking the next line until you get to a non-comment-only line
+        int numCompleteEmptyLinesBeforeData = 0;
+
+        if(fullReactionDefLine.empty()) { //if the line is only comments, keep checking the next line until you get to a non-comment-only line
             while(fullReactionDefLine.empty()) {
                 getline(inputFile,fullReactionDefLine);
                 if(fullReactionDefLine.empty()) {
-                    cout << "Warning: Your file only contains commented lines." << endl;
-                    return false;
+                    numCompleteEmptyLinesBeforeData++;
+                    if(numCompleteEmptyLinesBeforeData > 3) {
+                        cout << "Warning: Your file only contains commented lines or contains too many empty lines before the data." << endl;
+                        return false;
+                    }
                 }
                 lineNumber++;
                 fullReactionDefLine = chopOffComments(fullReactionDefLine);
             }
         }
 
-        int spaceIndex = fullReactionDefLine.find(" ");
-        if(spaceIndex == std::string::npos) {
-            cout << "Warning: Your first non-comment line is incomplete." << endl;
-            return false;
-        }
-        for (int i = 0; i < spaceIndex; i++) {
-            reactionSlice += fullReactionDefLine.at(
-                    i); // copy the string up to the next space (and don't include that space)
-        } //this should be the number of reactions, an integer
+//        int spaceIndex = fullReactionDefLine.find(" ");
+//        if(spaceIndex == std::string::npos) {
+//            cout << "Warning: Your first non-comment line is incomplete." << endl;
+//            return false;
+//        }
+//        for (int i = 0; i < spaceIndex; i++) {
+//            reactionSlice += fullReactionDefLine.at(
+//                    i); // copy the string up to the next space (and don't include that space)
+//        } //this should be the number of reactions, an integer
 
+        reactionSlice = fullReactionDefLine;
         //cout << reactionSlice.length() << endl;
         for (int i = 0; i < reactionSlice.length(); i++) {
             //cout << "checking index " << i << " of line " << lineNumber << " which is " << reactionSlice.at(i) << endl;
@@ -78,24 +84,24 @@ bool inputVerifier::verifyFile(string iFile) {
             //cout << numReactions << endl;
         }
 
-        reactionSlice = "";
-        for (int i = spaceIndex + 1; i < fullReactionDefLine.length(); i++) {
-            reactionSlice += fullReactionDefLine.at(
-                    i); // copy the rest of the line, after the space
-        } //now check tEnd, which can contain up to 1 decimal, and only digits otherwise
-        int numDecimals = 0;
-        for (int i = 0; i < reactionSlice.length(); i++) {
-            if(reactionSlice.at(i) == '.') numDecimals++;
-            else if (!(isdigit(reactionSlice.at(i)))) {
-                cout << "Warning: Your first line contains an invalid tEnd value." << endl;
-                cout << reactionSlice.at(i) << endl;
-                errorExists = true;
-            }
-        }
-        if (numDecimals > 1) {
-            cout << "Warning: Your first line contains too many decimals in the tEnd value." << endl;
-            errorExists = true;
-        }
+//        reactionSlice = "";
+//        for (int i = spaceIndex + 1; i < fullReactionDefLine.length(); i++) {
+//            reactionSlice += fullReactionDefLine.at(
+//                    i); // copy the rest of the line, after the space
+//        } //now check tEnd, which can contain up to 1 decimal, and only digits otherwise
+//        int numDecimals = 0;
+//        for (int i = 0; i < reactionSlice.length(); i++) {
+//            if(reactionSlice.at(i) == '.') numDecimals++;
+//            else if (!(isdigit(reactionSlice.at(i)))) {
+//                cout << "Warning: Your first line contains an invalid tEnd value." << endl;
+//                cout << reactionSlice.at(i) << endl;
+//                errorExists = true;
+//            }
+//        }
+//        if (numDecimals > 1) {
+//            cout << "Warning: Your first line contains too many decimals in the tEnd value." << endl;
+//            errorExists = true;
+//        }
 
     } else {
         errorExists = true;

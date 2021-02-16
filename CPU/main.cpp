@@ -34,6 +34,8 @@ int main(int argc, char** argv) {
         bool it = false; // iterations limit
         if(endValue <= 0)
             ti = true;
+        else
+            cout << "tEnd is " << tEnd << endl;
         for(int i = 4; i < argc; i++){
             string argument = argv[i];
             if (argument =="-so")
