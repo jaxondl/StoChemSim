@@ -1,0 +1,11 @@
+4 10
+1x1 -> 1y z1 2
+1x2 -> 1y z2 2
+1z1 1z2 -> 1k 1
+1k 1y -> 0 3
+
+#this system is deterministic
+#the final system should always be 0x1, 0x2, 0k, 20y, 0z1, 10z2
+
+x1 10
+x2 20

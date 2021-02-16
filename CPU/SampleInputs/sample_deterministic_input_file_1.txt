@@ -1,0 +1,11 @@
+2 1
+1x -> 2z 1
+4z -> 3y 2
+
+#this system is deterministic
+#the final system should always be 0x, Wy, 0z, where W = 13n
+#with the initial values below, this outcome should always be 0x, 650y, 0z
+
+x 200 #n = 50 (x,y,z all have the same starting population size of 4n)
+y 200
+z 200
