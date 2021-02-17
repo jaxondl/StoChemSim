@@ -10,8 +10,8 @@
 
 class directMethodSSA {
 private:
-    reactionTree* reactionTree; 
-    dependencyGraph* dependencyGraph;
+    reactionTree* reaction_tree; 
+    dependencyGraph* dependency_graph;
 
     vector<double> reactionRates;
     vector<vector<pair<int, int>>> reactantsVector;

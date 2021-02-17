@@ -3,8 +3,8 @@
 using namespace std;
 
 directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration){
-    this->reactionTree = new class reactionTree(moleculeAmounts, reactionRates, reactantsVector);
-    this->dependencyGraph = new class dependencyGraph(stateChangeVector, reactantsVector);
+    this->reaction_tree = new class reactionTree(moleculeAmounts, reactionRates, reactantsVector);
+    this->dependency_graph = new class dependencyGraph(stateChangeVector, reactantsVector);
     this->allStates.push_back(moleculeAmounts);
     this->allTimes.push_back(0);
     this->reactionRates = reactionRates; // k reaction constants
@@ -52,7 +52,7 @@ double directMethodSSA::getTimeUntilNextReaction(double propensity) {
 }
 
 double directMethodSSA::getTotalPropensity(){
-    reactionTree::reactionNode root = reactionTree->reactionTreeArray[0];
+    reactionTree::reactionNode root = reaction_tree->reactionTreeArray[0];
     double totalPropensity = root.propensity + root.leftSum + root.rightSum;
     return totalPropensity;
 }
@@ -87,14 +87,14 @@ void directMethodSSA::start(){
             allTimes.push_back(currentTime);
         }
         double uniformRV = getUniformRandomVariable();
-        int reactionIndex = reactionTree->searchForNode(uniformRV);
+        int reactionIndex = reaction_tree->searchForNode(uniformRV);
         updateState(stateChangeVector, reactionIndex);
         if (!finalOnly) {
             allStates.push_back(currentState);
         }
-        vector<int> dependentReactionIndices = dependencyGraph->getDependentReactions(reactionIndex);
+        vector<int> dependentReactionIndices = dependency_graph->getDependentReactions(reactionIndex);
         for(int reaction: dependentReactionIndices){
-            reactionTree->updatePropensity(reaction, reactionRates[reaction], currentState, reactantsVector[reaction]);
+            reaction_tree->updatePropensity(reaction, reactionRates[reaction], currentState, reactantsVector[reaction]);
         }
         currentIteration++;
     }
