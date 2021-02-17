@@ -26,7 +26,7 @@ static vector<vector<Tout>> numericMatrixtoVector(const void *in0, mint const *d
 	mint row = dims[0];
 	mint col = dims[1];
 	for (mint i = 0; i < row; i++) {
-		vector<T> out_row;
+		vector<Tout> out_row;
 		for (mint j = 0; j < col; j++) {
 			out_row.push_back(in[i*col + j]);
 		}
