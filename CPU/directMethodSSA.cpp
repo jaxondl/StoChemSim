@@ -18,8 +18,8 @@ directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> rea
     this->finalOnly = finalOnly;
     this->endInfinity = endInfinity;
     this->endByIteration = endByIteration;
-    if (this->statesOnly) {
-        this->endInfinity = true; 
+    if (this->statesOnly && !this->endByIteration) {
+        this->endInfinity = true;
     }
 }
 

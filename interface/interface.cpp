@@ -167,9 +167,13 @@ EXTERN_C DLLEXPORT int CRN_SSA(WolframLibraryData libData, mint Argc, MArgument 
 	process->start();
 
     if (finalOnly) {
-        allStates.emplace_back(process->getCurrentState());
+		vector<vector<int>> current_state;
+		current_state.push_back(process->getCurrentState());
+        allStates = current_state;
         if (!statesOnly) {
-            allTimes.emplace_back(process->getCurrentTime());
+			vector<double> current_time;
+			current_time.push_back(process->getCurrentTime());
+            allTimes = current_time;
         }
     } else {
         allStates = process->getAllStates();

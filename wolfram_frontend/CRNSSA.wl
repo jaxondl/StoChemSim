@@ -67,15 +67,8 @@ GetProdCounts[rxns_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxns, rxn[_, p_
 GetRates[rxns_] := Cases[rxns, rxn[_, _, k_] :> k]
 
 
-library = LibraryLoad["interface"];
+library = LibraryLoad["CRNSSA"];
 DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
-	{LibraryDataType[NumericArray],
-	LibraryDataType[NumericArray],
-	LibraryDataType[NumericArray],
-	LibraryDataType[NumericArray],
-	Real},
-	"Void"];
-(*DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
 	{LibraryDataType[NumericArray],
 	LibraryDataType[NumericArray],
 	LibraryDataType[NumericArray],
@@ -86,10 +79,9 @@ DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
 	True|False,
 	True|False,
 	True|False},
-	"Void"];*)
+	"Void"];
 GetStates = LibraryFunctionLoad[library, "getStates", {}, LibraryDataType[NumericArray]];
 GetTimes = LibraryFunctionLoad[library, "getTimes", {}, LibraryDataType[NumericArray]];
-GetDebug = LibraryFunctionLoad[library, "getDebug", {}, LibraryDataType[NumericArray]];
 
 
 Options[DirectSSA] = {
@@ -139,9 +131,10 @@ DirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	prodCountsNA = NumericArray[prodCounts, "Integer64"];
 	ratesNA = NumericArray[rates, "Real64"];
 	
-	DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR];
-	(*DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, statesOnly, finalOnly]*);
-	{GetStates[], GetTimes[]}
+	DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, statesOnly, finalOnly];
+	If[statesOnly,
+		{GetStates[]},
+		{GetStates[], GetTimes[]}]
 	]
 
 
