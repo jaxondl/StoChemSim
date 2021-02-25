@@ -1,7 +1,6 @@
 /* Include required headers */
 #include <cstdint>
 #include <vector>
-#include "../CPU/directMethodSSA.h"
 #include "WolframLibrary.h"
 #include "WolframNumericArrayLibrary.h"
 
@@ -13,6 +12,7 @@
 #include <algorithm>
 #include <vector>
 #include <utility>
+#include <random>
 
 using namespace std;
 

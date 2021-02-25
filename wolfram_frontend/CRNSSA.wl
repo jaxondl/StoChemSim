@@ -27,6 +27,7 @@ GetSpecies[rxnsys, pattern] returns the species in rxnsys that match the specifi
 
 DirectSSA::usage =
 "{states, times} = DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, Options]
+or {states} = DirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, Options] if statesOnly = True
 Simulates the given reaction system via Gillespie Direct SSA
 Backend is optimized in C++ for computational efficiency
 Options include timeEnd (Real), iterEnd (Integer),
@@ -67,7 +68,7 @@ GetProdCounts[rxns_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxns, rxn[_, p_
 GetRates[rxns_] := Cases[rxns, rxn[_, _, k_] :> k]
 
 
-library = LibraryLoad["CRNSSA"];
+library = LibraryLoad["interface"];
 DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
 	{LibraryDataType[NumericArray],
 	LibraryDataType[NumericArray],
