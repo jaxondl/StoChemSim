@@ -38,9 +38,12 @@ int main(int argc, char** argv) {
             cout << "tEnd is " << endValue << endl;
         for(int i = 4; i < argc; i++){
             string argument = argv[i];
-            if (argument =="-so")
+            for (int j = 0; j < argument.length(); j++){   
+  		        argument[j] = tolower(upTxt[j]);
+  	        }
+            if (argument =="-so" || argument == "-statesonly")
                 so = true;
-            else if (argument == "-fo")
+            else if (argument == "-fo" || argument == "-finalonly")
                 fo = true;
             else if (argument == "-it")
                 it = true;
