@@ -13,8 +13,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
     inputVerifier *iv = new inputVerifier();
-    string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\CPU\\SampleInputs\\sample_input_SSA_file.txt
-    string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\CPU\\output.txt
+    string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\CPU\\SampleInputs\\sample_input_SSA_file.txt
+    string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\CPU\\output.txt
     bool safeToRun = iv->verifyFile(inputFilePath);
     if (safeToRun) {
         // Create decoder object and get all needed data structures
