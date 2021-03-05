@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
         outfile.close();
     }
     else {
-        cout << "There were issue with your input file." << endl;
+        cout << "There were issue(s) with your input file." << endl;
     }
     return 0;
 }
