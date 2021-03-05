@@ -11,7 +11,6 @@
 class decoder {
 private:
     int testInt;
-    double tEnd;
     std::vector<std::string> listOfSpecies;
     std::vector<int> populationSizes; //indices correspond to the indices in listOfSpecies
     std::vector<std::vector<std::pair<int, int>>> stateChangeVector; //a vector of vectors of pairs
@@ -35,7 +34,6 @@ public:
     void updateReactantsVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
     void updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant);
     void updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
-    double getTEnd();
     std::vector<std::string> getListOfSpecies();
     std::vector<int> getPopulationSizes();
     std::vector<std::vector<std::pair<int, int>>> getStateChangeVector();

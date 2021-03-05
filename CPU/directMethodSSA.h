@@ -10,8 +10,8 @@
 
 class directMethodSSA {
 private:
-    reactionTree* reactionTree; 
-    dependencyGraph* dependencyGraph;
+    reactionTree* reaction_tree; 
+    dependencyGraph* dependency_graph;
 
     vector<double> reactionRates;
     vector<vector<pair<int, int>>> reactantsVector;
@@ -20,7 +20,12 @@ private:
     vector<vector<int>> allStates;
     vector<double> allTimes;
     double currentTime;
-    double tEnd;
+    int currentIteration;
+    double endValue;
+    bool endInfinity;
+    bool statesOnly;
+    bool finalOnly;
+    bool endByIteration;
 
     double getUniformRandomVariable();
     double getTimeUntilNextReaction(double propensity);
@@ -29,9 +34,12 @@ private:
     double getTotalPropensity();
 
 public:
-    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double t_end);
+    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration);
     vector<vector<int>> getAllStates();
     vector<double> getAllTimes();
+    vector<int> getCurrentState();
+    double getCurrentTime();
+    int getCurrentIteration();
     void start();
 };
 

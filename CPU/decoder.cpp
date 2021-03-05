@@ -20,7 +20,6 @@ void decoder::decode(string iFile) {
 
     string inputLine;
     int numReactions;
-    string tEnd;
     string reactionSlice = "";
     int reactionNumber = -1; //this is used for indexing the output vectors/arrays
     bool firstEntry = true;
@@ -39,18 +38,14 @@ void decoder::decode(string iFile) {
             }
         }
 
-        //changes made here
-
         int spaceIndex = inputLine.find(" ");
         numReactions = stoi(inputLine.substr(0, spaceIndex));
-        tEnd = inputLine.substr(spaceIndex + 1, inputLine.length());
-        this->tEnd = atof(tEnd.c_str());
+//        tEnd = inputLine.substr(spaceIndex + 1, inputLine.length());
+//        this->tEnd = atof(tEnd.c_str());
         
         //numReactions = stoi(inputLine);
         cout << "Space " << spaceIndex << endl;
         cout << "numReactions is " << numReactions << endl;
-        cout << "tEnd is " << this->tEnd << endl;
-
     }
 
     for (int r = 0; r < numReactions; r++) {
@@ -720,10 +715,6 @@ void decoder::updateStateChangeVectorReverse(int reactionNumber, std::string rea
             //cout << this->stateChangeVector[reactionNumber][pairIndex].first << " " << this->stateChangeVector[reactionNumber][pairIndex].second << endl;
         }
     }
-}
-
-double decoder::getTEnd() {
-    return this->tEnd;
 }
 
 vector<string> decoder::getListOfSpecies() {
