@@ -41,7 +41,7 @@ int main(int argc, char** argv) {
         for(int i = 4; i < argc; i++){
             string argument = argv[i];
             for (int j = 0; j < argument.length(); j++){   
-  		        //argument[j] = tolower(upTxt[j]);
+  		        argument[j] = tolower(upTxt[j]);
   	        }
             if (argument =="-so" || argument == "-statesonly")
                 so = true;
