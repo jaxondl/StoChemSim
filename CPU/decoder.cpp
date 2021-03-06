@@ -4,10 +4,6 @@ using namespace std;
 
 //the methods in this class assume that the input file is formatted correctly according to the documentation
 
-void decoder::testFunction() {
-    cout << "This is a test function for decoder.cpp" << endl;
-}
-
 void decoder::decode(string iFile) {
     ifstream inputFile;
     inputFile.open(iFile);

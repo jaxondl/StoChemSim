@@ -3,6 +3,7 @@
 #include "dependencyGraph.h"
 #include "reactionTree.h"
 #include "inputVerifier.h"
+#include "gpuDecoderPrototype.h"
 
 #include <iostream>
 #include <iomanip>
@@ -20,6 +21,7 @@ int main(int argc, char** argv) {
     if (safeToRun) {
         // Create decoder object and get all needed data structures
         decoder *inputDecoder = new decoder();
+        //gpuDecoderPrototype *inputDecoder = new gpuDecoderPrototype();
         inputDecoder->decode(inputFilePath);
         vector<vector<pair<int, int>>> stateChangeVector = inputDecoder->getStateChangeVector();
         vector<vector<pair<int, int>>> reactantsVector = inputDecoder->getReactantVector();
@@ -39,7 +41,7 @@ int main(int argc, char** argv) {
         for(int i = 4; i < argc; i++){
             string argument = argv[i];
             for (int j = 0; j < argument.length(); j++){   
-  		        argument[j] = tolower(upTxt[j]);
+  		        //argument[j] = tolower(upTxt[j]);
   	        }
             if (argument =="-so" || argument == "-statesonly")
                 so = true;
