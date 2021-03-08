@@ -1,8 +1,8 @@
-#include "directMethodSSA.h"
-#include "decoder.h"
-#include "dependencyGraph.h"
-#include "reactionTree.h"
-#include "inputVerifier.h"
+#include "directSSA/directMethodSSA.h"
+#include "directSSA/reactionTree.h"
+#include "common/decoder.h"
+#include "common/dependencyGraph.h"
+#include "common/inputVerifier.h"
 
 #include <iostream>
 #include <iomanip>
@@ -35,7 +35,7 @@ int main(int argc, char** argv) {
         if(endValue <= 0)
             ti = true;
         else
-            cout << "tEnd is " << tEnd << endl;
+            cout << "endValue is " << endValue << endl;
         for(int i = 4; i < argc; i++){
             string argument = argv[i];
             if (argument =="-so")
