@@ -57,25 +57,15 @@ double directMethodSSA::getTotalPropensity(){
     return totalPropensity;
 }
 
-vector<vector<int>> directMethodSSA::getAllStates(){
-    return allStates;
-}
+vector<vector<int>> directMethodSSA::getAllStates(){return allStates;}
 
-vector<double> directMethodSSA::getAllTimes(){
-    return allTimes;
-}
+vector<double> directMethodSSA::getAllTimes(){return allTimes;}
 
-vector<int> directMethodSSA::getCurrentState(){
-    return currentState;
-}
+vector<int> directMethodSSA::getCurrentState(){return currentState;}
 
-double directMethodSSA::getCurrentTime(){
-    return currentTime;
-}
+double directMethodSSA::getCurrentTime(){return currentTime;}
 
-int directMethodSSA::getCurrentIteration(){
-    return currentIteration;
-}
+int directMethodSSA::getCurrentIteration(){return currentIteration;}
 
 void directMethodSSA::start(){
     while (getTotalPropensity() > 0.001 && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))){

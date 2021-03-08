@@ -4,7 +4,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
-#include "dependencyGraph.h"
+#include "../common/dependencyGraph.h"
 
 class boundedTauLeaping {
 private:
@@ -39,7 +39,7 @@ private:
     double getTotalPropensity();
 
 public:
-    boundedTauLeaping(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool finalOnly, bool endInfinity, bool endByIteration);
+    boundedTauLeaping(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool finalOnly, bool endInfinity, bool endByIteration, double epsilon);
     
     vector<vector<int>> getAllStates();
     vector<double> getAllTimes();
