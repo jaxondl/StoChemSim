@@ -1,7 +1,7 @@
 /* Include required headers */
 #include <cstdint>
 #include <vector>
-#include "../directSSA/directMethodSSA.h"
+#include "../directMethodSSA/directMethodSSA.h"
 #include "WolframLibrary.h"
 #include "WolframNumericArrayLibrary.h"
 

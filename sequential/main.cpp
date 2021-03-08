@@ -1,5 +1,5 @@
-#include "directSSA/directMethodSSA.h"
-#include "directSSA/reactionTree.h"
+#include "directMethodSSA/directMethodSSA.h"
+#include "directMethodSSA/reactionTree.h"
 #include "common/decoder.h"
 #include "common/dependencyGraph.h"
 #include "common/inputVerifier.h"
