@@ -1,0 +1,121 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      3791,        113]
+NotebookOptionsPosition[      3035,         93]
+NotebookOutlinePosition[      3435,        109]
+CellTagsIndexPosition[      3392,        106]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Needs", "[", "\"\<CCompilerDriver`\>\"", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"lib", "=", 
+   RowBox[{"CreateLibrary", "[", 
+    RowBox[{
+     RowBox[{"{", "\"\<E:\\\\CRN\\\\FrontEnd\\\\test.cpp\>\"", "}"}], ",", 
+     "\"\<interface\>\""}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"testFunc", "=", 
+   RowBox[{"LibraryFunctionLoad", "[", 
+    RowBox[{"lib", ",", "\"\<testing\>\"", ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"LibraryDataType", "[", "NumericArray", "]"}], ",", " ", 
+         "\"\<Constant\>\""}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"LibraryDataType", "[", "NumericArray", "]"}], "}"}], ",", 
+       " ", "Integer"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"Real", ",", " ", "1"}], "}"}]}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.814332574049928*^9, 3.8143326268626013`*^9}, {
+  3.814332972833595*^9, 
+  3.8143329743414855`*^9}},ExpressionUUID->"c6439aec-0d9a-4815-b6a4-\
+16e397ac2080"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"na1", " ", "=", " ", 
+   RowBox[{"NumericArray", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"2", ",", "4", ",", "6"}], "}"}], ",", "\"\<Integer64\>\""}], 
+    "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.81433264920521*^9, 3.814332667057181*^9}},
+ CellLabel->"In[31]:=",ExpressionUUID->"d2c5c475-d953-4f3a-aca6-0373adad0c58"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"na2", " ", "=", " ", 
+   RowBox[{"NumericArray", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"2", ",", "4"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"6", ",", "8"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"10", ",", "12"}], "}"}]}], "}"}], ",", "\"\<Integer64\>\""}],
+     "]"}]}], ";"}]], "Input",
+ CellLabel->"In[32]:=",ExpressionUUID->"3329195c-af64-43b6-bedf-18573c6d9a67"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"testFunc", "[", 
+  RowBox[{"na1", ",", " ", "na2", ",", " ", "2"}], "]"}]], "Input",
+ CellChangeTimes->{{3.81433268067416*^9, 3.8143326862085843`*^9}},
+ CellLabel->"In[33]:=",ExpressionUUID->"8dee039f-5041-4fcc-a859-c5131a3ebea6"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+  "1.`", ",", "2.`", ",", "3.`", ",", "1.`", ",", "2.`", ",", "3.`", ",", 
+   "4.`", ",", "5.`", ",", "6.`"}], "}"}]], "Output",
+ CellChangeTimes->{3.8143326868128576`*^9},
+ CellLabel->"Out[33]=",ExpressionUUID->"c99ffee1-83da-4026-89e2-af59875284bc"]
+}, Open  ]]
+},
+WindowSize->{759, 813},
+WindowMargins->{{892, Automatic}, {207, Automatic}},
+FrontEndVersion->"12.1 for Microsoft Windows (64-bit) (June 19, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"58d801d5-23df-4ed1-98c6-9677718fc876"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 1030, 27, 105, "Input",ExpressionUUID->"c6439aec-0d9a-4815-b6a4-16e397ac2080"],
+Cell[1591, 49, 372, 9, 28, "Input",ExpressionUUID->"d2c5c475-d953-4f3a-aca6-0373adad0c58"],
+Cell[1966, 60, 480, 14, 28, "Input",ExpressionUUID->"3329195c-af64-43b6-bedf-18573c6d9a67"],
+Cell[CellGroupData[{
+Cell[2471, 78, 254, 4, 28, "Input",ExpressionUUID->"8dee039f-5041-4fcc-a859-c5131a3ebea6"],
+Cell[2728, 84, 291, 6, 32, "Output",ExpressionUUID->"c99ffee1-83da-4026-89e2-af59875284bc"]
+}, Open  ]]
+}
+]
+*)
+

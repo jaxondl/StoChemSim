@@ -1,9 +1,8 @@
-#include "directMethodSSA.h"
-#include "decoder.h"
-#include "dependencyGraph.h"
-#include "reactionTree.h"
-#include "inputVerifier.h"
-#include "gpuDecoderPrototype.h"
+#include "directSSA/directMethodSSA.h"
+#include "directSSA/reactionTree.h"
+#include "common/decoder.h"
+#include "common/dependencyGraph.h"
+#include "common/inputVerifier.h"
 
 #include <iostream>
 #include <iomanip>
@@ -21,7 +20,6 @@ int main(int argc, char** argv) {
     if (safeToRun) {
         // Create decoder object and get all needed data structures
         decoder *inputDecoder = new decoder();
-        //gpuDecoderPrototype *inputDecoder = new gpuDecoderPrototype();
         inputDecoder->decode(inputFilePath);
         vector<vector<pair<int, int>>> stateChangeVector = inputDecoder->getStateChangeVector();
         vector<vector<pair<int, int>>> reactantsVector = inputDecoder->getReactantVector();
@@ -37,15 +35,12 @@ int main(int argc, char** argv) {
         if(endValue <= 0)
             ti = true;
         else
-            cout << "tEnd is " << endValue << endl;
+            cout << "endValue is " << endValue << endl;
         for(int i = 4; i < argc; i++){
             string argument = argv[i];
-            for (int j = 0; j < argument.length(); j++){   
-  		        argument[j] = tolower(upTxt[j]);
-  	        }
-            if (argument =="-so" || argument == "-statesonly")
+            if (argument =="-so")
                 so = true;
-            else if (argument == "-fo" || argument == "-finalonly")
+            else if (argument == "-fo")
                 fo = true;
             else if (argument == "-it")
                 it = true;
