@@ -1,7 +1,7 @@
 (* ::Package:: *)
 
 (* ::Title:: *)
-(*CRN SSA Package*)
+(*CRNSSA Package*)
 
 
 BeginPackage["CRNSSA`"]
@@ -68,7 +68,7 @@ GetProdCounts[rxns_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxns, rxn[_, p_
 GetRates[rxns_] := Cases[rxns, rxn[_, _, k_] :> k]
 
 
-library = LibraryLoad["interface"];
+library = LibraryLoad["directSSAinterface"];
 DirectBackend = LibraryFunctionLoad[library, "CRN_SSA",
 	{LibraryDataType[NumericArray],
 	LibraryDataType[NumericArray],
@@ -134,8 +134,8 @@ DirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	
 	DirectBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, statesOnly, finalOnly];
 	If[statesOnly,
-		{GetStates[]},
-		{GetStates[], GetTimes[]}]
+		If[finalOnly, Normal[GetStates[]][[1]], Normal[GetStates[]]],
+		If[finalOnly, {Normal[GetStates[]][[1]], Normal[GetTimes[]]}, {Normal[GetStates[]], Normal[GetTimes[]]}]]
 	]
 
 

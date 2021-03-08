@@ -25,7 +25,6 @@ private:
     //the second integer is how many copies of that reactant molecule are needed for the reaction to occur
     std::vector<double> kValueVector; //each element is the k value of the corresponding reaction
 public:
-    void testFunction();
     void decode(std::string iFile);
     std::string chopOffComments(std::string line);
     void parseReactionSlice(std::string reactionSlice, bool isReversible, bool fencepost, int reactionNumber, bool isReactant);
