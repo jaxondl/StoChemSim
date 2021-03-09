@@ -13,12 +13,12 @@ private:
     int testInt;
     std::vector<std::string> listOfSpecies;
     std::vector<int> populationSizes; //indices correspond to the indices in listOfSpecies
-    std::vector<std::vector<std::pair<int, int>>> stateChangeVector; //a vector of vectors of pairs
+    std::vector<std::vector<std::pair<int, int> > > stateChangeVector; //a vector of vectors of pairs
     //each element x of stateChangeArray corresponds to one defined reaction
     //each vector element y of a given element x is a pair of integer elements
     //the first integer is the index of the reactant/product,
     // and the second integer is the net change in the population size of that reactant/product after the reaction occurs
-    std::vector<std::vector<std::pair<int, int>>> reactantVector; //a vector of vectors of pairs
+    std::vector<std::vector<std::pair<int, int> > > reactantVector; //a vector of vectors of pairs
     //each element x of reactantArray corresponds to one defined reaction
     //each vector element y of a given element x is a pair of integer elements
     //the first integer is the index of the reactant
@@ -35,8 +35,8 @@ public:
     void updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
     std::vector<std::string> getListOfSpecies();
     std::vector<int> getPopulationSizes();
-    std::vector<std::vector<std::pair<int, int>>> getStateChangeVector();
-    std::vector<std::vector<std::pair<int, int>>> getReactantVector();
+    std::vector<std::vector<std::pair<int, int> > > getStateChangeVector();
+    std::vector<std::vector<std::pair<int, int> > > getReactantVector();
     std::vector<double> getkValueVector();
 };
 

@@ -14,10 +14,10 @@ private:
     dependencyGraph* dependency_graph;
 
     vector<double> reactionRates;
-    vector<vector<pair<int, int>>> reactantsVector;
-    vector<vector<pair<int, int>>> stateChangeVector;
+    vector<vector<pair<int, int> > > reactantsVector;
+    vector<vector<pair<int, int> > > stateChangeVector;
     vector<int> currentState;
-    vector<vector<int>> allStates;
+    vector<vector<int> > allStates;
     vector<double> allTimes;
     double currentTime;
     int currentIteration;
@@ -30,12 +30,12 @@ private:
     double getUniformRandomVariable();
     double getTimeUntilNextReaction(double propensity);
     void updateTime(double timeUntilNextReaction);
-    void updateState(vector<vector<pair<int, int>>> stateChangeVector, int reactionIndex);
+    void updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex);
     double getTotalPropensity();
 
 public:
-    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration);
-    vector<vector<int>> getAllStates();
+    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration);
+    vector<vector<int> > getAllStates();
     vector<double> getAllTimes();
     vector<int> getCurrentState();
     double getCurrentTime();

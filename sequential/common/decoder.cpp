@@ -115,17 +115,17 @@ void decoder::decode(string iFile) {
                     }
 
                     if(!createdNewVectorForThisReaction) {
-                        vector <pair<int, int>> stateChangesForReactions;
+                        vector <pair<int, int> > stateChangesForReactions;
                         this->stateChangeVector.push_back(stateChangesForReactions); //this will be pushed to index reactionNumber
 
-                        vector <pair<int, int>> reactantsForReactions;
+                        vector <pair<int, int> > reactantsForReactions;
                         this->reactantVector.push_back(reactantsForReactions); //this will be pushed to index reactionNumber
 
                         if(isReversible) { //do it again for the reverse direction reaction
-                            vector <pair<int, int>> stateChangesForReactions;
+                            vector <pair<int, int> > stateChangesForReactions;
                             this->stateChangeVector.push_back(stateChangesForReactions);
 
-                            vector <pair<int, int>> reactantsForReactions;
+                            vector <pair<int, int> > reactantsForReactions;
                             this->reactantVector.push_back(reactantsForReactions);
                         }
 
@@ -241,7 +241,7 @@ void decoder::decode(string iFile) {
     cout << endl;
     cout << "reactantVector:" << endl;
     cout << "[ ";
-    for (vector<pair<int, int>> x : this->reactantVector) {
+    for (vector<pair<int, int> > x : this->reactantVector) {
         cout << "[ ";
         for (pair<int, int> y : x) {
             cout << "[" << y.first << "," << y.second << "]" << ", ";
@@ -251,7 +251,7 @@ void decoder::decode(string iFile) {
     cout << "]" << endl;
     cout << "stateChangeVector:" << endl;
     cout << "[ ";
-    for (vector<pair<int, int>> x : this->stateChangeVector) {
+    for (vector<pair<int, int> > x : this->stateChangeVector) {
         cout << "[ ";
         for (pair<int, int> y : x) {
             cout << "[" << y.first << "," << y.second << "]" << ", ";
@@ -719,10 +719,10 @@ vector<string> decoder::getListOfSpecies() {
 vector<int> decoder::getPopulationSizes() {
     return this->populationSizes;
 }
-vector<vector<pair<int, int>>> decoder::getStateChangeVector() {
+vector<vector<pair<int, int> > > decoder::getStateChangeVector() {
     return this->stateChangeVector;
 }
-vector<vector<pair<int, int>>> decoder::getReactantVector() {
+vector<vector<pair<int, int> > > decoder::getReactantVector() {
     return this->reactantVector;
 }
 vector<double> decoder::getkValueVector() {
