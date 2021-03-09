@@ -18,16 +18,16 @@ using namespace std;
 
 class dependencyGraph {
 private:
-    vector<vector<int>> dependencyGraphStructure;
+    vector<vector<int> > dependencyGraphStructure;
 public:
-    dependencyGraph(vector<vector<pair<int, int>>> stateChangeVector, vector<vector<pair<int,int>>> reactantsVector);
+    dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector);
 
     bool intersects(set<int> set1, set<int> set2);
 
     vector<int> getDependentReactions(int reactionIndex);
 };
 
-dependencyGraph::dependencyGraph(vector<vector<pair<int, int>>> stateChangeVector, vector<vector<pair<int,int>>> reactantsVector){
+dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector){
     cout << "Beginning Creation of Dependency Graph" << endl;
     // DEFINITION 1: Reactants(p) and products(p) are reactants and prods of reaction p. e.g. Reactants(1) = {a,b}
     // DEFINITION 2: DependsOn(a-mu), where a-mu is the propensity of chosen reaction, is the set of substances that affect its value. i.e. Reactants(mu)
@@ -38,8 +38,8 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int>>> stateChangeVecto
     */
 
     int numReactions = stateChangeVector.size();
-    vector<set<int>> dependsOn(numReactions);
-    vector<set<int>> affects(numReactions);
+    vector<set<int> > dependsOn(numReactions);
+    vector<set<int> > affects(numReactions);
 
     for(int i = 0; i < numReactions; i++){
         for(pair<int, int> element : reactantsVector[i]){
@@ -50,7 +50,7 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int>>> stateChangeVecto
         }
     }
 
-    vector<vector<int>> dummyGraph(numReactions);
+    vector<vector<int> > dummyGraph(numReactions);
 
     for(int i = 0; i < numReactions; i++){ //then find intersection
         dummyGraph[i].push_back(i); 
@@ -87,7 +87,7 @@ vector<int> dependencyGraph::getDependentReactions(int reactionIndex){
 
 class reactionTree {
 private:
-    double calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants);
+    double calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants);
 public:
     struct reactionNode {
             double propensity;
@@ -98,12 +98,12 @@ public:
             int parent;
     };
     reactionNode* reactionTreeArray;
-    reactionTree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector);
+    reactionTree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector);
     int searchForNode(double RV);
-    void updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants);
+    void updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants);
 };
 
-double reactionTree::calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){
+double reactionTree::calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants){
     double propensity = reactionRate;
     for (pair<int, int> reactant: reactants) {
         for (int i=0; i<reactant.second; i++) {
@@ -113,7 +113,7 @@ double reactionTree::calculatePropensity(double reactionRate, vector<int> molecu
     return propensity;
 }
 
-reactionTree::reactionTree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector) {
+reactionTree::reactionTree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector) {
     cout << "Beginning Creation of Reaction Tree" << endl;
     long numReactions = reactantsVector.size();
     reactionTreeArray = new reactionNode[numReactions];
@@ -176,7 +176,7 @@ int reactionTree::searchForNode(double RV) {
 }
 
 //update its propensity and every subsequent parent's propensities
-void reactionTree::updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){
+void reactionTree::updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants){
     int currentIndex = index;
     double newPropensity = calculatePropensity(reactionRate, moleculeAmounts, reactants); //recalculate propensity for that index
     double propensityChange = newPropensity - reactionTreeArray[currentIndex].propensity;
@@ -198,10 +198,10 @@ private:
     dependencyGraph* dependency_graph;
 
     vector<double> reactionRates;
-    vector<vector<pair<int, int>>> reactantsVector;
-    vector<vector<pair<int, int>>> stateChangeVector;
+    vector<vector<pair<int, int> > > reactantsVector;
+    vector<vector<pair<int, int> > > stateChangeVector;
     vector<int> currentState;
-    vector<vector<int>> allStates;
+    vector<vector<int> > allStates;
     vector<double> allTimes;
     double currentTime;
     int currentIteration;
@@ -214,12 +214,12 @@ private:
     double getUniformRandomVariable();
     double getTimeUntilNextReaction(double propensity);
     void updateTime(double timeUntilNextReaction);
-    void updateState(vector<vector<pair<int, int>>> stateChangeVector, int reactionIndex);
+    void updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex);
     double getTotalPropensity();
 
 public:
-    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration);
-    vector<vector<int>> getAllStates();
+    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration);
+    vector<vector<int> > getAllStates();
     vector<double> getAllTimes();
     vector<int> getCurrentState();
     double getCurrentTime();
@@ -227,7 +227,7 @@ public:
     void start();
 };
 
-directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration){
+directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration){
     this->reaction_tree = new class reactionTree(moleculeAmounts, reactionRates, reactantsVector);
     this->dependency_graph = new class dependencyGraph(stateChangeVector, reactantsVector);
     this->allStates.push_back(moleculeAmounts);
@@ -260,8 +260,8 @@ void directMethodSSA::updateTime(double timeUntilNextReaction){
     currentTime += timeUntilNextReaction;
 }
 
-void directMethodSSA::updateState(vector<vector<pair<int, int>>> stateChangeVector, int reactionIndex) {
-    vector<pair<int, int>> chosenReactionChange = stateChangeVector[reactionIndex];
+void directMethodSSA::updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex) {
+    vector<pair<int, int> > chosenReactionChange = stateChangeVector[reactionIndex];
     for(pair<int, int> p: chosenReactionChange){
         currentState[p.first] += p.second; //update the state change at the associated index
     }
@@ -282,7 +282,7 @@ double directMethodSSA::getTotalPropensity(){
     return totalPropensity;
 }
 
-vector<vector<int>> directMethodSSA::getAllStates(){
+vector<vector<int> > directMethodSSA::getAllStates(){
     return allStates;
 }
 
@@ -342,9 +342,9 @@ DLLEXPORT void WolframLibrary_uninitialize(WolframLibraryData libData) {
 
 /* convert a 2-dimentional NumericArray to a 2-dimentional vector */
 template <typename Tin, typename Tout>
-static vector<vector<Tout>> numericMatrixtoVector(const void *in0, mint const *dims) {
+static vector<vector<Tout> > numericMatrixtoVector(const void *in0, mint const *dims) {
 	const Tin *in = static_cast<const Tin *>(in0);
-	vector<vector<Tout>> out;
+	vector<vector<Tout> > out;
 	mint row = dims[0];
 	mint col = dims[1];
 	for (mint i = 0; i < row; i++) {
@@ -378,7 +378,7 @@ static void vectortoNumericArray(void *Mout0, vector<T> out) {
 }
 
 template <typename Tin, typename Tout>
-static void matrixtoNumericArray(void *Mout0, vector<vector<Tin>> out) {
+static void matrixtoNumericArray(void *Mout0, vector<vector<Tin> > out) {
 	Tout *Mout = static_cast<Tout *>(Mout0);
 	int64_t row = out.size();
 	int64_t col = out[0].size();
@@ -390,10 +390,10 @@ static void matrixtoNumericArray(void *Mout0, vector<vector<Tin>> out) {
 }
 
 template <typename T1, typename T2>
-static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint moleculeCount, const int64_t *reactIn, const int64_t *prodIn, vector<vector<pair<T1, T2>>>& reactantsArray, vector<vector<pair<T1, T2>>>& stateChangeArray) {
+static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint moleculeCount, const int64_t *reactIn, const int64_t *prodIn, vector<vector<pair<T1, T2> > >& reactantsArray, vector<vector<pair<T1, T2> > >& stateChangeArray) {
 	for (mint i = 0; i < reactionCount; i++) {
-		vector<pair<T1, T2>> reactantsArray_row;
-		vector<pair<T1, T2>> stateChangeArray_row;
+		vector<pair<T1, T2> > reactantsArray_row;
+		vector<pair<T1, T2> > stateChangeArray_row;
 		for (mint j = 0; j < moleculeCount; j++) {
 			T1 index = (T1)j;
 			T2 in = (T2)reactIn[i*moleculeCount + j];
@@ -416,7 +416,7 @@ static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint mo
 }
 
 // ****** gloabl storage for returns *******
-vector<vector<int>> allStates;
+vector<vector<int> > allStates;
 vector<double> allTimes;
 
 // ******** end of global storage ********
@@ -444,8 +444,8 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	void* MprodCounts_in = naFuns->MNumericArray_getData(MprodCounts);
 	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in); // TODO: convert to template in later release
 	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);   // TODO: convert to template in later release
-    vector<vector<pair<int, int>>> reactantsArray;
-	vector<vector<pair<int, int>>> stateChangeArray;
+    vector<vector<pair<int, int> > > reactantsArray;
+	vector<vector<pair<int, int> > > stateChangeArray;
     reactantsAndStateChangeArrayConstruction<int, int>(reactionCount, moleculeCount, reactIn, prodIn, reactantsArray, stateChangeArray);
 
 	// convert rates
@@ -489,7 +489,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	process->start();
 
     if (finalOnly) {
-		vector<vector<int>> current_state;
+		vector<vector<int> > current_state;
 		current_state.push_back(process->getCurrentState());
         allStates = current_state;
         if (!statesOnly) {
