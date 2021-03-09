@@ -40,11 +40,7 @@ Options include:
 PlotLastSimulation::usage =
 "PlotSimulation[Options]
 Plots the last simulation ran
-Options include:
-	start (Real), default = 0, left bound of x axis
-	end (Real), default = All, right bound of x axis
-	title (String), default = \"CRN Simulation\", title of plot
-	maxPoints (Integer), default = 500, maximum number of points plotted"
+Uses same Options from ListLinePlot"
 
 
 Begin["`Private`"]
@@ -171,18 +167,8 @@ DirectSSA[rxnsys_, OptionsPattern[]] := Module[
 ]
 
 
-Options[PlotLastSimulation] = {
-	"start" -> 0,
-	"end" -> All,
-	"title" -> "CRN Simulation",
-	"maxPoints" -> 500
-}
-PlotLastSimulation[OptionsPattern[]] := Module[
-	{start = OptionValue["start"],
-	end = OptionValue["end"],
-	title = OptionValue["title"],
-	maxPoints = OptionValue["maxPoints"],
-	xLabel, ts},
+PlotLastSimulation[opts:OptionsPattern[ListLinePlot]] := Module[
+	{xLabel, ts},
 	
 	If[Head[simulationResult] === Symbol,
 		Message[PlotLastSimulation::nosimerr],
@@ -199,12 +185,14 @@ PlotLastSimulation[OptionsPattern[]] := Module[
 				xLabel = "Iterations",
 				xLabel = "Time [s]"
 			];
-			ListLinePlot[ts,
-				PlotRange -> {start, end},
+			ListLinePlot[
+				ts,
+				opts,
+				PlotRange -> {0, All},
 				PlotLegends -> spcs,
 				AxesLabel -> {xLabel, "Molecular Count"},
-				PlotLabel -> title,
-				MaxPlotPoints -> maxPoints
+				PlotLabel -> "CRN Simulation",
+				MaxPlotPoints -> 500
 			]
 		]
 	]
