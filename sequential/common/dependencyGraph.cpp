@@ -2,7 +2,7 @@
 
 using namespace std;
 
-dependencyGraph::dependencyGraph(vector<vector<pair<int, int>>> stateChangeVector, vector<vector<pair<int,int>>> reactantsVector){
+dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector){
     cout << "Beginning Creation of Dependency Graph" << endl;
     // DEFINITION 1: Reactants(p) and products(p) are reactants and prods of reaction p. e.g. Reactants(1) = {a,b}
     // DEFINITION 2: DependsOn(a-mu), where a-mu is the propensity of chosen reaction, is the set of substances that affect its value. i.e. Reactants(mu)
@@ -13,8 +13,8 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int>>> stateChangeVecto
     */
 
     int numReactions = stateChangeVector.size();
-    vector<set<int>> dependsOn(numReactions);
-    vector<set<int>> affects(numReactions);
+    vector<set<int> > dependsOn(numReactions);
+    vector<set<int> > affects(numReactions);
 
     for(int i = 0; i < numReactions; i++){
         for(pair<int, int> element : reactantsVector[i]){
@@ -25,7 +25,7 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int>>> stateChangeVecto
         }
     }
 
-    vector<vector<int>> dummyGraph(numReactions);
+    vector<vector<int> > dummyGraph(numReactions);
 
     for(int i = 0; i < numReactions; i++){ //then find intersection
         dummyGraph[i].push_back(i); 

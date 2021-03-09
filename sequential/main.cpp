@@ -21,8 +21,8 @@ int main(int argc, char** argv) {
         // Create decoder object and get all needed data structures
         decoder *inputDecoder = new decoder();
         inputDecoder->decode(inputFilePath);
-        vector<vector<pair<int, int>>> stateChangeVector = inputDecoder->getStateChangeVector();
-        vector<vector<pair<int, int>>> reactantsVector = inputDecoder->getReactantVector();
+        vector<vector<pair<int, int> > > stateChangeVector = inputDecoder->getStateChangeVector();
+        vector<vector<pair<int, int> > > reactantsVector = inputDecoder->getReactantVector();
         vector<double> reactionRates = inputDecoder->getkValueVector();
         vector<int> moleculeAmounts = inputDecoder->getPopulationSizes();
         vector<string> speciesList = inputDecoder->getListOfSpecies();
@@ -54,7 +54,7 @@ int main(int argc, char** argv) {
 
         // Print the results of the SSA - all states at all times, sequentially
         vector<double> allTimes = directSSA->getAllTimes();
-        vector<vector<int>> allStates = directSSA->getAllStates();
+        vector<vector<int> > allStates = directSSA->getAllStates();
         vector<int> currentState = directSSA->getCurrentState();
         double currentTime = directSSA->getCurrentTime();
         int currentIteration = directSSA->getCurrentIteration();
