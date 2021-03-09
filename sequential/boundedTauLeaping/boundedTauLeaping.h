@@ -11,10 +11,10 @@ private:
     dependencyGraph* dependency_graph;
 
     vector<double> reactionRates;
-    vector<vector<pair<int, int>>> reactantsVector;
-    vector<vector<pair<int, int>>> stateChangeVector;
+    vector<vector<pair<int, int> > > reactantsVector;
+    vector<vector<pair<int, int> > > stateChangeVector;
     vector<int> currentState;
-    vector<vector<int>> allStates;
+    vector<vector<int> > allStates;
     vector<double> allTimes;
     double currentTime;
     int currentIteration;
@@ -35,13 +35,13 @@ private:
     vector<int> determineReactionOccurrences(vector<int> bounds, vector<double> violatingTimes, int violatingIndex);
     
     void updateTime(double timeUntilNextReaction);
-    void updateState(vector<vector<pair<int, int>>> stateChangeVector, int reactionIndex);
+    void updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex);
     double getTotalPropensity();
 
 public:
-    boundedTauLeaping(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool finalOnly, bool endInfinity, bool endByIteration, double epsilon);
+    boundedTauLeaping(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool finalOnly, bool endInfinity, bool endByIteration, double epsilon);
     
-    vector<vector<int>> getAllStates();
+    vector<vector<int> > getAllStates();
     vector<double> getAllTimes();
     vector<int> getCurrentState();
     double getCurrentTime();

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-boundedTauLeaping::boundedTauLeaping(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool finalOnly, bool endInfinity, bool endByIteration, double epsilon){
+boundedTauLeaping::boundedTauLeaping(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool finalOnly, bool endInfinity, bool endByIteration, double epsilon){
     this->dependency_graph = new class dependencyGraph(stateChangeVector, reactantsVector);
     this->allStates.push_back(moleculeAmounts);
     this->allTimes.push_back(0);
@@ -43,14 +43,14 @@ void boundedTauLeaping::updateTime(double timeUntilNextReaction){
 
 }
 
-void boundedTauLeaping::updateState(vector<vector<pair<int, int>>> stateChangeVector, int reactionIndex){
+void boundedTauLeaping::updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex){
 
 }
 double boundedTauLeaping::getTotalPropensity(){
     
 }
 
-vector<vector<int>> boundedTauLeaping::getAllStates(){return allStates;}
+vector<vector<int> > boundedTauLeaping::getAllStates(){return allStates;}
 
 vector<double> boundedTauLeaping::getAllTimes(){return allTimes;}
 
