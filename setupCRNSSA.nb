@@ -1,0 +1,538 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     20956,        530]
+NotebookOptionsPosition[     18771,        485]
+NotebookOutlinePosition[     19174,        501]
+CellTagsIndexPosition[     19131,        498]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Setup Instructions for CRNSSA", "Title",
+ CellChangeTimes->{{3.824211999682989*^9, 
+  3.8242120180817876`*^9}},ExpressionUUID->"4c0eacd2-d689-4e3a-90b5-\
+2d666b6e6543"],
+
+Cell[TextData[{
+ "1. Clone the GitHub repo ",
+ StyleBox["crn-ssa-wolfram-pkg", "Code"],
+ " with the URL ",
+ StyleBox["https://github.com/jaxondl/crn-ssa-wolfram-pkg.git", "Code"],
+ ".\n2. Ensure that Wolfram Mathematica 12 is installed."
+}], "Text",
+ CellChangeTimes->{{3.8242120280591063`*^9, 3.824212029170171*^9}, {
+   3.824212064858651*^9, 3.8242121450655775`*^9}, 3.824217196140025*^9, {
+   3.8242172357083006`*^9, 
+   3.824217247452568*^9}},ExpressionUUID->"950455de-c7d2-4e73-bbdd-\
+36296d67d0a7"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["$VersionNumber"], "Input",
+ CellChangeTimes->{{3.824212116815961*^9, 3.824212120345524*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"db78ec2f-a791-419d-9f93-b8b8b21d85b8"],
+
+Cell[BoxData["12.1`"], "Output",
+ CellChangeTimes->{3.8242121211822834`*^9, 3.8242171338144045`*^9, 
+  3.8242363914295807`*^9, 3.824237434726559*^9, 3.824237475551791*^9, 
+  3.8242467648726883`*^9, 3.8242480190528526`*^9},
+ CellLabel->"Out[1]=",ExpressionUUID->"cb926edf-a97d-48cf-bd56-471276123f95"]
+}, Open  ]],
+
+Cell["3. Run this cell to install the interface library.", "Text",
+ CellChangeTimes->{{3.824212387377584*^9, 3.824212409681095*^9}, {
+  3.824215957149396*^9, 3.824215972190756*^9}, {3.824216311088166*^9, 
+  3.824216311472187*^9}, {3.8242468033917894`*^9, 
+  3.8242468034646125`*^9}},ExpressionUUID->"f9ae4b93-3271-4901-8c7b-\
+5154d71210c5"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"<<", "CCompilerDriver`"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"repoPath", "=", 
+   RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+  "relativePathInterface", "=", 
+   "\"\<sequential\\\\interface\\\\directSSAInterface-aio.cpp\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fullPathInterface", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"repoPath", ",", "relativePathInterface"}], "}"}], ",", 
+     RowBox[{"\"\<OperatingSystem\>\"", "\[Rule]", "$OperatingSystem"}]}], 
+    "]"}]}], ";"}], "\n", 
+ RowBox[{"library", "=", 
+  RowBox[{"CreateLibrary", "[", 
+   RowBox[{
+    RowBox[{"{", "fullPath", "}"}], ",", "\"\<directSSAInterface\>\""}], 
+   "]"}]}]}], "Input",
+ CellChangeTimes->{{3.8242124115859995`*^9, 3.824212426066324*^9}, {
+   3.824212602345129*^9, 3.8242126511191797`*^9}, {3.824212707300028*^9, 
+   3.824212765442621*^9}, {3.824212835130954*^9, 3.8242128609530597`*^9}, {
+   3.8242129809419565`*^9, 3.82421302275965*^9}, {3.8242155729135494`*^9, 
+   3.8242155750880337`*^9}, {3.824236360106598*^9, 3.824236360537373*^9}, {
+   3.8242374517311554`*^9, 3.8242374520901194`*^9}, 3.82424676049867*^9, {
+   3.8242467908795967`*^9, 3.8242467910312166`*^9}, {3.82424694666446*^9, 
+   3.824246960795124*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"57486241-4bc7-4c95-b67f-1dfa27b33a91"],
+
+Cell[BoxData[
+ RowBox[{"CreateLibrary", "[", 
+  RowBox[{
+   RowBox[{"{", "fullPath", "}"}], ",", "\<\"directSSAInterface\"\>"}], 
+  "]"}]], "Output",
+ CellChangeTimes->{
+  3.8242129991256504`*^9, {3.824215579653351*^9, 3.824215593603798*^9}, 
+   3.8242171442510505`*^9, 3.8242364102770395`*^9, 3.824237443273325*^9, 
+   3.8242374867907104`*^9, 3.824246774443733*^9, 3.824248023700543*^9},
+ CellLabel->"Out[6]=",ExpressionUUID->"3d1bf638-fc26-4aa7-bd32-3922243c2bc5"]
+}, Open  ]],
+
+Cell[TextData[{
+ "4. Permanently install the CRNSSA package by going to ",
+ StyleBox["File -> Install", "Code"],
+ ". Set the type as ",
+ StyleBox["Package", "Code"],
+ " and use ",
+ StyleBox["crn-ssa-wolfram-pkg\\\\wolfram\\\\CRNSSA.wl", "Code"],
+ " as the source. Use install name ",
+ StyleBox["CRNSSA", "Code"],
+ ". Running this cell in any notebook will load the package."
+}], "Text",
+ CellChangeTimes->{{3.824215627021496*^9, 3.8242157193176284`*^9}, {
+  3.824215800992221*^9, 3.824215995930647*^9}, {3.8242160613459015`*^9, 
+  3.824216064210594*^9}, {3.8242163085037603`*^9, 3.82421630890374*^9}, {
+  3.824217269982453*^9, 3.824217274663184*^9}, {3.8242470460822535`*^9, 
+  3.8242470489301243`*^9}, {3.824247486877673*^9, 3.8242475024544106`*^9}, {
+  3.8242477677653847`*^9, 3.8242478227666845`*^9}, {3.8242478535840497`*^9, 
+  3.82424795835365*^9}},ExpressionUUID->"e6311312-7ab8-419a-a166-\
+89ea718500da"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"<<", "CRNSSA`"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"?", "CRNSSA`*"}]}], "Input",
+ CellLabel->"In[7]:=",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
+
+Cell[BoxData[
+ StyleBox[
+  FrameBox[GridBox[{
+     {
+      DynamicModuleBox[{Typeset`open$$ = True}, 
+       PaneSelectorBox[{False->
+        ButtonBox[
+         RowBox[{
+          
+          DynamicBox[FEPrivate`FrontEndResource[
+           "FEBitmaps", "RightPointerOpener"]], " ", 
+          StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+         Appearance->None,
+         BaseStyle->"InformationGridLink",
+         ButtonFunction:>FEPrivate`Set[Typeset`open$$, True],
+         Evaluator->Automatic,
+         Method->"Preemptive"], True->
+        PaneBox[GridBox[{
+           {
+            ButtonBox[
+             RowBox[{
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], " ", 
+              StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+             Appearance->None,
+             BaseStyle->"InformationGridLink",
+             ButtonFunction:>FEPrivate`Set[Typeset`open$$, False],
+             Evaluator->Automatic,
+             Method->"Preemptive"]},
+           {
+            PaneBox[GridBox[{
+               {
+                ButtonBox[
+                 StyleBox["DirectSSA", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-4a8f791c-51d5-4a35-88b0-e1391f68f59d", {
+                   "DirectSSA", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["GetSpecies", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-4a8f791c-51d5-4a35-88b0-e1391f68f59d", {
+                   "GetSpecies", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["init", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-4a8f791c-51d5-4a35-88b0-e1391f68f59d", {
+                   "init", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["PlotLastSimulation", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-4a8f791c-51d5-4a35-88b0-e1391f68f59d", {
+                   "PlotLastSimulation", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["revrxn", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-4a8f791c-51d5-4a35-88b0-e1391f68f59d", {
+                   "revrxn", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["rxn", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-4a8f791c-51d5-4a35-88b0-e1391f68f59d", {
+                   "rxn", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic]}
+              },
+              DefaultBaseStyle->"Text",
+              
+              GridBoxAlignment->{
+               "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+              GridBoxItemSize->{"Columns" -> {{
+                   Scaled[0.15833333333333333`]}}}],
+             ImageMargins->{{10, 0}, {0, 2}}]}
+          },
+          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}],
+         FrameMargins->{{0, 0}, {8, 0}}]}, Dynamic[Typeset`open$$],
+        ImageSize->Automatic]]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+    GridBoxDividers->{"ColumnsIndexed" -> {{False}}, "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.5599999999999999]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.8]}, 
+        Offset[0.2]}}],
+   BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
+ CellChangeTimes->{3.824247936014856*^9, 3.8242480273877726`*^9},
+ CellLabel->"Out[8]=",ExpressionUUID->"851d28c4-a031-44a3-96cd-b9515f732ee2"]
+}, Open  ]],
+
+Cell["\<\
+5. Alternatively, you can run this cell to load the package in this notebook.\
+\>", "Text",
+ CellChangeTimes->{
+  3.824247862070568*^9, {3.8242479459365387`*^9, 3.824247946265667*^9}, {
+   3.824247978401539*^9, 
+   3.8242479882913413`*^9}},ExpressionUUID->"14725567-84e2-414a-8129-\
+28567df334bf"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"repoPath", "=", 
+   RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"relativePathPackage", "=", "\"\<wolfram\\\\CRNSSA.wl\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fullPathPackage", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"repoPath", ",", "relativePathPackage"}], "}"}], ",", 
+     RowBox[{"\"\<OperatingSystem\>\"", "\[Rule]", "$OperatingSystem"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Get", "[", "fullPathPackage", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"?", "CRNSSA`*"}]}], "Input",
+ CellChangeTimes->{{3.8242476739147367`*^9, 3.824247705412258*^9}},
+ CellLabel->"In[9]:=",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
+
+Cell[BoxData[
+ StyleBox[
+  FrameBox[GridBox[{
+     {
+      DynamicModuleBox[{Typeset`open$$ = True}, 
+       PaneSelectorBox[{False->
+        ButtonBox[
+         RowBox[{
+          
+          DynamicBox[FEPrivate`FrontEndResource[
+           "FEBitmaps", "RightPointerOpener"]], " ", 
+          StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+         Appearance->None,
+         BaseStyle->"InformationGridLink",
+         ButtonFunction:>FEPrivate`Set[Typeset`open$$, True],
+         Evaluator->Automatic,
+         Method->"Preemptive"], True->
+        PaneBox[GridBox[{
+           {
+            ButtonBox[
+             RowBox[{
+              
+              DynamicBox[FEPrivate`FrontEndResource[
+               "FEBitmaps", "DownPointerOpener"],
+               ImageSizeCache->{10., {2., 8.}}], " ", 
+              StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+             Appearance->None,
+             BaseStyle->"InformationGridLink",
+             ButtonFunction:>FEPrivate`Set[Typeset`open$$, False],
+             Evaluator->Automatic,
+             Method->"Preemptive"]},
+           {
+            PaneBox[GridBox[{
+               {
+                ButtonBox[
+                 StyleBox["DirectSSA", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-f53bebfe-6cf0-4c28-bebe-a4c83a808968", {
+                   "DirectSSA", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["GetSpecies", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-f53bebfe-6cf0-4c28-bebe-a4c83a808968", {
+                   "GetSpecies", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["init", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-f53bebfe-6cf0-4c28-bebe-a4c83a808968", {
+                   "init", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["PlotLastSimulation", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-f53bebfe-6cf0-4c28-bebe-a4c83a808968", {
+                   "PlotLastSimulation", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["revrxn", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-f53bebfe-6cf0-4c28-bebe-a4c83a808968", {
+                   "revrxn", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["rxn", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-f53bebfe-6cf0-4c28-bebe-a4c83a808968", {
+                   "rxn", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic]}
+              },
+              DefaultBaseStyle->"Text",
+              
+              GridBoxAlignment->{
+               "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+              GridBoxItemSize->{"Columns" -> {{
+                   Scaled[0.15833333333333333`]}}}],
+             ImageMargins->{{10, 0}, {0, 2}}]}
+          },
+          GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}],
+         FrameMargins->{{0, 0}, {8, 0}}]}, Dynamic[Typeset`open$$],
+        ImageSize->Automatic]]}
+    },
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
+    GridBoxDividers->{"ColumnsIndexed" -> {{False}}, "RowsIndexed" -> {}},
+    GridBoxSpacings->{"Columns" -> {
+        Offset[0.27999999999999997`], {
+         Offset[0.5599999999999999]}, 
+        Offset[0.27999999999999997`]}, "Rows" -> {
+        Offset[0.2], {
+         Offset[0.8]}, 
+        Offset[0.2]}}],
+   BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
+ CellChangeTimes->{3.8242477062430577`*^9, 3.824247992124188*^9, 
+  3.8242480299394355`*^9},
+ CellLabel->"Out[13]=",ExpressionUUID->"0e2f692a-bf20-4382-8e72-ed563f7e28ae"]
+}, Open  ]],
+
+Cell[TextData[{
+ "6. Run the following cells to simulate a simple CRN. The final state should \
+be ",
+ StyleBox["{0, 1}", "Code"],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.8242162879970107`*^9, 3.824216306392149*^9}, {
+  3.8242164805648613`*^9, 3.82421648704533*^9}, {3.8242165270821643`*^9, 
+  3.824216535603452*^9}, {3.82421728816778*^9, 3.8242172910954056`*^9}, {
+  3.824247505166257*^9, 
+  3.8242475052619753`*^9}},ExpressionUUID->"8872dfa3-38dc-489c-a312-\
+90890b1566aa"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"rxnsys", "=", 
+   RowBox[{"{", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"rxn", "[", 
+      RowBox[{"x", ",", "y", ",", "1"}], "]"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"rxn", "[", 
+      RowBox[{
+       RowBox[{"y", "+", "y"}], ",", "y", ",", "1"}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"init", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"x", ",", " ", "y"}], "}"}], ",", "5"}], "]"}]}], 
+    "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"GetSpecies", "[", "rxnsys", "]"}]}], "Input",
+ CellChangeTimes->{{3.8242163796328516`*^9, 3.8242163841453323`*^9}},
+ CellLabel->"In[14]:=",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"x", ",", "y"}], "}"}]], "Output",
+ CellChangeTimes->{3.824216390209857*^9, 3.824216473094953*^9, 
+  3.824216825102227*^9, 3.8242170337497163`*^9, 3.824217149167162*^9, 
+  3.824237494937446*^9, 3.824248035664304*^9},
+ CellLabel->"Out[15]=",ExpressionUUID->"a9a01518-e461-48b9-acd5-88edb12fc861"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"{", 
+   RowBox[{"states", ",", "times"}], "}"}], "=", 
+  RowBox[{"DirectSSA", "[", 
+   RowBox[{"rxnsys", ",", 
+    RowBox[{"\"\<finalOnly\>\"", "\[Rule]", "True"}], ",", 
+    RowBox[{"\"\<outputTS\>\"", "\[Rule]", "False"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.8242164020675693`*^9, 3.8242164151971035`*^9}, {
+  3.824216492719846*^9, 3.824216513553684*^9}, {3.8242170418205566`*^9, 
+  3.824217108310268*^9}, {3.824237506234483*^9, 3.8242375159849052`*^9}},
+ CellLabel->"In[16]:=",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "1"}], "}"}], "}"}], ",", 
+   RowBox[{"{", "2.318616527160212`", "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.824216405986579*^9, 3.824216473735287*^9, 3.8242165154029665`*^9, 
+   3.824216825951003*^9, {3.824217034691247*^9, 3.8242171086533937`*^9}, 
+   3.8242171516476593`*^9, 3.8242375186537046`*^9, 3.8242480378205585`*^9},
+ CellLabel->"Out[16]=",ExpressionUUID->"f357a5c0-0dcc-4800-9162-24a6c858036e"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1428., 741.75},
+WindowMargins->{{Automatic, 960}, {Automatic, 0}},
+FrontEndVersion->"12.1 for Microsoft Windows (64-bit) (June 19, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"28a0dba9-dcfe-4840-9f91-438146278593"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 174, 3, 97, "Title",ExpressionUUID->"4c0eacd2-d689-4e3a-90b5-2d666b6e6543"],
+Cell[757, 27, 504, 11, 56, "Text",ExpressionUUID->"950455de-c7d2-4e73-bbdd-36296d67d0a7"],
+Cell[CellGroupData[{
+Cell[1286, 42, 184, 2, 28, "Input",ExpressionUUID->"db78ec2f-a791-419d-9f93-b8b8b21d85b8"],
+Cell[1473, 46, 300, 4, 32, "Output",ExpressionUUID->"cb926edf-a97d-48cf-bd56-471276123f95"]
+}, Open  ]],
+Cell[1788, 53, 340, 5, 34, "Text",ExpressionUUID->"f9ae4b93-3271-4901-8c7b-5154d71210c5"],
+Cell[CellGroupData[{
+Cell[2153, 62, 1428, 32, 104, "Input",ExpressionUUID->"57486241-4bc7-4c95-b67f-1dfa27b33a91"],
+Cell[3584, 96, 466, 9, 32, "Output",ExpressionUUID->"3d1bf638-fc26-4aa7-bd32-3922243c2bc5"]
+}, Open  ]],
+Cell[4065, 108, 911, 18, 56, "Text",ExpressionUUID->"e6311312-7ab8-419a-a166-89ea718500da"],
+Cell[CellGroupData[{
+Cell[5001, 130, 201, 4, 47, "Input",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
+Cell[5205, 136, 4810, 118, 91, "Output",ExpressionUUID->"851d28c4-a031-44a3-96cd-b9515f732ee2"]
+}, Open  ]],
+Cell[10030, 257, 307, 7, 34, "Text",ExpressionUUID->"14725567-84e2-414a-8129-28567df334bf"],
+Cell[CellGroupData[{
+Cell[10362, 268, 818, 19, 104, "Input",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
+Cell[11183, 289, 4838, 119, 91, "Output",ExpressionUUID->"0e2f692a-bf20-4382-8e72-ed563f7e28ae"]
+}, Open  ]],
+Cell[16036, 411, 474, 11, 34, "Text",ExpressionUUID->"8872dfa3-38dc-489c-a312-90890b1566aa"],
+Cell[CellGroupData[{
+Cell[16535, 426, 745, 18, 122, "Input",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
+Cell[17283, 446, 334, 6, 32, "Output",ExpressionUUID->"a9a01518-e461-48b9-acd5-88edb12fc861"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[17654, 457, 577, 11, 28, "Input",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
+Cell[18234, 470, 509, 11, 32, "Output",ExpressionUUID->"f357a5c0-0dcc-4800-9162-24a6c858036e"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

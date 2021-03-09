@@ -38,9 +38,9 @@ Options include:
 	outputTS (Boolean), default = True, setting to True outputs result as TimeSeries, setting to False outputs result as List";
 
 PlotLastSimulation::usage =
-"PlotSimulation[Options]
+"PlotLastSimulation[Options]
 Plots the last simulation ran
-Uses same Options from ListLinePlot"
+Uses same Options as ListLinePlot"
 
 
 Begin["`Private`"]
