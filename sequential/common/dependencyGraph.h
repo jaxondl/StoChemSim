@@ -13,9 +13,9 @@ using namespace std;
 
 class dependencyGraph {
 private:
-    vector<vector<int>> dependencyGraphStructure;
+    vector<vector<int> > dependencyGraphStructure;
 public:
-    dependencyGraph(vector<vector<pair<int, int>>> stateChangeVector, vector<vector<pair<int,int>>> reactantsVector);
+    dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector);
 
     bool intersects(set<int> set1, set<int> set2);
 

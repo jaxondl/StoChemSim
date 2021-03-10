@@ -2,7 +2,7 @@
 
 using namespace std;
 
-double reactionTree::calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){
+double reactionTree::calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants){
     double propensity = reactionRate;
     for (pair<int, int> reactant: reactants) {
         for (int i=0; i<reactant.second; i++) {
@@ -12,7 +12,7 @@ double reactionTree::calculatePropensity(double reactionRate, vector<int> molecu
     return propensity;
 }
 
-reactionTree::reactionTree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector) {
+reactionTree::reactionTree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector) {
     cout << "Beginning Creation of Reaction Tree" << endl;
     long numReactions = reactantsVector.size();
     reactionTreeArray = new reactionNode[numReactions];
@@ -75,7 +75,7 @@ int reactionTree::searchForNode(double RV) {
 }
 
 //update its propensity and every subsequent parent's propensities
-void reactionTree::updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){
+void reactionTree::updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants){
     int currentIndex = index;
     double newPropensity = calculatePropensity(reactionRate, moleculeAmounts, reactants); //recalculate propensity for that index
     double propensityChange = newPropensity - reactionTreeArray[currentIndex].propensity;

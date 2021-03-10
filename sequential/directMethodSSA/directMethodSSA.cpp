@@ -2,7 +2,7 @@
 
 using namespace std;
 
-directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int>>> reactantsVector, vector<vector<pair<int, int>>> stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration){
+directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration){
     this->reaction_tree = new class reactionTree(moleculeAmounts, reactionRates, reactantsVector);
     this->dependency_graph = new class dependencyGraph(stateChangeVector, reactantsVector);
     this->allStates.push_back(moleculeAmounts);
@@ -35,8 +35,8 @@ void directMethodSSA::updateTime(double timeUntilNextReaction){
     currentTime += timeUntilNextReaction;
 }
 
-void directMethodSSA::updateState(vector<vector<pair<int, int>>> stateChangeVector, int reactionIndex) {
-    vector<pair<int, int>> chosenReactionChange = stateChangeVector[reactionIndex];
+void directMethodSSA::updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex) {
+    vector<pair<int, int> > chosenReactionChange = stateChangeVector[reactionIndex];
     for(pair<int, int> p: chosenReactionChange){
         currentState[p.first] += p.second; //update the state change at the associated index
     }
@@ -57,7 +57,7 @@ double directMethodSSA::getTotalPropensity(){
     return totalPropensity;
 }
 
-vector<vector<int>> directMethodSSA::getAllStates(){
+vector<vector<int> > directMethodSSA::getAllStates(){
     return allStates;
 }
 
