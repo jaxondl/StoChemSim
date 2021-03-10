@@ -13,8 +13,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
     inputVerifier *iv = new inputVerifier();
-    string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\CPU\\SampleInputs\\sample_input_SSA_file.txt
-    string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\CPU\\output.txt
+    string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\sample_input_SSA_file.txt
+    string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\output.txt
     double endValue = stod(argv[3]);
     bool safeToRun = iv->verifyFile(inputFilePath);
     if (safeToRun) {
