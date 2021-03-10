@@ -13,13 +13,13 @@ using namespace std;
 
 class dependencyGraph {
 private:
-    vector<vector<int> > dependencyGraphStructure;
+    vector<vector<int> > dependencyGraphStructure; // the graph structure itself
 public:
-    dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector);
+    dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector); // constructor
 
-    bool intersects(set<int> set1, set<int> set2);
+    bool intersects(set<int> set1, set<int> set2); // user made function to check for an intersection of 1 or more elements between two sets
 
-    vector<int> getDependentReactions(int reactionIndex);
+    vector<int> getDependentReactions(int reactionIndex); // obtain the dependent reactions for a given reaction via the dependencyGraphStructure
 };
 
 #endif
