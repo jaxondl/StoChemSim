@@ -4,6 +4,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <chrono>
 #include "../common/dependencyGraph.h"
 
 class boundedTauLeaping {
@@ -25,7 +26,7 @@ private:
 
     double epsilon;
 
-    double getGammaRandomVariable(int b, double a);
+    double getGammaRandomVariable(double a, double b);
     double getBinomialRandomVariable(int n, double p);
 
     vector<double> calculatePropensities();
@@ -48,7 +49,6 @@ public:
     int getCurrentIteration();
     
     void start();
-
 };
 
 #endif

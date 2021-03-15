@@ -19,6 +19,16 @@ boundedTauLeaping::boundedTauLeaping(vector<int> moleculeAmounts, vector<double>
     this->epsilon = epsilon;
 }
 
+//a is alpha, b is beta; both must be positive
+double boundedTauLeaping::getGammaRandomVariable(double a, double b){
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine generator (seed);
+    std::gamma_distribution<double> distribution(a, b);
+    double g = distribution(generator);
+    cout << "gamma RV: " << g << endl;
+    return g;
+}
+
 vector<double> boundedTauLeaping::calculatePropensities(){
 
 }
@@ -40,14 +50,14 @@ vector<int> boundedTauLeaping::determineReactionOccurrences(vector<int> bounds, 
 }
 
 void boundedTauLeaping::updateTime(double timeUntilNextReaction){
-
+    currentTime += timeUntilNextReaction;
 }
 
 void boundedTauLeaping::updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex){
 
 }
 double boundedTauLeaping::getTotalPropensity(){
-    
+
 }
 
 vector<vector<int> > boundedTauLeaping::getAllStates(){return allStates;}

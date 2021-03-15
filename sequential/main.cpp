@@ -3,6 +3,7 @@
 #include "common/decoder.h"
 #include "common/dependencyGraph.h"
 #include "common/inputVerifier.h"
+#include "boundedTauLeaping/boundedTauLeaping.h"
 
 #include <iostream>
 #include <iomanip>
