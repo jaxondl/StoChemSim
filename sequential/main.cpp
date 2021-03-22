@@ -3,6 +3,7 @@
 #include "common/decoder.h"
 #include "common/dependencyGraph.h"
 #include "common/inputVerifier.h"
+#include "boundedTauLeaping/boundedTauLeaping.h"
 
 #include <iostream>
 #include <iomanip>
@@ -21,8 +22,8 @@ int main(int argc, char** argv) {
         // Create decoder object and get all needed data structures
         decoder *inputDecoder = new decoder();
         inputDecoder->decode(inputFilePath);
-        vector<vector<pair<int, int>>> stateChangeVector = inputDecoder->getStateChangeVector();
-        vector<vector<pair<int, int>>> reactantsVector = inputDecoder->getReactantVector();
+        vector<vector<pair<int, int> > > stateChangeVector = inputDecoder->getStateChangeVector();
+        vector<vector<pair<int, int> > > reactantsVector = inputDecoder->getReactantVector();
         vector<double> reactionRates = inputDecoder->getkValueVector();
         vector<int> moleculeAmounts = inputDecoder->getPopulationSizes();
         vector<string> speciesList = inputDecoder->getListOfSpecies();
@@ -38,13 +39,15 @@ int main(int argc, char** argv) {
             cout << "endValue is " << endValue << endl;
         for(int i = 4; i < argc; i++){
             string argument = argv[i];
-            if (argument =="-so")
+            for (int j = 0; j < argument.length(); j++){   
+  		        argument[j] = tolower(argument[j]);
+  	        }
+            if (argument =="-so" || argument == "-statesonly")
                 so = true;
-            else if (argument == "-fo")
+            else if (argument == "-fo" || argument == "-finalonly")
                 fo = true;
-            else if (argument == "-it")
+            else if (argument == "-it"  || argument == "-useiter")
                 it = true;
-            
         }
 
         directMethodSSA *directSSA = new directMethodSSA(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, endValue, so, fo, ti, it);
@@ -52,7 +55,7 @@ int main(int argc, char** argv) {
 
         // Print the results of the SSA - all states at all times, sequentially
         vector<double> allTimes = directSSA->getAllTimes();
-        vector<vector<int>> allStates = directSSA->getAllStates();
+        vector<vector<int> > allStates = directSSA->getAllStates();
         vector<int> currentState = directSSA->getCurrentState();
         double currentTime = directSSA->getCurrentTime();
         int currentIteration = directSSA->getCurrentIteration();
