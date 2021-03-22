@@ -29,6 +29,9 @@ double boundedTauLeaping::getGammaRandomVariable(double a, double b){
     return g;
 }
 
+double boundedTauLeaping::getBinomialRandomVariable(int n, double p){
+}
+
 vector<double> boundedTauLeaping::calculatePropensities(){
 
 }
