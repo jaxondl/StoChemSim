@@ -1,4 +1,5 @@
 #include "boundedTauLeaping.h"
+#include <cmath> // for absolute value
 
 using namespace std;
 
@@ -24,15 +25,36 @@ vector<double> boundedTauLeaping::calculatePropensities(){
 }
 
 vector<int> boundedTauLeaping::calculateBounds(vector<double> propensities){
-
+    vector<int> result;
+    for(int i = 0; i < propensities.size(); i++){
+        int bound = 0; // set the integer to the minimum non-negative value
+        bool withinBoundary = true;
+        vector<pair<int, int>> currentStateChangeVector = stateChangeVector[i]; // looks through each reaction's state changes
+        while(withinBoundary){
+            bound += 1;
+            for(auto entry : currentStateChangeVector){ // entry is Vij in the paper : the first of the pair is the molecule id, the second is its quantity
+                if(abs(entry.second * bound) > (epsilon * currentState[entry.first])){ // if we reach a violation, we stop increasing the bound and stop the loop
+                    withinBoundary = false;
+                    break;
+                }
+            }
+        }
+        result.push_back(bound);
+    }
+    return result;
 }
 
 vector<double> boundedTauLeaping::determineViolatingTimes(vector<int> bounds, vector<double> propensities){
-
+    vector<double> result;
+    for(int i = 0; i < bounds.size(); i++){
+        result.push_back(getGammaRandomVariable(bounds[i], propensities[i]));
+    }
+    return result;
 }
 
 int boundedTauLeaping::determineFirstViolating(vector<double> violatingTimes){
-
+    vector<double>::iterator iter = min_element(violatingTimes.begin(), violatingTimes.end());
+    return distance(violatingTimes.begin(), iter) - 1;
 }
 
 vector<int> boundedTauLeaping::determineReactionOccurrences(vector<int> bounds, vector<double> violatingTimes, int violatingIndex){
