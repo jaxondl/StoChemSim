@@ -1,4 +1,4 @@
-32887 0
+32887
 Forward May[1,1,1] 7NoCount[1,1] Un[1,1] -> Forward Kn[1,1,1] May[1,1,1] 7NoCount[1,1] Rev[1,1,1] 0.00000198413
 Forward May[1,1,1] NoCount[1,1] Un[1,1] -> Forward Kn[1,1,1] May[1,1,1] NoCount[1,1] Rev[1,1,1] 0.0001
 Forward May[1,1,1] Un[1,1] -> Forward Kn[1,1,1] May[1,1,1] Rev[1,1,1] 0.0001
@@ -32886,7 +32886,7 @@ Forward Kn[9,5,9] May[9,9,9] MayCount[9,9] -> Forward Kn[9,5,9] No[9,9,9] NoCoun
 Forward Kn[9,6,9] May[9,9,9] MayCount[9,9] -> Forward Kn[9,6,9] No[9,9,9] NoCount[9,9] 1
 Forward Kn[9,7,9] May[9,9,9] MayCount[9,9] -> Forward Kn[9,7,9] No[9,9,9] NoCount[9,9] 1
 Forward Kn[9,8,9] May[9,9,9] MayCount[9,9] -> Forward Kn[9,8,9] No[9,9,9] NoCount[9,9] 1
- 
+
 Kn[1,1,5] 1
 Kn[1,2,6] 1
 Kn[1,4,8] 1
