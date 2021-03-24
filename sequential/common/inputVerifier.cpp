@@ -470,7 +470,7 @@ string inputVerifier::chopOffComments(string line) {
 
     //if there is a space at the end of the line, remove it
     if (!line.empty()) {
-        if (line.at(line.length() - 1) == ' ') {
+        while (line.at(line.length() - 1) == ' ') {
             line = line.substr(0, line.length() - 1); //remove the very last character
         }
     }
