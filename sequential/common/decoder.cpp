@@ -231,7 +231,7 @@ void decoder::decode(string iFile) {
 
     inputFile.close(); //done parsing and creating the needed data structures
 
-    cout << "List of species:" << endl;
+    /**cout << "List of species:" << endl;
     for (string x : this->listOfSpecies)
         cout << x << " ";
     cout << endl;
@@ -263,7 +263,7 @@ void decoder::decode(string iFile) {
     for (int x : this->populationSizes)
         cout << x << " ";
     cout << endl;
-
+    **/
 
 }
 
