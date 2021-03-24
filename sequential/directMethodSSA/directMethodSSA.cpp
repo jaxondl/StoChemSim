@@ -4,7 +4,7 @@ using namespace std;
 
 directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration){
     this->reaction_tree = new class reactionTree(moleculeAmounts, reactionRates, reactantsVector); // create reaction tree
-    this->dependency_graph = new class dependencyGraph(stateChangeVector, reactantsVector); // create dependency graph
+    this->dependency_graph = new class dependencyGraph(stateChangeVector, reactantsVector, moleculeAmounts); // create dependency graph
     this->allStates.push_back(moleculeAmounts); // stored initial state in the allStates vector
     this->allTimes.push_back(0); // store the initial time (0) in the allTimes vector
     this->reactionRates = reactionRates; // k reaction constants
@@ -71,7 +71,9 @@ int directMethodSSA::getCurrentIteration(){return currentIteration;}
 
 void directMethodSSA::start(){
     // continue the simulation while the total propensity > 0 AND (the endInfinity flag is true OR the current time/iteration hasn't exceeded the inputted limit)
+    bool keepGoing = true;
     while (getTotalPropensity() > 0.001 && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))){
+        cout << "total propensity is " << getTotalPropensity() << " " << currentIteration << endl;
         if (!statesOnly) { // only calculate if the user wants to also calculate the times (default)
             double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity()); // obtain the time until the next reaction
             if(currentTime + timeUntilNextReaction > endValue && !endInfinity) // if updating the time violates the finite end time value, terminate the simulation
@@ -81,6 +83,16 @@ void directMethodSSA::start(){
         }
         double uniformRV = getUniformRandomVariable(); // sample uniform RV
         int reactionIndex = reaction_tree->searchForNode(uniformRV); // search for reaction
+        for (int i; i < stateChangeVector[reactionIndex].size(); i++){
+            pair<int, int> stateChangePair = stateChangeVector[reactionIndex][i];
+            if (currentState[stateChangePair.first] + stateChangePair.second >= 0) {
+                keepGoing = false;
+                break;
+            }
+        }
+        if (!keepGoing) {
+            break;
+        }
         updateState(stateChangeVector, reactionIndex); // update state/configuration
         if (!finalOnly) { // only save the state vectors of the iteration if the finalOnly flag is false
             allStates.push_back(currentState);
