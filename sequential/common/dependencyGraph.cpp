@@ -2,7 +2,7 @@
 
 using namespace std;
 
-dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector){
+dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector, vector<int> moleculeAmounts){
     cout << "Beginning Creation of Dependency Graph" << endl;
     // DEFINITION 1: Reactants(p) and products(p) are reactants and prods of reaction p. e.g. Reactants(1) = {a,b}
     // DEFINITION 2: DependsOn(a-mu), where a-mu is the propensity of chosen reaction, is the set of substances that affect its value. i.e. Reactants(mu)
@@ -12,6 +12,13 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
      * i.e. at least one of the reactants and products of Vi is shared with the reactants of Vj.
     */
 
+    // A+B=C reaction 1
+    // dependson(1) = [A, B]
+    // affects(1) = [A,B,C]
+
+    // draw an edge from reaction 1 to reaction 2 IFF dependsOn(2) has something in affects(1)
+
+    /**
     int numReactions = stateChangeVector.size(); 
     vector<set<int>> dependsOn(numReactions);  // each reaction has a set of dependent reactions and reactions it affects (as per Definitions 2 and 3)
     vector<set<int>> affects(numReactions);
@@ -32,6 +39,30 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
         for(int j = 0; j < numReactions; j++){
             if(j != i && intersects(affects[i], dependsOn[j])){ // using the intersects function: for any other reaction j, if reaction i's reactants or products (stored in affects[i]) has any overlap/intersection with the reactants used in reaction j (stored in dependsOn[j]), then reaction j depends on reaction i
                 dummyGraph[i].push_back(j); // since reaction j depends on reaction i, j will be added to i's designated vector
+            }
+        }
+    }
+
+    dependencyGraphStructure = dummyGraph; // assign the "dummy" graph to the actual dependencyGraphStructure within the class
+    **/
+
+
+    //no need for an affects vector if just going to use state change molecules
+    int numMolecules = moleculeAmounts.size();
+    vector<set<int>> dependsOn(numMolecules);  // each molecule index will have a set of the reaction indices of which have the molecule as a reactant
+
+    for(int i = 0; i < reactantsVector.size(); i++){
+        for(pair<int, int> element : reactantsVector[i]){
+            dependsOn[element.first].insert(i); // insert the reaction index in to the molecule's depends on
+        }
+    }
+
+    vector<vector<int> > dummyGraph(stateChangeVector.size());
+
+    for(int i = 0; i < stateChangeVector.size(); i++){
+        for(pair<int, int> element : stateChangeVector[i]){
+            for(auto dep : dependsOn[element.first]){
+                dummyGraph[i].push_back(dep);
             }
         }
     }
