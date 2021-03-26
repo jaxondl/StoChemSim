@@ -27,14 +27,14 @@ private:
     double epsilon;
 
     double getGammaRandomVariable(double a, double b);
-    double getBinomialRandomVariable(int n, double p);
+    int getBinomialRandomVariable(int n, double p);
 
     vector<double> calculatePropensities();
     vector<int> calculateBounds(vector<double> propensities);
     vector<double> determineViolatingTimes(vector<int> bounds, vector<double> propensities);
     int determineFirstViolating(vector<double> violatingTimes);
     vector<int> determineReactionOccurrences(vector<int> bounds, vector<double> violatingTimes, int violatingIndex);
-    
+
     void updateTime(double timeUntilNextReaction);
     void updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex);
     double getTotalPropensity();

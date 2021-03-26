@@ -6,7 +6,7 @@ using namespace std;
 double reactionTree::calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants){
     double propensity = reactionRate;
     for (pair<int, int> reactant: reactants) { 
-        for (int i=0; i<reactant.second; i++) {
+        for (int i = 0; i < reactant.second; i++) {
             propensity *= (moleculeAmounts[reactant.first] - i);
         }
     }
@@ -44,7 +44,7 @@ reactionTree::reactionTree(vector<int> moleculeAmounts, vector<double> reactionR
     }
 
     // Calculating left and right sums for all tree nodes starting from the leaves (end of array to the beginning)
-    for (int i=numReactions-1; i>0; i--) {
+    for (int i = numReactions-1; i > 0; i--) {
         double subTotalPropensity = reactionTreeArray[i].propensity + reactionTreeArray[i].rightSum + reactionTreeArray[i].leftSum; // current node's subtree propensity sum
         // Add subTotalPropensity to parent's leftSum or rightSum depending on if the child is the left or right child of its parent
         if (i == reactionTreeArray[reactionTreeArray[i].parent].leftChild) {
