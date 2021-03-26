@@ -5,3 +5,4 @@ cmake-build-debug-mingw
 .DS_Store
 .vscode/
 .vscode/settings.json
+sequential/a.exe

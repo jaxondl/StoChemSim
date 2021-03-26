@@ -231,7 +231,7 @@ void decoder::decode(string iFile) {
 
     inputFile.close(); //done parsing and creating the needed data structures
 
-    cout << "List of species:" << endl;
+    /**cout << "List of species:" << endl;
     for (string x : this->listOfSpecies)
         cout << x << " ";
     cout << endl;
@@ -263,7 +263,7 @@ void decoder::decode(string iFile) {
     for (int x : this->populationSizes)
         cout << x << " ";
     cout << endl;
-
+    **/
 
 }
 
@@ -278,7 +278,7 @@ string decoder::chopOffComments(string line) {
 
     //if there is a space at the end of the line, remove it
     if (!line.empty()) {
-        if (line.at(line.length() - 1) == ' ') {
+        while (line.at(line.length() - 1) == ' ') {
             line = line.substr(0, line.length() - 1); //remove the very last character
         }
     }
