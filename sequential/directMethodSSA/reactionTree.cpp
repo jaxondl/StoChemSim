@@ -16,7 +16,7 @@ double reactionTree::calculatePropensity(double reactionRate, vector<int> molecu
 // Create the reaction tree
 reactionTree::reactionTree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector) {
     cout << "Beginning Creation of Reaction Tree" << endl;
-    long numReactions = reactantsVector.size();
+    int numReactions = reactantsVector.size();
     reactionTreeArray = new reactionNode[numReactions];
     reactionTreeArray[0].parent = -1;
     // Calculate propensity for each reaction
@@ -32,19 +32,19 @@ reactionTree::reactionTree(vector<int> moleculeAmounts, vector<double> reactionR
             reactionTreeArray[i * 2 + 1].parent = i;
         }
         else {
-            reactionTreeArray[i].leftChild = 0;
+            reactionTreeArray[i].leftChild = -1;
         }
         if (i * 2 + 2 < numReactions) {
             reactionTreeArray[i].rightChild = i * 2 + 2;
             reactionTreeArray[i * 2 + 2].parent = i;
         }
         else {
-            reactionTreeArray[i].rightChild = 0;
+            reactionTreeArray[i].rightChild = -1;
         }
     }
 
     // Calculating left and right sums for all tree nodes starting from the leaves (end of array to the beginning)
-    for (long i=numReactions-1; i>0; i--) {
+    for (int i=numReactions-1; i>0; i--) {
         double subTotalPropensity = reactionTreeArray[i].propensity + reactionTreeArray[i].rightSum + reactionTreeArray[i].leftSum; // current node's subtree propensity sum
         // Add subTotalPropensity to parent's leftSum or rightSum depending on if the child is the left or right child of its parent
         if (i == reactionTreeArray[reactionTreeArray[i].parent].leftChild) {
@@ -53,7 +53,6 @@ reactionTree::reactionTree(vector<int> moleculeAmounts, vector<double> reactionR
         else {
             reactionTreeArray[reactionTreeArray[i].parent].rightSum += subTotalPropensity;
         }
-
     }
 }
 
@@ -67,12 +66,19 @@ int reactionTree::searchForNode(double RV) {
         if (RV < (leftSumTotal/totalPropensity)) { // if the sampled RV is in the left subtree of the current node, update the current node to the left child
             currentIndex = currentIndex*2 + 1;
             leftSumTotal -= checkNode.leftSum;
+            if (checkNode.leftChild == -1){
+                cout << "PROBLEM" << endl;
+                break;
+            }
             checkNode = reactionTreeArray[checkNode.leftChild];
             leftSumTotal += checkNode.leftSum;
-
         } else { // if the sampled RV is in the right subtree of the current node, update the current node to the right child
             currentIndex = currentIndex*2 + 2;
             leftSumTotal += checkNode.propensity;
+            if (checkNode.rightChild == -1){
+                cout << "PROBLEM" << endl;
+                break;
+            }
             checkNode = reactionTreeArray[checkNode.rightChild];
             leftSumTotal += checkNode.leftSum;
         }

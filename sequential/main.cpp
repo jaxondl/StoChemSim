@@ -26,6 +26,13 @@ int main(int argc, char** argv) {
         vector<double> reactionRates = inputDecoder->getkValueVector();
         vector<int> moleculeAmounts = inputDecoder->getPopulationSizes();
         vector<string> speciesList = inputDecoder->getListOfSpecies();
+        /**for (int i = 0; i<reactantsVector[6268].size(); i++){ //6409
+            cout << "Species: " << speciesList[reactantsVector[6268][i].first]<<  " Amount"<< reactantsVector[6268][i].second << endl;
+        }
+        
+        for (int i = 0; i<stateChangeVector[6268].size(); i++){
+            cout << "Species: " << speciesList[stateChangeVector[6268][i].first] << " Amount" << stateChangeVector[6268][i].second << endl;
+        }**/
 
         // begin setting flags from the command line arguments, with every flag by default set to false
         bool so = false; // states only flag
