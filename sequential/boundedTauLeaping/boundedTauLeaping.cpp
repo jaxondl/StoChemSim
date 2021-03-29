@@ -87,7 +87,7 @@ int boundedTauLeaping::determineFirstViolating(vector<double> violatingTimes){
 vector<int> boundedTauLeaping::determineReactionOccurrences(vector<int> bounds, vector<double> violatingTimes, int violatingIndex) {
     vector<int> result;
     double firstViolatingTime = violatingTimes[violatingIndex];
-    for (int i = 0; i < violatingTimes.size(), i++) {
+    for (int i = 0; i < violatingTimes.size(); i++) {
         int nj;
         if (i == violatingIndex) {
             nj = bounds[violatingIndex];
@@ -96,7 +96,7 @@ vector<int> boundedTauLeaping::determineReactionOccurrences(vector<int> bounds, 
             double p = firstViolatingTime/violatingTimes[i];
             nj = getBinomialRandomVariable(bounds[i] - 1, p);
         }
-        result.push_back(nj)
+        result.push_back(nj);
     }
     return result;
 }
@@ -105,8 +105,21 @@ void boundedTauLeaping::updateTime(double timeUntilNextReaction){
     currentTime += timeUntilNextReaction;
 }
 
+//Effect the leap by replacing ~x[j] with ~x[j] + ~ν[j]*n[j]
+//notation: ~x means the x vector (v is the state change vector, x is the current state vector)
+//nj is a binomial RV from with parameters (bj - 1, τ / τj) (aka the value returned by determineReactionOccurrences())
+//b is the bounds vector (returned by calculateBounds())
 void boundedTauLeaping::updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex){
+    vector<double> props = calculatePropensities();
+    vector<int> boundsVector = calculateBounds(props);
+    vector<double> violatingTimes = determineViolatingTimes(boundsVector, props);
+    vector<pair<int, int> > chosenReactionChange = stateChangeVector[reactionIndex]; // v vector
+    vector<int> reactionOccurrencesVector = determineReactionOccurrences(boundsVector, violatingTimes, reactionIndex); //n vector
 
+    for(pair<int, int> p: chosenReactionChange) {
+        currentState[p.first] += (p.second*reactionOccurrencesVector[reactionIndex]); // x[j] += v[j]*n[j]
+        // update the state change by individually updating the amounts of the affected species, for each time the reaction occurred
+    }
 }
 double boundedTauLeaping::getTotalPropensity(){
 
