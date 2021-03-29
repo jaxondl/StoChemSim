@@ -146,7 +146,7 @@ double boundedTauLeaping::getCurrentTime(){return currentTime;}
 int boundedTauLeaping::getCurrentIteration(){return currentIteration;}
     
 void boundedTauLeaping::start(){
-    vector<double> props = calculatePropensities(); // should determine nonePossible
+    vector<double> props = calculatePropensities(); // Step 1a, should determine nonePossible
     vector<int> firingBounds;
     vector<double> violatingTimes;
     int firstViolatingIndex;
