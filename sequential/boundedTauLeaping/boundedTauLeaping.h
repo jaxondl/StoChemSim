@@ -20,6 +20,7 @@ private:
     double currentTime;
     int currentIteration;
     double endValue;
+    bool nonePossible;
     bool endInfinity;
     bool finalOnly;
     bool endByIteration;
@@ -36,7 +37,7 @@ private:
     vector<int> determineReactionOccurrences(vector<int> bounds, vector<double> violatingTimes, int violatingIndex);
 
     void updateTime(double timeUntilNextReaction);
-    void updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex);
+    void updateState(vector<int> reactionOccurrences);
     double getTotalPropensity();
 
 public:
