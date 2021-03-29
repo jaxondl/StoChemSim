@@ -41,13 +41,13 @@ private:
 
 public:
     boundedTauLeaping(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool finalOnly, bool endInfinity, bool endByIteration, double epsilon);
-    
+
     vector<vector<int> > getAllStates();
     vector<double> getAllTimes();
     vector<int> getCurrentState();
     double getCurrentTime();
     int getCurrentIteration();
-    
+
     void start();
 };
 
