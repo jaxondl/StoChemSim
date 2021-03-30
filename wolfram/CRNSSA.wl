@@ -36,6 +36,18 @@ Options include:
 	statesOnly (Boolean), default = False, setting to True avoids simulating reaction times
 	finalOnly (Boolean), default = False, only records final state to conserve memory
 	outputTS (Boolean), default = True, setting to True outputs result as TimeSeries, setting to False outputs result as List";
+	
+BoundedTauLeaping::usage =
+"result = BoundedTauLeaping[{rxn1, rxn2, ..., init1, init2, ...}, Options]
+Simulates the given reaction system via Soloveichik Bounded Tau Leaping
+Backend is optimized in C++ for computational efficiency
+Options include:
+	timeEnd (Real), default = Infinity, ending time of simulation (if useIter = False)
+	iterEnd (Integer), default = Infinity, ending iteration of simulation (if useIter = True)
+	useIter (Boolean), default = False, setting to True uses iterEnd instead of timeEnd
+	finalOnly (Boolean), default = False, only records final state to conserve memory
+	outputTS (Boolean), default = True, setting to True outputs result as TimeSeries, setting to False outputs result as List
+	epsilon (Real), default = 0.0309/numRxns, threshold between 0 and 1 using in calculating firing bounds for each reaction";
 
 PlotLastSimulation::usage =
 "PlotLastSimulation[Options]
@@ -61,12 +73,18 @@ GetUnkObjs[rxnsys_] := Cases[rxnsys, Except[rxn[_, _, _] | init[_, _]]]
 rxnsyswarnMsg = "Warning: Unknown objects detected in rxnsys. These will be ignored by Wolfram pattern matching: `1`"
 GetSpecies::rxnsyswarn = rxnsyswarnMsg
 DirectSSA::rxnsyswarn = rxnsyswarnMsg
+BoundedTauLeaping::rxnsyswarn = rxnsyswarnMsg
 (*Error given when timeEnd value is invalid*)
 timeenderrMsg = "Error: timeEnd (`1`) must be a real number greater than zero"
 DirectSSA::timeenderr = timeenderrMsg
+BoundedTauLeaping::timeenderr = timeenderrMsg
 (*Error given when iterEnd value is invalid*)
 iterenderrMsg = "Error: iterEnd (`1`) must be an integer greater than zero"
 DirectSSA::iterenderr = iterenderrMsg
+BoundedTauLeaping::iterenderr = iterenderrMsg
+(*Error given when epsilon value is invalid*)
+epsilonerrMsg = "Error: epsilon (`1`) must be a real number between 0 and 1"
+BoundedTauLeaping::epsilonerr = epsilonerrMsg
 (*Error given when plotting is attempted with no simulations run*)
 nosimerrMsg = "Error: No simulations have been run"
 PlotLastSimulation::nosimerr = nosimerrMsg
@@ -196,6 +214,93 @@ DirectSSA[rxnsys_, OptionsPattern[]] := Module[
 			simulationResult = {Normal[GetStates[]], Normal[GetTimes[]]}
 		]
 	]
+]
+
+
+(*Specifies options that can be passed into BoundedTauLeaping with default values*)
+Options[BoundedTauLeaping] = {
+	"timeEnd" -> Infinity,
+	"iterEnd" -> Infinity,
+	"useIter" -> False,
+	"finalOnly" -> False,
+	"outputTS" -> True,
+	"epsilon" -> Null
+}
+(*Main funciton that runs Direct SSA simulation on given rxnsys*)
+BoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
+	(*Define local variables*)
+	{initCounts, reactCounts, prodCounts, rates,
+	initCountsNA, reactCountsNA, prodCountsNA, ratesNA,
+	infTime, infIter, unkObjs = GetUnkObjs[rxnsys]},
+	
+	(*Initialize global variables that are stored for PlotLastSimulation*)
+	inits = Cases[rxnsys, init[_, _]];
+	rxns = Cases[rxnsys, rxn[_, _, _]];
+	spcs = Quiet[GetSpecies[rxnsys]];
+	timeEnd = OptionValue["timeEnd"];
+	iterEnd = OptionValue["iterEnd"];
+	useIter = OptionValue["useIter"];
+	statesOnly = False;
+	finalOnly = OptionValue["finalOnly"];
+	outputTS = OptionValue["outputTS"];
+	epsilon = OptionValue["epsilon"];
+	(*If no epsilon set, use well-defined epsilon (equivalent to p=0.1)*)
+	If[epsilon === Null,
+		epsilon = 0.0309/Length[rxns]
+	];
+	
+	(*Exception handling block*)
+	(*If unknown objects present, give warning*)
+	If[Length[unkObjs] =!= 0,
+		Message[BoundedTauLeaping::rxnsyswarn, unkObjs]
+	];
+	(*Set infTime flag if timeEnd is infinity or invalid*)
+	If[timeEnd === Infinity || timeEnd <= 0 || !NumericQ[timeEnd],
+		timeEndR = 1000000.0; infTime = True,
+		timeEndR = N[timeEnd]; infTime = False
+	];
+	(*If timeEnd is invalid, give error*)
+	If[((timeEnd =!= Infinity && !NumericQ[timeEnd]) || timeEnd <= 0.0) && useIter === False, 
+		Message[BoundedTauLeaping::timeenderr, timeEnd]
+	];
+	(*Set infIter flag if iterEnd is infinity or invalid*)
+	If[iterEnd === Infinity || iterEnd <= 0 || !IntegerQ[iterEnd],
+		iterEndI = 1000000; infIter = True,
+		iterEndI = Round[iterEnd]; infIter = False];
+	(*If iterEnd is invalid, give error*)
+	If[((iterEnd =!= Infinity && !IntegerQ[iterEnd]) || iterEnd <= 0) && useIter === True,
+		Message[BoundedTauLeaping::iterenderr, iterEnd]
+	];
+	(*Set inf flag based on userIter, infTime, and infIter, which determines if simulation runs to completion or not*)
+	If[(infTime === True && useIter === False) || (infIter === True && useIter === True),
+		inf = True,
+		inf = False
+	];
+	(*If epsilon is invalid, give error*)
+	If[!NumericQ[epsilon] || epsilon < 0 || epsilon > 1,
+		Message[BoundedTauLeaping::epsilonerr, epsilon];
+		epsilon = 0.0309/Length[rxns]
+	];
+	
+	(*Determine simulation parameters from rxnsys and convert to numeric arrays of correct datatypes*)
+	initCounts = GetInitCounts[inits, spcs];
+	reactCounts = GetReactCounts[rxns, spcs];
+	prodCounts = GetProdCounts[rxns, spcs];
+	rates = GetRates[rxns];
+	initCountsNA = NumericArray[initCounts, "Integer32"];
+	reactCountsNA = NumericArray[reactCounts, "Integer64"];
+	prodCountsNA = NumericArray[prodCounts, "Integer64"];
+	ratesNA = NumericArray[rates, "Real64"];
+	
+(*	(*Run simulation via C++ library*)
+	BoundedTauLeapingBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, finalOnly, epsilon];
+	(*Output format depends on outputTS flag*)
+	If[outputTS,
+		simulationResult = TimeSeries[Normal[GetStates[]], {Normal[GetTimes[]]}],
+		simulationResult = {Normal[GetStates[]], Normal[GetTimes[]]}
+	]*)
+	(*Temporary return while backend unimplemented*)
+	epsilon
 ]
 
 
