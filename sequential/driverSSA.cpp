@@ -1,7 +1,7 @@
 #include "directMethodSSA/directMethodSSA.h"
 #include "directMethodSSA/reactionTree.h"
+#include "directMethodSSA/dependencyGraph.h"
 #include "common/decoder.h"
-#include "common/dependencyGraph.h"
 #include "common/inputVerifier.h"
 #include "boundedTauLeaping/boundedTauLeaping.h"
 
