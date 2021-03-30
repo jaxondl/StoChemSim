@@ -37,31 +37,27 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
      * i.e. at least one of the reactants and products of Vi is shared with the reactants of Vj.
     */
 
-    int numReactions = stateChangeVector.size();
-    vector<set<int> > dependsOn(numReactions);
-    vector<set<int> > affects(numReactions);
+    //no need for an affects vector if just going to use state change molecules
+    int numMolecules = moleculeAmounts.size();
+    vector<set<int>> dependsOn(numMolecules);  // each molecule index will have a set of the reaction indices of which have the molecule as a reactant
 
-    for(int i = 0; i < numReactions; i++){
+    for(int i = 0; i < reactantsVector.size(); i++){
         for(pair<int, int> element : reactantsVector[i]){
-            dependsOn[i].insert(element.first);
-        }
-        for(pair<int, int> element : stateChangeVector[i]){
-            affects[i].insert(element.first);
+            dependsOn[element.first].insert(i); // insert the reaction index in to the molecule's depends on
         }
     }
 
-    vector<vector<int> > dummyGraph(numReactions);
+    vector<vector<int> > dummyGraph(stateChangeVector.size());
 
-    for(int i = 0; i < numReactions; i++){ //then find intersection
-        dummyGraph[i].push_back(i); 
-        for(int j = 0; j < numReactions; j++){
-            if(j != i && intersects(affects[i], dependsOn[j])){
-                dummyGraph[i].push_back(j);
+    for(int i = 0; i < stateChangeVector.size(); i++){
+        for(pair<int, int> element : stateChangeVector[i]){
+            for(auto dep : dependsOn[element.first]){
+                dummyGraph[i].push_back(dep);
             }
         }
     }
 
-    dependencyGraphStructure = dummyGraph;
+    dependencyGraphStructure = dummyGraph; // assign the "dummy" graph to the actual dependencyGraphStructure within the class
 }
 
 bool dependencyGraph::intersects(set<int> set1, set<int> set2){
