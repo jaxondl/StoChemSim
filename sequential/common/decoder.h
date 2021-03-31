@@ -38,6 +38,7 @@ public:
     std::vector<std::vector<std::pair<int, int> > > getStateChangeVector();
     std::vector<std::vector<std::pair<int, int> > > getReactantVector();
     std::vector<double> getkValueVector();
+    void printVectors();
 };
 
 #endif //DECODER_H
