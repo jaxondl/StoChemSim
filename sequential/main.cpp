@@ -13,7 +13,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
     inputVerifier *iv = new inputVerifier(); // create input verifier for validating input file
-    string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\sample_input_SSA_file.txt
+    string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\large_crn.txt
     string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\output.txt
     double endValue = stod(argv[3]); // a double used to specify the end time or iteration, depending on the user's flags
     bool safeToRun = iv->verifyFile(inputFilePath); // the input verifier will indicate whether the input file is valid and safe to run

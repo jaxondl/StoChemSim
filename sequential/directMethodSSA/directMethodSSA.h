@@ -29,11 +29,12 @@ private:
     bool finalOnly; // if set to true, the simulation will only output/print the final iteration of the simulation
     bool endByIteration; // if set to true, the endValue will be used to determine the ending iteration instead of the ending time
 
-    double getUniformRandomVariable(); // obtain a uniform RV dist sample value
-    double getTimeUntilNextReaction(double propensity); // obtain the time until the next reaction (in order to update the time)
+    double getUniformRandomVariable(mt19937 gen_uni); // obtain a uniform RV dist sample value
+    double getTimeUntilNextReaction(double propensity, mt19937 gen_exp); // obtain the time until the next reaction (in order to update the time)
     void updateTime(double timeUntilNextReaction); // update the existing time
     void updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex); // update the state of the species
     double getTotalPropensity(); // obtain the total propensity across all reactions
+
 
 public:
     directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration); // constructor
@@ -43,6 +44,7 @@ public:
     double getCurrentTime(); // obtain end/most recent time
     int getCurrentIteration(); // obtain end/most recent iteration
     void start(); // begin CRN SSA simulation
+    
 };
 
 #endif

@@ -67,7 +67,10 @@ int reactionTree::searchForNode(double RV) {
             currentIndex = currentIndex*2 + 1;
             leftSumTotal -= checkNode.leftSum;
             if (checkNode.leftChild == -1){
+                return -1;
                 cout << "PROBLEM" << endl;
+                cout << "RV value: " << RV << endl;
+                cout << "Left Sum Total" << leftSumTotal << " Propensity: " << checkNode.propensity << endl;
                 break;
             }
             checkNode = reactionTreeArray[checkNode.leftChild];
@@ -76,7 +79,10 @@ int reactionTree::searchForNode(double RV) {
             currentIndex = currentIndex*2 + 2;
             leftSumTotal += checkNode.propensity;
             if (checkNode.rightChild == -1){
+                return -1;
                 cout << "PROBLEM" << endl;
+                cout << "RV value: " << RV << endl;
+                cout << "Left Sum Total" << leftSumTotal << " Propensity: " << checkNode.propensity << endl;
                 break;
             }
             checkNode = reactionTreeArray[checkNode.rightChild];
