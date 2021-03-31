@@ -112,8 +112,9 @@ void decoder::decode(string iFile) {
                     updateReactantsVector(reactionNumber, reactionSlice, isReactant);
                     if(isReversible) updateReactantsVectorReverse(reactionNumber + 1, reactionSlice, isReactant);
 
-                    updateStateChangeVector(reactionNumber, reactionSlice, isReactant);
-                    if(isReversible) updateStateChangeVectorReverse(reactionNumber + 1, reactionSlice, isReactant);
+                    updateStateChangeVector(reactionNumber, reactionSlice, isReactant, false);
+                    //if(isReversible) updateStateChangeVectorReverse(reactionNumber + 1, reactionSlice, isReactant);
+                    if(isReversible) updateStateChangeVector(reactionNumber + 1, reactionSlice, isReactant, true);
 
                     j = spaceIndex + 1;
                 }
@@ -402,84 +403,7 @@ void decoder::updateReactantsVectorReverse(int reactionNumber, string reactionSl
     }
 }
 
-void decoder::updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant) {
-    if (reactionSlice == "->" || reactionSlice == "<->") {
-        return; //if the reaction slice is "->" or "<->", ignore it
-    }
-    string moleculeName = "";
-    bool containsLetter = false;
-    for (int i = 0; i < reactionSlice.length(); i++) {
-        if (isalpha(reactionSlice.at(i))) {
-            containsLetter = true;
-        }
-    }
-    if(!containsLetter && reactionSlice != "0") { //if the reaction slice contains no letter, then it can't be a reactant or product, so it must be a reaction rate, so we can just ignore it
-    } else if (reactionSlice == "0") { //there are no reactants or no products for this reaction, so do nothing
-    } else { //the slice contains a letter, so it must be a reactant or a product
-        string moleculeCount = "";
-        int i = 0;
-        while (i < reactionSlice.length()) {
-            //cout << i << endl;
-            if (isdigit(reactionSlice.at(i))) {
-                moleculeCount += reactionSlice.at(i); //copy the digits into a new string
-                //cout << "moleculeCount is now " << moleculeCount << endl;
-            } else break;
-            i++;
-        } //moleculeCount now contains the defined number of reactant/product molecules
-
-        if(moleculeCount.empty()) {
-            moleculeCount = "1"; //1x is the same as x, so if there is a letter but no digit, pretend there is a 1
-        }
-
-        while (i < reactionSlice.length()) {
-            moleculeName += reactionSlice.at(i); //copy the molecule name into a new string
-            i++;
-        }
-
-        //get the index of the molecule
-        int moleculeIndex = -1;
-        for (int i = 0; i < this->listOfSpecies.size(); i++) {
-            if (this->listOfSpecies[i] == moleculeName) {
-                moleculeIndex = i;
-                break;
-            }
-        }
-
-        bool found = false;
-        //check all existing pairs in stateChangeVector[reactionNumber] and set found to true if any of them have moleculeIndex at .first
-        for (pair<int, int> y : this->stateChangeVector[reactionNumber]) {
-            if (y.first == moleculeIndex) found = true;
-        }
-        //push a [0,0] pair that will be modified shortly ONLY IF there is not already a pair pushed for that molecule
-        if(!found) {
-            pair<int, int> pairing;
-            pairing.first = moleculeIndex;
-            pairing.second = 0; //holds the net change in the species population caused by this reaction
-            this->stateChangeVector[reactionNumber].push_back(pairing);
-        }
-
-        int pairIndex;
-        if (isReactant) { //decrement the corresponding pairing.second by moleculeCount
-            for (int i = 0; i < this->stateChangeVector[reactionNumber].size(); i++) {
-                if (this->stateChangeVector[reactionNumber][i].first == moleculeIndex) {
-                    pairIndex = i;
-                    break;
-                }
-            }
-            this->stateChangeVector[reactionNumber][pairIndex].second -= stoi(moleculeCount);
-        } else { //it's a product, so increment the corresponding pairing.second by moleculeCount
-            for (int i = 0; i < this->stateChangeVector[reactionNumber].size(); i++) {
-                if (this->stateChangeVector[reactionNumber][i].first == moleculeIndex) {
-                    pairIndex = i;
-                    break;
-                }
-            }
-            this->stateChangeVector[reactionNumber][pairIndex].second += stoi(moleculeCount);
-        }
-    }
-}
-
-void decoder::updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant) {
+void decoder::updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant, bool reverseUpdate) {
     if (reactionSlice == "->" || reactionSlice == "<->") {
         return; //if the reaction slice is "->" or "<->", ignore it
     }
@@ -525,7 +449,6 @@ void decoder::updateStateChangeVectorReverse(int reactionNumber, std::string rea
         for (pair<int, int> y : this->stateChangeVector[reactionNumber]) {
             if (y.first == moleculeIndex) found = true;
         }
-
         //push a [0,0] pair that will be modified shortly ONLY IF there is not already a pair pushed for that molecule
         if(!found) {
             pair<int, int> pairing;
@@ -535,7 +458,7 @@ void decoder::updateStateChangeVectorReverse(int reactionNumber, std::string rea
         }
 
         int pairIndex;
-        if (!isReactant) { //decrement the corresponding pairing.second by moleculeCount
+        if ((isReactant && !reverseUpdate) || (!isReactant && reverseUpdate)) { //decrement the corresponding pairing.second by moleculeCount
             for (int i = 0; i < this->stateChangeVector[reactionNumber].size(); i++) {
                 if (this->stateChangeVector[reactionNumber][i].first == moleculeIndex) {
                     pairIndex = i;

@@ -31,8 +31,7 @@ public:
     void parseReverseReactionSlice(std::string reactionSlice, bool fencepost, int reactionNumber, bool isReactant);
     void updateReactantsVector(int reactionNumber, std::string reactionSlice, bool isReactant);
     void updateReactantsVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
-    void updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant);
-    void updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
+    void updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant, bool reverseUpdate);
     std::vector<std::string> getListOfSpecies();
     std::vector<int> getPopulationSizes();
     std::vector<std::vector<std::pair<int, int> > > getStateChangeVector();
