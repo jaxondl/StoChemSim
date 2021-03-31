@@ -29,8 +29,7 @@ public:
     std::string chopOffComments(std::string line);
     void parseReactionSlice(std::string reactionSlice, bool isReversible, bool fencepost, int reactionNumber, bool isReactant);
     void parseReverseReactionSlice(std::string reactionSlice, bool fencepost, int reactionNumber, bool isReactant);
-    void updateReactantsVector(int reactionNumber, std::string reactionSlice, bool isReactant);
-    void updateReactantsVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
+    void updateReactantsVector(int reactionNumber, std::string reactionSlice, bool isReactant, bool reverseUpdate);
     void updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant, bool reverseUpdate);
     std::vector<std::string> getListOfSpecies();
     std::vector<int> getPopulationSizes();
