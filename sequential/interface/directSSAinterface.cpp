@@ -9,14 +9,10 @@
 DLLEXPORT mint WolframLibrary_getVersion() { return WolframLibraryVersion; }
 
 /* Initialize Library */
-DLLEXPORT int WolframLibrary_initialize(WolframLibraryData libData) {
-	return LIBRARY_NO_ERROR;
-}
+DLLEXPORT int WolframLibrary_initialize(WolframLibraryData libData) { return LIBRARY_NO_ERROR; }
 
 /* Uninitialize Library */
-DLLEXPORT void WolframLibrary_uninitialize(WolframLibraryData libData) {
-	return;
-}
+DLLEXPORT void WolframLibrary_uninitialize(WolframLibraryData libData) { return; }
 
 /* convert a 2-dimentional NumericArray to a 2-dimentional vector */
 template <typename Tin, typename Tout>
@@ -55,6 +51,7 @@ static void vectortoNumericArray(void *Mout0, vector<T> out) {
 	}
 }
 
+/* convert a matrix to a 1-dimentional NumericArray */
 template <typename Tin, typename Tout>
 static void matrixtoNumericArray(void *Mout0, vector<vector<Tin> > out) {
 	Tout *Mout = static_cast<Tout *>(Mout0);
@@ -67,6 +64,7 @@ static void matrixtoNumericArray(void *Mout0, vector<vector<Tin> > out) {
 	}
 }
 
+/* construct reactants and state_change array */
 template <typename T1, typename T2>
 static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint moleculeCount, const int64_t *reactIn, const int64_t *prodIn, vector<vector<pair<T1, T2> > >& reactantsArray, vector<vector<pair<T1, T2> > >& stateChangeArray) {
 	for (mint i = 0; i < reactionCount; i++) {
@@ -99,7 +97,7 @@ vector<double> allTimes;
 
 // ******** end of global storage ********
 
-/* CRN SSA main function */
+/* direct SSA main function */
 EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
 	// debug setup
 	int err = LIBRARY_FUNCTION_ERROR;
@@ -109,7 +107,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
 	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
 	mint length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
-    const int64_t *initIn = static_cast<const int64_t *>(MinitCounts_in);   // TODO: convert to template in later release
+    const int64_t *initIn = static_cast<const int64_t *>(MinitCounts_in);
 	vector<int> moleculeAmounts = numericArraytoVector<int, int>(initIn, length);
 
 	// convert reactantsArray & stateChangeArray
@@ -120,8 +118,8 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	mint moleculeCount = dims[1];
 	void* MreactCounts_in = naFuns->MNumericArray_getData(MreactCounts);
 	void* MprodCounts_in = naFuns->MNumericArray_getData(MprodCounts);
-	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in); // TODO: convert to template in later release
-	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);   // TODO: convert to template in later release
+	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in);
+	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);
     vector<vector<pair<int, int> > > reactantsArray;
 	vector<vector<pair<int, int> > > stateChangeArray;
     reactantsAndStateChangeArrayConstruction<int, int>(reactionCount, moleculeCount, reactIn, prodIn, reactantsArray, stateChangeArray);
@@ -166,6 +164,98 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
                     useIter);
 	process->start();
 
+    // pass back rerults depends on result
+    if (finalOnly) {
+		vector<vector<int> > current_state;
+		current_state.push_back(process->getCurrentState());
+        allStates = current_state;
+        if (!statesOnly) {
+			vector<double> current_time;
+			current_time.push_back(process->getCurrentTime());
+            allTimes = current_time;
+        }
+    } else {
+        allStates = process->getAllStates();
+        if (!statesOnly) {
+            allTimes = process->getAllTimes();
+        }
+    }
+
+	return LIBRARY_NO_ERROR;
+}
+
+/* BTL main function */
+EXTERN_C DLLEXPORT int BLTInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
+	// debug setup
+	int err = LIBRARY_FUNCTION_ERROR;
+	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
+
+	// convert initCounts
+	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
+	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
+	mint length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
+    const int64_t *initIn = static_cast<const int64_t *>(MinitCounts_in);
+	vector<int> moleculeAmounts = numericArraytoVector<int, int>(initIn, length);
+
+	// convert reactantsArray & stateChangeArray
+	MNumericArray MreactCounts = MArgument_getMNumericArray(Args[1]);
+	MNumericArray MprodCounts = MArgument_getMNumericArray(Args[2]);
+	mint const * dims = naFuns->MNumericArray_getDimensions(MreactCounts);
+	mint reactionCount = dims[0];
+	mint moleculeCount = dims[1];
+	void* MreactCounts_in = naFuns->MNumericArray_getData(MreactCounts);
+	void* MprodCounts_in = naFuns->MNumericArray_getData(MprodCounts);
+	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in);
+	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);
+    vector<vector<pair<int, int> > > reactantsArray;
+	vector<vector<pair<int, int> > > stateChangeArray;
+    reactantsAndStateChangeArrayConstruction<int, int>(reactionCount, moleculeCount, reactIn, prodIn, reactantsArray, stateChangeArray);
+
+	// convert rates
+	MNumericArray Mrates = MArgument_getMNumericArray(Args[3]);
+	void* rateIn = naFuns->MNumericArray_getData(Mrates);
+	length = naFuns->MNumericArray_getFlattenedLength(Mrates);
+	vector<double> kValues = numericArraytoVector<double, double>(rateIn, length);
+
+	// extract timeEndR
+	double timeEndR = MArgument_getReal(Args[4]);
+
+    // extract iterEndI
+    double iterEndI = (double)MArgument_getInteger(Args[5]);
+
+    // extract inf (flag)
+    mbool inf = MArgument_getBoolean(Args[6]);
+
+    // extract useIter (flag)
+    mbool useIter = MArgument_getBoolean(Args[7]);
+
+    // extract statesOnly (flag)
+    mbool statesOnly = MArgument_getBoolean(Args[8]);
+
+    // extract finalOnly (flag)
+    mbool finalOnly = MArgument_getBoolean(Args[9]);
+
+	// extract epsilon
+	double epsilon = MArgument_getReal(Args[10]);
+
+    // choose endValue
+    double endValue = (useIter)? iterEndI : timeEndR;
+
+	// CRN SSA process: pass everything to backend
+	boundedTauLeaping* process = new boundedTauLeaping(
+					moleculeAmounts,
+					kValues,
+					reactantsArray,
+					stateChangeArray,
+					endValue,
+                    statesOnly,
+                    finalOnly,
+                    inf,
+                    useIter,
+					epsilon);
+	process->start();
+
+    // pass back rerults depends on result
     if (finalOnly) {
 		vector<vector<int> > current_state;
 		current_state.push_back(process->getCurrentState());
