@@ -37,31 +37,27 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
      * i.e. at least one of the reactants and products of Vi is shared with the reactants of Vj.
     */
 
-    int numReactions = stateChangeVector.size();
-    vector<set<int> > dependsOn(numReactions);
-    vector<set<int> > affects(numReactions);
+    //no need for an affects vector if just going to use state change molecules
+    int numMolecules = moleculeAmounts.size();
+    vector<set<int>> dependsOn(numMolecules);  // each molecule index will have a set of the reaction indices of which have the molecule as a reactant
 
-    for(int i = 0; i < numReactions; i++){
+    for(int i = 0; i < reactantsVector.size(); i++){
         for(pair<int, int> element : reactantsVector[i]){
-            dependsOn[i].insert(element.first);
-        }
-        for(pair<int, int> element : stateChangeVector[i]){
-            affects[i].insert(element.first);
+            dependsOn[element.first].insert(i); // insert the reaction index in to the molecule's depends on
         }
     }
 
-    vector<vector<int> > dummyGraph(numReactions);
+    vector<vector<int> > dummyGraph(stateChangeVector.size());
 
-    for(int i = 0; i < numReactions; i++){ //then find intersection
-        dummyGraph[i].push_back(i); 
-        for(int j = 0; j < numReactions; j++){
-            if(j != i && intersects(affects[i], dependsOn[j])){
-                dummyGraph[i].push_back(j);
+    for(int i = 0; i < stateChangeVector.size(); i++){
+        for(pair<int, int> element : stateChangeVector[i]){
+            for(auto dep : dependsOn[element.first]){
+                dummyGraph[i].push_back(dep);
             }
         }
     }
 
-    dependencyGraphStructure = dummyGraph;
+    dependencyGraphStructure = dummyGraph; // assign the "dummy" graph to the actual dependencyGraphStructure within the class
 }
 
 bool dependencyGraph::intersects(set<int> set1, set<int> set2){
@@ -331,14 +327,10 @@ void directMethodSSA::start(){
 DLLEXPORT mint WolframLibrary_getVersion() { return WolframLibraryVersion; }
 
 /* Initialize Library */
-DLLEXPORT int WolframLibrary_initialize(WolframLibraryData libData) {
-	return LIBRARY_NO_ERROR;
-}
+DLLEXPORT int WolframLibrary_initialize(WolframLibraryData libData) { return LIBRARY_NO_ERROR; }
 
 /* Uninitialize Library */
-DLLEXPORT void WolframLibrary_uninitialize(WolframLibraryData libData) {
-	return;
-}
+DLLEXPORT void WolframLibrary_uninitialize(WolframLibraryData libData) { return; }
 
 /* convert a 2-dimentional NumericArray to a 2-dimentional vector */
 template <typename Tin, typename Tout>
@@ -377,6 +369,7 @@ static void vectortoNumericArray(void *Mout0, vector<T> out) {
 	}
 }
 
+/* convert a matrix to a 1-dimentional NumericArray */
 template <typename Tin, typename Tout>
 static void matrixtoNumericArray(void *Mout0, vector<vector<Tin> > out) {
 	Tout *Mout = static_cast<Tout *>(Mout0);
@@ -389,6 +382,7 @@ static void matrixtoNumericArray(void *Mout0, vector<vector<Tin> > out) {
 	}
 }
 
+/* construct reactants and state_change array */
 template <typename T1, typename T2>
 static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint moleculeCount, const int64_t *reactIn, const int64_t *prodIn, vector<vector<pair<T1, T2> > >& reactantsArray, vector<vector<pair<T1, T2> > >& stateChangeArray) {
 	for (mint i = 0; i < reactionCount; i++) {
@@ -431,7 +425,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
 	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
 	mint length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
-    const int64_t *initIn = static_cast<const int64_t *>(MinitCounts_in);   // TODO: convert to template in later release
+    const int64_t *initIn = static_cast<const int64_t *>(MinitCounts_in);
 	vector<int> moleculeAmounts = numericArraytoVector<int, int>(initIn, length);
 
 	// convert reactantsArray & stateChangeArray
@@ -442,8 +436,8 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	mint moleculeCount = dims[1];
 	void* MreactCounts_in = naFuns->MNumericArray_getData(MreactCounts);
 	void* MprodCounts_in = naFuns->MNumericArray_getData(MprodCounts);
-	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in); // TODO: convert to template in later release
-	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);   // TODO: convert to template in later release
+	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in);
+	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);
     vector<vector<pair<int, int> > > reactantsArray;
 	vector<vector<pair<int, int> > > stateChangeArray;
     reactantsAndStateChangeArrayConstruction<int, int>(reactionCount, moleculeCount, reactIn, prodIn, reactantsArray, stateChangeArray);
@@ -488,6 +482,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
                     useIter);
 	process->start();
 
+    // pass back rerults depends on result
     if (finalOnly) {
 		vector<vector<int> > current_state;
 		current_state.push_back(process->getCurrentState());
