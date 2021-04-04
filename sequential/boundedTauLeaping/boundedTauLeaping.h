@@ -1,6 +1,8 @@
 #ifndef BOUNDEDTAULEAPING_H
 #define BOUNDEDTAULEAPING_H
 
+using namespace std;
+
 #include <iostream>
 #include <cmath>
 #include <random>

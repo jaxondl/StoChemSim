@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
         vector<string> speciesList = inputDecoder->getListOfSpecies();
 
         // begin setting flags from the command line arguments, with every flag by default set to false
-        bool so = false; // states only flag
+        //bool so = false; // states only flag
         bool fo = false; // final only flag
         bool ti = false; // infinite time flag (time infinity)
         bool it = false; // iteration limit flag
@@ -40,16 +40,17 @@ int main(int argc, char** argv) {
                 argument[j] = tolower(argument[j]);
             }
             // depending on the user input, set certain flags to true
-            if (argument =="-so" || argument == "-statesonly")
-                so = true;
-            else if (argument == "-fo" || argument == "-finalonly")
+            //if (argument =="-so" || argument == "-statesonly")
+                //so = true;
+            if (argument == "-fo" || argument == "-finalonly")
                 fo = true;
             else if (argument == "-it"  || argument == "-useiter")
                 it = true;
         }
 
+        double epsilon = 0; //TODO: implement a way for the user to pass this to the program
         // Create directMethodSSA object and begin simulation
-        boundedTauLeaping *btlAlgorithm = new boundedTauLeaping(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, endValue, so, fo, ti, it);
+        boundedTauLeaping *btlAlgorithm = new boundedTauLeaping(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, endValue, fo, ti, it, epsilon);
         btlAlgorithm->start();
 
         // Get all necessary state from the directMethodSSA object
@@ -65,9 +66,9 @@ int main(int argc, char** argv) {
         int iterationWidth = 15;
         char separator = ' ';
         if(fo){
-            if(so) // final only and state only
-                outfile << "Final State:" << endl;
-            else { // final only with time
+            //if(so) // final only and state only
+            // outfile << "Final State:" << endl;
+            //else { // final only with time
                 if(it){
                     outfile << "Final Iteration" << "\t\t\tFinal State" << endl;
                     outfile << left << setw(iterationWidth) << setfill(separator) << currentIteration << "\t\t\t";
@@ -76,25 +77,25 @@ int main(int argc, char** argv) {
                     outfile << "Final Time" << "\t\t\tFinal State" << endl;
                     outfile << setprecision(5) << scientific << currentTime << "\t\t\t";
                 }
-            }
+            //}
             for(int i = 0; i < currentState.size(); i++){
                 outfile << speciesList[i];
                 outfile << ": " << currentState[i];
                 outfile << "\t";
             }
         }
-        else if(so){ // states only (no time)
-            outfile << "Iteration" << "\t\t\tState" << endl;
-            for(int i = 0; i < allStates.size(); i++){
-                outfile << left << setw(iterationWidth) << setfill(separator) << i << "\t\t";
-                for(int j = 0; j < allStates[i].size(); j++){
-                    outfile << speciesList[j];
-                    outfile << ": " << allStates[i][j];
-                    outfile << "\t";
-                }
-                outfile << endl;
-            }
-        }
+//        else if(so){ // states only (no time)
+//            outfile << "Iteration" << "\t\t\tState" << endl;
+//            for(int i = 0; i < allStates.size(); i++){
+//                outfile << left << setw(iterationWidth) << setfill(separator) << i << "\t\t";
+//                for(int j = 0; j < allStates[i].size(); j++){
+//                    outfile << speciesList[j];
+//                    outfile << ": " << allStates[i][j];
+//                    outfile << "\t";
+//                }
+//                outfile << endl;
+//            }
+//        }
         else { // all states and all times
             outfile << "Iteration" << "\t\t\tTime(s)" << "\t\t\tState" << endl;
             for(int i = 0; i < allTimes.size(); i++){

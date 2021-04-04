@@ -1,4 +1,5 @@
 #include "boundedTauLeaping.h"
+#include <algorithm>
 
 using namespace std;
 
@@ -32,8 +33,8 @@ double boundedTauLeaping::getGammaRandomVariable(double a, double b) {
 int boundedTauLeaping::getBinomialRandomVariable(int n, double p) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     default_random_engine generator (seed);
-    binomial_distribution<double> distribution(n, p);
-    double b = distribution(generator);
+    binomial_distribution<int> distribution(n, p);
+    int b = distribution(generator);
     // cout << "binomial RV: " << b << endl;
     return b;
 }
