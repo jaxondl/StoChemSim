@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
                 it = true;
         }
 
-        double epsilon = 0; //TODO: implement a way for the user to pass this to the program
+        double epsilon = 0.05; //TODO: implement a way for the user to pass this to the program; 0.05 is the default until then
         // Create directMethodSSA object and begin simulation
         boundedTauLeaping *btlAlgorithm = new boundedTauLeaping(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, endValue, fo, ti, it, epsilon);
         btlAlgorithm->start();
