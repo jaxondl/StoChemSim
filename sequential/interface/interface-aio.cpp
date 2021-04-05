@@ -18,16 +18,16 @@ using namespace std;
 
 class dependencyGraph {
 private:
-    vector<vector<int> > dependencyGraphStructure;
+    vector<vector<int> > dependencyGraphStructure; // the graph structure itself
 public:
-    dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector);
+    dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector, vector<int> moleculeAmounts); // constructor
 
-    bool intersects(set<int> set1, set<int> set2);
+    bool intersects(set<int> set1, set<int> set2); // user made function to check for an intersection of 1 or more elements between two sets
 
-    vector<int> getDependentReactions(int reactionIndex);
+    vector<int> getDependentReactions(int reactionIndex); // obtain the dependent reactions for a given reaction via the dependencyGraphStructure
 };
 
-dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector){
+dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector, vector<int> moleculeAmounts){
     // DEFINITION 1: Reactants(p) and products(p) are reactants and prods of reaction p. e.g. Reactants(1) = {a,b}
     // DEFINITION 2: DependsOn(a-mu), where a-mu is the propensity of chosen reaction, is the set of substances that affect its value. i.e. Reactants(mu)
     // DEFINITION 3: Affects(mu) is set of substances that change in number when reaction mu executes. i.e. Reactants(mu) UNION Products(mu)
@@ -36,7 +36,6 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
      * i.e. at least one of the reactants and products of Vi is shared with the reactants of Vj.
     */
 
-    //no need for an affects vector if just going to use state change molecules
     int numMolecules = moleculeAmounts.size();
     vector<set<int>> dependsOn(numMolecules);  // each molecule index will have a set of the reaction indices of which have the molecule as a reactant
 
@@ -60,24 +59,24 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
 }
 
 bool dependencyGraph::intersects(set<int> set1, set<int> set2){
-    set<int>::iterator iter1 = set1.begin();
+    set<int>::iterator iter1 = set1.begin(); // create two iterators for both sets in question
     set<int>::iterator iter2 = set2.begin();
-    while(iter1 != set1.end() && iter2 != set2.end()){
-        if(*iter1 < *iter2){ //that means *iter1 is lexicographically smaller than *iter2 for string, but for this case index is smaller
-            iter1++;
+    while(iter1 != set1.end() && iter2 != set2.end()){ // while either set has not been completely traversed
+        if(*iter1 < *iter2){ // this means *iter1 is lexicographically smaller than *iter2 for string; in this case that means the index is smaller
+            iter1++; // thus, look at the next value in set 1
         }
-        else if(*iter1 > *iter2){ //that means *iter2 is lexicographically smaller than *iter1
-            iter2++;
+        else if(*iter1 > *iter2){ // this means *iter2 is lexicographically smaller than *iter1 instead
+            iter2++; // instead, look at the next value in set 2
         }
         else{
-            return true;
+            return true; // otherwise, the two values must be lexicographically identical. A match, or intersection, is found
         }
     }
-    return false;
+    return false; // if either set has already been traversed and no values are identical, then there is no intersection
 }
 
 vector<int> dependencyGraph::getDependentReactions(int reactionIndex){
-    return dependencyGraphStructure[reactionIndex]; //returns itself as well
+    return dependencyGraphStructure[reactionIndex]; // returns the designated vector within the dependency graph for that reaction index
 }
 
 class reactionTree {
