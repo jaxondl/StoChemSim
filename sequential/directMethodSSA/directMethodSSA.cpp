@@ -21,17 +21,24 @@ directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> rea
     this->endInfinity = endInfinity;
     this->endByIteration = endByIteration;
 
+    random_device rd_uni; // random seed
+    mt19937 gen_uni(rd_uni()); // mersenne twister engine
+    this->gen_uni = gen_uni;
+    random_device rd_exp; // random seed
+    mt19937 gen_exp(rd_exp()); 
+    this->gen_exp = gen_exp; // mersenne twister engine
+    uniform_real_distribution<double> dis(0.0, 1);
+    
     if (this->statesOnly && !this->endByIteration) { // if the user requests to only calculate the states but gives a positive finite value for time (i.e. did not set endByIteration to true) then the end time is automatically set to infinity (as finite time will be unapplicable)
         this->endInfinity = true;
     }
     //asdasdasdasdasdas
 }
 
-double directMethodSSA::getUniformRandomVariable(mt19937 gen_uni){
+double directMethodSSA::getUniformRandomVariable() {
     //double totalPropensity = getTotalPropensity();
-    uniform_real_distribution<> dis(0.0, 1); // create a uniform RV dist between 0 and 1
-    double RV = dis(gen_uni); // obtain sampled value 
-    cout << "RV is " << RV << endl;
+    uniform_real_distribution<double> dis(0.0, 1);
+    double RV = dis(gen_uni); // obtain sampled value
     return RV;
 }
 
@@ -46,7 +53,7 @@ void directMethodSSA::updateState(vector<vector<pair<int, int> > > stateChangeVe
     }
 }
 
-double directMethodSSA::getTimeUntilNextReaction(double propensity, mt19937 gen_exp) {
+double directMethodSSA::getTimeUntilNextReaction(double propensity) {
     exponential_distribution<> dis(propensity); // utilize exponential approximation of propensity
     double RV = dis(gen_exp); // obtain sampled value
     return RV;
@@ -70,40 +77,19 @@ int directMethodSSA::getCurrentIteration(){return currentIteration;}
 
 void directMethodSSA::start(){
     // continue the simulation while the total propensity > 0 AND (the endInfinity flag is true OR the current time/iteration hasn't exceeded the inputted limit)
-    bool keepGoing = true;
-    random_device rd_uni; // random seed
-    mt19937 gen_uni(rd_uni()); // mersenne twister engine
-    random_device rd_exp; // random seed
-    mt19937 gen_exp(rd_exp()); // mersenne twister engine
-
-    uniform_real_distribution<> dis(0.0, 1); // create a uniform RV dist between 0 and 1
     while (getTotalPropensity() > 0 && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))){
         cout << "total prop: " << getTotalPropensity() << " iteration: " << currentIteration << endl;
         if (!statesOnly) { // only calculate if the user wants to also calculate the times (default)
-            double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity(), gen_exp); // obtain the time until the next reaction
+            double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity()); // obtain the time until the next reaction
             if(currentTime + timeUntilNextReaction > endValue && !endInfinity) // if updating the time violates the finite end time value, terminate the simulation
                 break;
             updateTime(timeUntilNextReaction); // otherwise, update the time
             allTimes.push_back(currentTime); // recorded the updated time
         }
-        //double uniformRV = getUniformRandomVariable(gen_uni); // sample uniform RV
-
-        double RV = dis(gen_uni); // obtain sampled value 
-        cout << "RV: " << RV << endl;
+        double RV = getUniformRandomVariable(); // obtain sampled value
         int reactionIndex = reaction_tree->searchForNode(RV); // search for reaction
         if(reactionIndex == -1)
             break;
-        for (int i; i < stateChangeVector[reactionIndex].size(); i++){
-            pair<int, int> stateChangePair = stateChangeVector[reactionIndex][i];
-            if (currentState[stateChangePair.first] + stateChangePair.second >= 0) {
-                keepGoing = false;
-                break;
-            }
-        }
-        if (!keepGoing) {
-            cout << "I HAVE BROKEN!!!!!!!" << endl;
-            break;
-        }
         updateState(stateChangeVector, reactionIndex); // update state/configuration
         if (!finalOnly) { // only save the state vectors of the iteration if the finalOnly flag is false
             allStates.push_back(currentState);
@@ -114,5 +100,4 @@ void directMethodSSA::start(){
         }
         currentIteration++; // update iteration
     }
-    // If we pass endValue, remove the last time and state before sending
 }
