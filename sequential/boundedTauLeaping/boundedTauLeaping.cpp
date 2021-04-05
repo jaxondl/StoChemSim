@@ -179,6 +179,12 @@ void boundedTauLeaping::start() {
             allTimes.push_back(currentTime);
             allStates.push_back(currentState);
         }
+
+        cout << "iter and time: " << currentIteration << " " << currentTime << endl;
+        cout << "state: ";
+        for(int i=0; i < currentState.size(); i++)
+            cout << currentState.at(i) << ' ';
+        cout << endl;
         
         currentIteration++; // update iteration
         props = calculatePropensities(); // Step 1a, sets nonePossible
