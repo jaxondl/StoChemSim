@@ -34,6 +34,8 @@ private:
     void updateTime(double timeUntilNextReaction); // update the existing time
     void updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex); // update the state of the species
     double getTotalPropensity(); // obtain the total propensity across all reactions
+    mt19937 gen_uni;
+    mt19937 gen_exp;
 
 public:
     directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration); // constructor
@@ -43,6 +45,7 @@ public:
     double getCurrentTime(); // obtain end/most recent time
     int getCurrentIteration(); // obtain end/most recent iteration
     void start(); // begin CRN SSA simulation
+    
 };
 
 #endif

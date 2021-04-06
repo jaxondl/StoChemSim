@@ -18,17 +18,16 @@ using namespace std;
 
 class dependencyGraph {
 private:
-    vector<vector<int> > dependencyGraphStructure;
+    vector<vector<int> > dependencyGraphStructure; // the graph structure itself
 public:
-    dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector);
+    dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector, vector<int> moleculeAmounts); // constructor
 
-    bool intersects(set<int> set1, set<int> set2);
+    bool intersects(set<int> set1, set<int> set2); // user made function to check for an intersection of 1 or more elements between two sets
 
-    vector<int> getDependentReactions(int reactionIndex);
+    vector<int> getDependentReactions(int reactionIndex); // obtain the dependent reactions for a given reaction via the dependencyGraphStructure
 };
 
-dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector){
-    cout << "Beginning Creation of Dependency Graph" << endl;
+dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVector, vector<vector<pair<int,int> > > reactantsVector, vector<int> moleculeAmounts){
     // DEFINITION 1: Reactants(p) and products(p) are reactants and prods of reaction p. e.g. Reactants(1) = {a,b}
     // DEFINITION 2: DependsOn(a-mu), where a-mu is the propensity of chosen reaction, is the set of substances that affect its value. i.e. Reactants(mu)
     // DEFINITION 3: Affects(mu) is set of substances that change in number when reaction mu executes. i.e. Reactants(mu) UNION Products(mu)
@@ -37,7 +36,6 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
      * i.e. at least one of the reactants and products of Vi is shared with the reactants of Vj.
     */
 
-    //no need for an affects vector if just going to use state change molecules
     int numMolecules = moleculeAmounts.size();
     vector<set<int>> dependsOn(numMolecules);  // each molecule index will have a set of the reaction indices of which have the molecule as a reactant
 
@@ -61,24 +59,24 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
 }
 
 bool dependencyGraph::intersects(set<int> set1, set<int> set2){
-    set<int>::iterator iter1 = set1.begin();
+    set<int>::iterator iter1 = set1.begin(); // create two iterators for both sets in question
     set<int>::iterator iter2 = set2.begin();
-    while(iter1 != set1.end() && iter2 != set2.end()){
-        if(*iter1 < *iter2){ //that means *iter1 is lexicographically smaller than *iter2 for string, but for this case index is smaller
-            iter1++;
+    while(iter1 != set1.end() && iter2 != set2.end()){ // while either set has not been completely traversed
+        if(*iter1 < *iter2){ // this means *iter1 is lexicographically smaller than *iter2 for string; in this case that means the index is smaller
+            iter1++; // thus, look at the next value in set 1
         }
-        else if(*iter1 > *iter2){ //that means *iter2 is lexicographically smaller than *iter1
-            iter2++;
+        else if(*iter1 > *iter2){ // this means *iter2 is lexicographically smaller than *iter1 instead
+            iter2++; // instead, look at the next value in set 2
         }
         else{
-            return true;
+            return true; // otherwise, the two values must be lexicographically identical. A match, or intersection, is found
         }
     }
-    return false;
+    return false; // if either set has already been traversed and no values are identical, then there is no intersection
 }
 
 vector<int> dependencyGraph::getDependentReactions(int reactionIndex){
-    return dependencyGraphStructure[reactionIndex]; //returns itself as well
+    return dependencyGraphStructure[reactionIndex]; // returns the designated vector within the dependency graph for that reaction index
 }
 
 class reactionTree {
@@ -99,9 +97,10 @@ public:
     void updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants);
 };
 
+// Propesnity calculation for each reaction = k * (amount(reactantMolecule1)) * (amount(reactantMolecule1)-1)...(amount(reactantMolecule1)-reactantCoefficient + 1) * ... continue for every reactant
 double reactionTree::calculatePropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants){
     double propensity = reactionRate;
-    for (pair<int, int> reactant: reactants) {
+    for (pair<int, int> reactant: reactants) { 
         for (int i=0; i<reactant.second; i++) {
             propensity *= (moleculeAmounts[reactant.first] - i);
         }
@@ -109,61 +108,71 @@ double reactionTree::calculatePropensity(double reactionRate, vector<int> molecu
     return propensity;
 }
 
+// Create the reaction tree
 reactionTree::reactionTree(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector) {
-    cout << "Beginning Creation of Reaction Tree" << endl;
-    long numReactions = reactantsVector.size();
+    int numReactions = reactantsVector.size();
     reactionTreeArray = new reactionNode[numReactions];
     reactionTreeArray[0].parent = -1;
+    // Calculate propensity for each reaction
     for (int i=0; i<numReactions; i++) {
         reactionTreeArray[i].propensity = calculatePropensity(reactionRates[i], moleculeAmounts, reactantsVector[i]);
         reactionTreeArray[i].leftSum = 0;
         reactionTreeArray[i].rightSum = 0;
     }
+    // Assign left and right child indices for each tree node beginning at the roott
     for (int i=0; i<numReactions; i++) {
-        if (i * 2 + 1 < numReactions) {
+        if (i * 2 + 1 < numReactions) { 
             reactionTreeArray[i].leftChild = i * 2 + 1;
             reactionTreeArray[i * 2 + 1].parent = i;
         }
         else {
-            reactionTreeArray[i].leftChild = 0;
+            reactionTreeArray[i].leftChild = -1;
         }
         if (i * 2 + 2 < numReactions) {
             reactionTreeArray[i].rightChild = i * 2 + 2;
             reactionTreeArray[i * 2 + 2].parent = i;
         }
         else {
-            reactionTreeArray[i].rightChild = 0;
+            reactionTreeArray[i].rightChild = -1;
         }
     }
 
-    for (long i=numReactions-1; i>0; i--) {
-        double subTotalPropensity = reactionTreeArray[i].propensity + reactionTreeArray[i].rightSum + reactionTreeArray[i].leftSum;
+    // Calculating left and right sums for all tree nodes starting from the leaves (end of array to the beginning)
+    for (int i=numReactions-1; i>0; i--) {
+        double subTotalPropensity = reactionTreeArray[i].propensity + reactionTreeArray[i].rightSum + reactionTreeArray[i].leftSum; // current node's subtree propensity sum
+        // Add subTotalPropensity to parent's leftSum or rightSum depending on if the child is the left or right child of its parent
         if (i == reactionTreeArray[reactionTreeArray[i].parent].leftChild) {
             reactionTreeArray[reactionTreeArray[i].parent].leftSum += subTotalPropensity;
         }
         else {
             reactionTreeArray[reactionTreeArray[i].parent].rightSum += subTotalPropensity;
         }
-
     }
 }
 
-// Search for node in reaction tree based on uniform RV
+// Search for node in reaction tree based on sampled uniform RV
 int reactionTree::searchForNode(double RV) {
-    int currentIndex = 0;
-    reactionNode checkNode = reactionTreeArray[0];
+    int currentIndex = 0; // index of checkNode in the reactionTree array, start with root node
+    reactionNode checkNode = reactionTreeArray[0]; // node object of the reaction to be checked
     double leftSumTotal = reactionTreeArray[0].leftSum;
     double totalPropensity = reactionTreeArray[0].leftSum + reactionTreeArray[0].rightSum + reactionTreeArray[0].propensity;
-    while(RV < (leftSumTotal/totalPropensity) || RV > ((leftSumTotal+checkNode.propensity)/totalPropensity)){
-        if (RV < (leftSumTotal/totalPropensity)) {
+    while(RV < (leftSumTotal/totalPropensity) || RV > ((leftSumTotal+checkNode.propensity)/totalPropensity)) { // if the sampled RV is not in the current node's propensity range, continue searching
+        if (RV < (leftSumTotal/totalPropensity)) { // if the sampled RV is in the left subtree of the current node, update the current node to the left child
             currentIndex = currentIndex*2 + 1;
             leftSumTotal -= checkNode.leftSum;
+            if (checkNode.leftChild == -1){
+                return -1;
+                break;
+            }
             checkNode = reactionTreeArray[checkNode.leftChild];
             leftSumTotal += checkNode.leftSum;
-
-        } else {
+        } else { // if the sampled RV is in the right subtree of the current node, update the current node to the right child
             currentIndex = currentIndex*2 + 2;
             leftSumTotal += checkNode.propensity;
+            if (checkNode.rightChild == -1){
+                return -1;
+                break;
+            }
             checkNode = reactionTreeArray[checkNode.rightChild];
             leftSumTotal += checkNode.leftSum;
         }
@@ -175,151 +184,156 @@ int reactionTree::searchForNode(double RV) {
 void reactionTree::updatePropensity(int index, double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int> > reactants){
     int currentIndex = index;
     double newPropensity = calculatePropensity(reactionRate, moleculeAmounts, reactants); //recalculate propensity for that index
-    double propensityChange = newPropensity - reactionTreeArray[currentIndex].propensity;
+    double propensityChange = newPropensity - reactionTreeArray[currentIndex].propensity; // determine change in propensity
     reactionTreeArray[currentIndex].propensity = newPropensity;
-    while (reactionTreeArray[currentIndex].parent != -1) {
+    while (reactionTreeArray[currentIndex].parent != -1) { // update parents' left or right sums depending on if the child is the left or right child of its parent until you hit the root node
         if (currentIndex == reactionTreeArray[reactionTreeArray[currentIndex].parent].leftChild) {
             reactionTreeArray[reactionTreeArray[currentIndex].parent].leftSum += propensityChange;
         }
         else {
             reactionTreeArray[reactionTreeArray[currentIndex].parent].rightSum += propensityChange;
         }
-        currentIndex = reactionTreeArray[currentIndex].parent;
+        currentIndex = reactionTreeArray[currentIndex].parent; // move up the tree to next parent
     }
 }
 
 class directMethodSSA {
 private:
-    reactionTree* reaction_tree; 
-    dependencyGraph* dependency_graph;
+    reactionTree* reaction_tree; // reaction tree necessary for this simulation algorithm
+    dependencyGraph* dependency_graph; // dependency graph necessary for this simulation algorithm
 
-    vector<double> reactionRates;
-    vector<vector<pair<int, int> > > reactantsVector;
-    vector<vector<pair<int, int> > > stateChangeVector;
-    vector<int> currentState;
-    vector<vector<int> > allStates;
-    vector<double> allTimes;
-    double currentTime;
-    int currentIteration;
-    double endValue;
-    bool endInfinity;
-    bool statesOnly;
-    bool finalOnly;
-    bool endByIteration;
+    vector<double> reactionRates; // reaction rates (k) for each reaction
+    vector<vector<pair<int, int> > > reactantsVector; // reactants for each reaction
+    vector<vector<pair<int, int> > > stateChangeVector; // state change vectors for each reaction
+    vector<int> currentState; // the current state / amounts of species in CRN
+    vector<vector<int> > allStates; // vector containing all states calculated by the simulation algorithm
+    vector<double> allTimes; // vector containing the time it has taken to complete each iteration and all preceding iterations
 
-    double getUniformRandomVariable();
-    double getTimeUntilNextReaction(double propensity);
-    void updateTime(double timeUntilNextReaction);
-    void updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex);
-    double getTotalPropensity();
+    double currentTime; // current time tracked for the simulation
+    int currentIteration; // current iteration tracked fo the simulation
+    double endValue; // end value will either be a ending time or and ending iteration, depending on whether the user sets the endByIteration flag to true. The simulation will stop before it crosses the endValue
+
+    bool endInfinity; // if set to true, the simulation will continue until no more reactions can take place
+    bool statesOnly; // if set to true, the simulation will forego any calculations of times (as well as any updating the time) and only prin out the states 
+    bool finalOnly; // if set to true, the simulation will only output/print the final iteration of the simulation
+    bool endByIteration; // if set to true, the endValue will be used to determine the ending iteration instead of the ending time
+
+    double getUniformRandomVariable(); // obtain a uniform RV dist sample value
+    double getTimeUntilNextReaction(double propensity); // obtain the time until the next reaction (in order to update the time)
+    void updateTime(double timeUntilNextReaction); // update the existing time
+    void updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex); // update the state of the species
+    double getTotalPropensity(); // obtain the total propensity across all reactions
+    mt19937 gen_uni;
+    mt19937 gen_exp;
 
 public:
-    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration);
-    vector<vector<int> > getAllStates();
-    vector<double> getAllTimes();
-    vector<int> getCurrentState();
-    double getCurrentTime();
-    int getCurrentIteration();
-    void start();
+    directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration); // constructor
+    vector<vector<int> > getAllStates(); // obtain vector of all states
+    vector<double> getAllTimes(); // obtain vector of all times
+    vector<int> getCurrentState(); // obtain vector of the end/most recent state
+    double getCurrentTime(); // obtain end/most recent time
+    int getCurrentIteration(); // obtain end/most recent iteration
+    void start(); // begin CRN SSA simulation
+    
 };
 
 directMethodSSA::directMethodSSA(vector<int> moleculeAmounts, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool statesOnly, bool finalOnly, bool endInfinity, bool endByIteration){
-    this->reaction_tree = new class reactionTree(moleculeAmounts, reactionRates, reactantsVector);
-    this->dependency_graph = new class dependencyGraph(stateChangeVector, reactantsVector);
-    this->allStates.push_back(moleculeAmounts);
-    this->allTimes.push_back(0);
+    this->reaction_tree = new class reactionTree(moleculeAmounts, reactionRates, reactantsVector); // create reaction tree
+    this->dependency_graph = new class dependencyGraph(stateChangeVector, reactantsVector, moleculeAmounts); // create dependency graph
+    this->allStates.push_back(moleculeAmounts); // stored initial state in the allStates vector
+    this->allTimes.push_back(0); // store the initial time (0) in the allTimes vector
     this->reactionRates = reactionRates; // k reaction constants
     this->reactantsVector = reactantsVector;
     this->stateChangeVector = stateChangeVector;
+
     this->currentState = moleculeAmounts;
-    this->currentTime = 0;
-    this->currentIteration = 0;
-    this->endValue = endValue;
+    this->currentTime = 0; // want to set the current time to 0 before beginning
+    this->currentIteration = 0; // likewise set current iteration to 0 before beginning
+
+    this->endValue = endValue; // all related booleans/flags are defined by the user
     this->statesOnly = statesOnly;
     this->finalOnly = finalOnly;
     this->endInfinity = endInfinity;
     this->endByIteration = endByIteration;
-    if (this->statesOnly && !this->endByIteration) {
+
+    random_device rd_uni; // random seed
+    mt19937 gen_uni(rd_uni()); // mersenne twister engine
+    this->gen_uni = gen_uni;
+    random_device rd_exp; // random seed
+    mt19937 gen_exp(rd_exp()); 
+    this->gen_exp = gen_exp; // mersenne twister engine
+    uniform_real_distribution<double> dis(0.0, 1);
+    
+    if (this->statesOnly && !this->endByIteration) { // if the user requests to only calculate the states but gives a positive finite value for time (i.e. did not set endByIteration to true) then the end time is automatically set to infinity (as finite time will be unapplicable)
         this->endInfinity = true;
     }
+    //asdasdasdasdasdas
 }
 
-double directMethodSSA::getUniformRandomVariable(){
-    random_device rd; // random seed
-    mt19937 gen(rd()); // mersenne twister engine
-    uniform_real_distribution<> dis(0.0, 1.0);
-    double RV = dis(gen);
+double directMethodSSA::getUniformRandomVariable() {
+    //double totalPropensity = getTotalPropensity();
+    uniform_real_distribution<double> dis(0.0, 1);
+    double RV = dis(gen_uni); // obtain sampled value
     return RV;
 }
 
 void directMethodSSA::updateTime(double timeUntilNextReaction){
-    currentTime += timeUntilNextReaction;
+    currentTime += timeUntilNextReaction; // update time by adding the passed in time until next reaction to the existing time
 }
 
 void directMethodSSA::updateState(vector<vector<pair<int, int> > > stateChangeVector, int reactionIndex) {
-    vector<pair<int, int> > chosenReactionChange = stateChangeVector[reactionIndex];
+    vector<pair<int, int> > chosenReactionChange = stateChangeVector[reactionIndex]; // given the chosen reaction, obtain all the changes to all the species
     for(pair<int, int> p: chosenReactionChange){
-        currentState[p.first] += p.second; //update the state change at the associated index
+        currentState[p.first] += p.second; // update the state change by individually updating the amounts of the affected species
     }
-
 }
 
 double directMethodSSA::getTimeUntilNextReaction(double propensity) {
-    random_device rd;
-    mt19937 gen(rd());
-    exponential_distribution<> dis(propensity); //exponential approximation of propensity
-    double RV = dis(gen);
+    exponential_distribution<> dis(propensity); // utilize exponential approximation of propensity
+    double RV = dis(gen_exp); // obtain sampled value
     return RV;
 }
 
 double directMethodSSA::getTotalPropensity(){
-    reactionTree::reactionNode root = reaction_tree->reactionTreeArray[0];
+    reactionTree::reactionNode root = reaction_tree->reactionTreeArray[0]; // propensity sum = root node propensity + rightSum + leftSum
     double totalPropensity = root.propensity + root.leftSum + root.rightSum;
     return totalPropensity;
 }
 
-vector<vector<int> > directMethodSSA::getAllStates(){
-    return allStates;
-}
+vector<vector<int> > directMethodSSA::getAllStates(){return allStates;}
 
-vector<double> directMethodSSA::getAllTimes(){
-    return allTimes;
-}
+vector<double> directMethodSSA::getAllTimes(){return allTimes;}
 
-vector<int> directMethodSSA::getCurrentState(){
-    return currentState;
-}
+vector<int> directMethodSSA::getCurrentState(){return currentState;}
 
-double directMethodSSA::getCurrentTime(){
-    return currentTime;
-}
+double directMethodSSA::getCurrentTime(){return currentTime;}
 
-int directMethodSSA::getCurrentIteration(){
-    return currentIteration;
-}
+int directMethodSSA::getCurrentIteration(){return currentIteration;}
 
 void directMethodSSA::start(){
-    while (getTotalPropensity() > 0.001 && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))){
-        if (!statesOnly) {
-            double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity());
-            if(currentTime + timeUntilNextReaction > endValue && !endInfinity)
+    // continue the simulation while the total propensity > 0 AND (the endInfinity flag is true OR the current time/iteration hasn't exceeded the inputted limit)
+    while (getTotalPropensity() > 0 && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))){
+        if (!statesOnly) { // only calculate if the user wants to also calculate the times (default)
+            double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity()); // obtain the time until the next reaction
+            if(currentTime + timeUntilNextReaction > endValue && !endInfinity) // if updating the time violates the finite end time value, terminate the simulation
                 break;
-            updateTime(timeUntilNextReaction);
-            allTimes.push_back(currentTime);
+            updateTime(timeUntilNextReaction); // otherwise, update the time
+            allTimes.push_back(currentTime); // recorded the updated time
         }
-        double uniformRV = getUniformRandomVariable();
-        int reactionIndex = reaction_tree->searchForNode(uniformRV);
-        updateState(stateChangeVector, reactionIndex);
-        if (!finalOnly) {
+        double RV = getUniformRandomVariable(); // obtain sampled value
+        int reactionIndex = reaction_tree->searchForNode(RV); // search for reaction
+        if(reactionIndex == -1)
+            break;
+        updateState(stateChangeVector, reactionIndex); // update state/configuration
+        if (!finalOnly) { // only save the state vectors of the iteration if the finalOnly flag is false
             allStates.push_back(currentState);
         }
-        vector<int> dependentReactionIndices = dependency_graph->getDependentReactions(reactionIndex);
+        vector<int> dependentReactionIndices = dependency_graph->getDependentReactions(reactionIndex); // get affected reactions from dependency graph
         for(int reaction: dependentReactionIndices){
-            reaction_tree->updatePropensity(reaction, reactionRates[reaction], currentState, reactantsVector[reaction]);
+            reaction_tree->updatePropensity(reaction, reactionRates[reaction], currentState, reactantsVector[reaction]); // update propensity for every affected reaction
         }
-        currentIteration++;
+        currentIteration++; // update iteration
     }
-    // If we pass endValue, remove the last time and state before sending
 }
 /* backend end */
 
