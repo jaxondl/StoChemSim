@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     27815,        689]
-NotebookOptionsPosition[     25533,        642]
-NotebookOutlinePosition[     26030,        660]
-CellTagsIndexPosition[     25987,        657]
+NotebookDataLength[     26910,        636]
+NotebookOptionsPosition[     19153,        484]
+NotebookOutlinePosition[     25032,        606]
+CellTagsIndexPosition[     24989,        603]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -49,8 +49,9 @@ Cell[BoxData["12.1`"], "Output",
  CellChangeTimes->{3.8242121211822834`*^9, 3.8242171338144045`*^9, 
   3.8242363914295807`*^9, 3.824237434726559*^9, 3.824237475551791*^9, 
   3.8242467648726883`*^9, 3.8242480190528526`*^9, 3.824387195400543*^9, 
-  3.826678720238459*^9},
- CellLabel->"Out[1]=",ExpressionUUID->"e458d1db-18a7-45af-9bef-77739e20b7a4"]
+  3.826678720238459*^9, 3.8268250777819767`*^9, 3.826825136293271*^9, 
+  3.8268262202507057`*^9},
+ CellLabel->"Out[1]=",ExpressionUUID->"988e8c44-392e-4109-b5c9-efe76064b1da"]
 }, Open  ]],
 
 Cell["3. Run this cell to install the interface library.", "Text",
@@ -105,8 +106,9 @@ Cell[BoxData[
   3.8242129991256504`*^9, {3.824215579653351*^9, 3.824215593603798*^9}, 
    3.8242171442510505`*^9, 3.8242364102770395`*^9, 3.824237443273325*^9, 
    3.8242374867907104`*^9, 3.824246774443733*^9, 3.824248023700543*^9, 
-   3.8243872002805023`*^9, 3.8266787244339275`*^9},
- CellLabel->"Out[6]=",ExpressionUUID->"52a66298-10a9-4d1c-9bc3-eab11bb4fb7e"]
+   3.8243872002805023`*^9, 3.8266787244339275`*^9, 3.8268250808088937`*^9, 
+   3.8268251387543*^9, 3.8268262206975613`*^9},
+ CellLabel->"Out[6]=",ExpressionUUID->"4302b825-6112-4227-990a-515e7f7bea65"]
 }, Open  ]],
 
 Cell[TextData[{
@@ -118,7 +120,10 @@ Cell[TextData[{
  StyleBox["crn-ssa-wolfram-pkg\\\\wolfram\\\\CRNSSA.wl", "Code"],
  " as the source. Use install name ",
  StyleBox["CRNSSA", "Code"],
- ". Running this cell in any notebook will load the package."
+ ". CRNSSA depends on the CRNSimulator package, which must also be installed \
+the same way using ",
+ StyleBox["crn-ssa-wolfram-pkg\\\\wolfram\\\\CRNSimulator.m", "Code"],
+ "  as the source. Running this cell in any notebook will load the package."
 }], "Text",
  CellChangeTimes->{{3.824215627021496*^9, 3.8242157193176284`*^9}, {
   3.824215800992221*^9, 3.824215995930647*^9}, {3.8242160613459015`*^9, 
@@ -126,7 +131,8 @@ Cell[TextData[{
   3.824217269982453*^9, 3.824217274663184*^9}, {3.8242470460822535`*^9, 
   3.8242470489301243`*^9}, {3.824247486877673*^9, 3.8242475024544106`*^9}, {
   3.8242477677653847`*^9, 3.8242478227666845`*^9}, {3.8242478535840497`*^9, 
-  3.82424795835365*^9}},ExpressionUUID->"e6311312-7ab8-419a-a166-\
+  3.82424795835365*^9}, {3.8268258800790367`*^9, 
+  3.826825967223147*^9}},ExpressionUUID->"e6311312-7ab8-419a-a166-\
 89ea718500da"],
 
 Cell[CellGroupData[{
@@ -135,6 +141,7 @@ Cell[BoxData[{
  RowBox[{
   RowBox[{"<<", "CRNSSA`"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"?", "CRNSSA`*"}]}], "Input",
+ CellChangeTimes->{{3.8268260718320875`*^9, 3.826826088823308*^9}},
  CellLabel->"In[7]:=",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
 
 Cell[BoxData[
@@ -172,125 +179,13 @@ Cell[BoxData[
             PaneBox[GridBox[{
                {
                 ButtonBox[
-                 StyleBox["ExpandInits", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "ExpandInits", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["GetSpeciesStringPattern", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "GetSpeciesStringPattern", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["revrxn", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "revrxn", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["RxnlsToRxns", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "RxnlsToRxns", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["SimulateDirectSSA", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "SimulateDirectSSA", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic]},
-               {
-                ButtonBox[
-                 StyleBox["ExpandRevrxns", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "ExpandRevrxns", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["init", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "init", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["rxn", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "rxn", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["RxnsToRxnls", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "RxnsToRxnls", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], ""},
-               {
-                ButtonBox[
-                 StyleBox["GetSpecies", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "GetSpecies", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
                  StyleBox["PlotLastSimulation", "InformationGridButton"],
                  Appearance->None,
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
+                  "Info-0e169124-a57d-4e35-af4a-aa49111bc7cc", {
                    "PlotLastSimulation", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["rxnl", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
-                   "rxnl", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic], 
                 ButtonBox[
@@ -301,17 +196,27 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-08d1529f-f4d0-4d80-b3fb-bd262f7f53a2", {
+                  "Info-0e169124-a57d-4e35-af4a-aa49111bc7cc", {
                    "SimulateBoundedTauLeaping", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], ""}
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["SimulateDirectSSA", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-0e169124-a57d-4e35-af4a-aa49111bc7cc", {
+                   "SimulateDirectSSA", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic]}
               },
               DefaultBaseStyle->"Text",
               
               GridBoxAlignment->{
                "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
               GridBoxItemSize->{"Columns" -> {{
-                   Scaled[0.19]}}}],
+                   Scaled[0.31666666666666665`]}}}],
              ImageMargins->{{10, 0}, {0, 2}}]}
           },
           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}],
@@ -329,8 +234,10 @@ Cell[BoxData[
         Offset[0.2]}}],
    BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
  CellChangeTimes->{3.824247936014856*^9, 3.8242480273877726`*^9, 
-  3.8243872009317627`*^9, 3.826678727365405*^9},
- CellLabel->"Out[8]=",ExpressionUUID->"8281db73-7a70-4afd-940e-03eb7af309ad"]
+  3.8243872009317627`*^9, 3.826678727365405*^9, 3.8268250849539366`*^9, 
+  3.8268251432023487`*^9, 3.82682609168976*^9, 3.8268261363533297`*^9, 
+  3.8268262256258173`*^9},
+ CellLabel->"Out[8]=",ExpressionUUID->"1989bcc6-ea45-41cb-a6e9-75aa2424e6b9"]
 }, Open  ]],
 
 Cell["\<\
@@ -338,8 +245,8 @@ Cell["\<\
 \>", "Text",
  CellChangeTimes->{
   3.824247862070568*^9, {3.8242479459365387`*^9, 3.824247946265667*^9}, {
-   3.824247978401539*^9, 
-   3.8242479882913413`*^9}},ExpressionUUID->"14725567-84e2-414a-8129-\
+   3.824247978401539*^9, 3.8242479882913413`*^9}, {3.8268261809279766`*^9, 
+   3.826826202318977*^9}},ExpressionUUID->"14725567-84e2-414a-8129-\
 28567df334bf"],
 
 Cell[CellGroupData[{
@@ -349,7 +256,19 @@ Cell[BoxData[{
   RowBox[{"repoPath", "=", 
    RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
+  RowBox[{
+  "relativePathPackageDep", "=", "\"\<wolfram\\\\CRNSimulator.m\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
   RowBox[{"relativePathPackage", "=", "\"\<wolfram\\\\CRNSSA.wl\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fullPathPackageDep", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"repoPath", ",", "relativePathPackageDep"}], "}"}], ",", 
+     RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"fullPathPackage", "=", 
@@ -360,10 +279,14 @@ Cell[BoxData[{
      RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
+  RowBox[{"Get", "[", "fullPathPackageDep", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
   RowBox[{"Get", "[", "fullPathPackage", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{"?", "CRNSSA`*"}]}], "Input",
  CellChangeTimes->{{3.8242476739147367`*^9, 3.824247705412258*^9}, {
-  3.8243871580344224`*^9, 3.8243871591853123`*^9}},
+  3.8243871580344224`*^9, 3.8243871591853123`*^9}, {3.8268259905592165`*^9, 
+  3.8268260564551325`*^9}, {3.826826100480337*^9, 3.8268261750884175`*^9}},
  CellLabel->"In[9]:=",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
 
 Cell[BoxData[
@@ -401,125 +324,13 @@ Cell[BoxData[
             PaneBox[GridBox[{
                {
                 ButtonBox[
-                 StyleBox["ExpandInits", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "ExpandInits", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["GetSpeciesStringPattern", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "GetSpeciesStringPattern", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["revrxn", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "revrxn", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["RxnlsToRxns", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "RxnlsToRxns", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["SimulateDirectSSA", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "SimulateDirectSSA", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic]},
-               {
-                ButtonBox[
-                 StyleBox["ExpandRevrxns", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "ExpandRevrxns", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["init", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "init", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["rxn", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "rxn", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["RxnsToRxnls", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "RxnsToRxnls", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], ""},
-               {
-                ButtonBox[
-                 StyleBox["GetSpecies", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "GetSpecies", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
                  StyleBox["PlotLastSimulation", "InformationGridButton"],
                  Appearance->None,
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
+                  "Info-92bcaace-aac7-4b49-b942-20d3662af573", {
                    "PlotLastSimulation", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["rxnl", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
-                   "rxnl", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic], 
                 ButtonBox[
@@ -530,17 +341,27 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-8f253ac5-6106-49d2-b1be-86e2ebc98f6c", {
+                  "Info-92bcaace-aac7-4b49-b942-20d3662af573", {
                    "SimulateBoundedTauLeaping", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], ""}
+                 Evaluator->Automatic], 
+                ButtonBox[
+                 StyleBox["SimulateDirectSSA", "InformationGridButton"],
+                 Appearance->None,
+                 BaseStyle->"InformationGridLink",
+                 
+                 ButtonData:>{
+                  "Info-92bcaace-aac7-4b49-b942-20d3662af573", {
+                   "SimulateDirectSSA", "CRNSSA`"}, False},
+                 ButtonNote->"CRNSSA`",
+                 Evaluator->Automatic]}
               },
               DefaultBaseStyle->"Text",
               
               GridBoxAlignment->{
                "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
               GridBoxItemSize->{"Columns" -> {{
-                   Scaled[0.19]}}}],
+                   Scaled[0.31666666666666665`]}}}],
              ImageMargins->{{10, 0}, {0, 2}}]}
           },
           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}],
@@ -557,9 +378,9 @@ Cell[BoxData[
          Offset[0.8]}, 
         Offset[0.2]}}],
    BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
- CellChangeTimes->{3.8242477062430577`*^9, 3.824247992124188*^9, 
-  3.8242480299394355`*^9, 3.8243872025693855`*^9, 3.826678729888483*^9},
- CellLabel->"Out[13]=",ExpressionUUID->"69f80886-8768-4def-9931-05e754a8b37c"]
+ CellChangeTimes->{{3.8268261488022795`*^9, 3.826826159254091*^9}, 
+   3.8268262267472744`*^9},
+ CellLabel->"Out[16]=",ExpressionUUID->"4ea6b946-8fb3-4e49-9f2d-3a441c71af99"]
 }, Open  ]],
 
 Cell[TextData[{
@@ -578,24 +399,45 @@ be ",
 Cell[CellGroupData[{
 
 Cell[BoxData[{
- RowBox[{
-  RowBox[{"rxnsys", "=", 
-   RowBox[{"{", "\[IndentingNewLine]", 
+ RowBox[{"rxnsys", "=", 
+  RowBox[{"{", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"rxn", "[", 
+     RowBox[{"x", ",", "y", ",", "1"}], "]"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"rxn", "[", 
+     RowBox[{
+      RowBox[{"y", "+", "y"}], ",", "y", ",", "1"}], "]"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"conc", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"x", ",", " ", "y"}], "}"}], ",", "5"}], "]"}]}], 
+   "\[IndentingNewLine]", "}"}]}], "\[IndentingNewLine]", 
+ RowBox[{"SpeciesInRxnsys", "[", "rxnsys", "]"}]}], "Input",
+ CellChangeTimes->{{3.8242163796328516`*^9, 3.8242163841453323`*^9}, {
+  3.8268250938615503`*^9, 3.8268251026130176`*^9}},
+ CellLabel->"In[17]:=",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"x", " ", 
+    OverscriptBox["\[RightArrow]", 
+     RowBox[{" ", "1", " "}]], " ", "y"}], " ", ",", 
+   RowBox[{
+    RowBox[{"2", " ", "y"}], " ", 
+    OverscriptBox["\[RightArrow]", 
+     RowBox[{" ", "1", " "}]], " ", "y"}], " ", ",", 
+   RowBox[{"conc", "[", 
     RowBox[{
-     RowBox[{"rxn", "[", 
-      RowBox[{"x", ",", "y", ",", "1"}], "]"}], ",", "\[IndentingNewLine]", 
-     RowBox[{"rxn", "[", 
-      RowBox[{
-       RowBox[{"y", "+", "y"}], ",", "y", ",", "1"}], "]"}], ",", 
-     "\[IndentingNewLine]", 
-     RowBox[{"init", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"x", ",", " ", "y"}], "}"}], ",", "5"}], "]"}]}], 
-    "\[IndentingNewLine]", "}"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"GetSpecies", "[", "rxnsys", "]"}]}], "Input",
- CellChangeTimes->{{3.8242163796328516`*^9, 3.8242163841453323`*^9}},
- CellLabel->"In[14]:=",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
+     RowBox[{"{", 
+      RowBox[{"x", ",", "y"}], "}"}], ",", "5"}], "]"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.824216390209857*^9, 3.824216473094953*^9, 
+  3.824216825102227*^9, 3.8242170337497163`*^9, 3.824217149167162*^9, 
+  3.824237494937446*^9, 3.824248035664304*^9, 3.824387211551386*^9, 
+  3.826678732228579*^9, 3.8268251032047668`*^9, 3.826825144378501*^9, 
+  3.8268262295140057`*^9},
+ CellLabel->"Out[17]=",ExpressionUUID->"836bf6a0-b970-457f-bde6-589fc8e3dfef"],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -603,16 +445,15 @@ Cell[BoxData[
  CellChangeTimes->{3.824216390209857*^9, 3.824216473094953*^9, 
   3.824216825102227*^9, 3.8242170337497163`*^9, 3.824217149167162*^9, 
   3.824237494937446*^9, 3.824248035664304*^9, 3.824387211551386*^9, 
-  3.826678732228579*^9},
- CellLabel->"Out[15]=",ExpressionUUID->"6499478b-031f-4574-ab26-e62104f52efc"]
+  3.826678732228579*^9, 3.8268251032047668`*^9, 3.826825144378501*^9, 
+  3.8268262295169983`*^9},
+ CellLabel->"Out[18]=",ExpressionUUID->"7ebfaaaa-d9b2-49ef-a22e-931df891a47b"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[
- RowBox[{
-  RowBox[{"{", 
-   RowBox[{"states", ",", "times"}], "}"}], "=", 
+ RowBox[{"result", "=", 
   RowBox[{"SimulateDirectSSA", "[", 
    RowBox[{"rxnsys", ",", 
     RowBox[{"finalOnly", "\[Rule]", "True"}], ",", 
@@ -621,8 +462,8 @@ Cell[BoxData[
   3.824216492719846*^9, 3.824216513553684*^9}, {3.8242170418205566`*^9, 
   3.824217108310268*^9}, {3.824237506234483*^9, 3.8242375159849052`*^9}, {
   3.8243871636105223`*^9, 3.824387168978177*^9}, {3.8266787002186832`*^9, 
-  3.826678702674346*^9}},
- CellLabel->"In[16]:=",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
+  3.826678702674346*^9}, {3.8268251157104464`*^9, 3.8268251162290297`*^9}},
+ CellLabel->"In[19]:=",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -630,13 +471,14 @@ Cell[BoxData[
    RowBox[{"{", 
     RowBox[{"{", 
      RowBox[{"0", ",", "1"}], "}"}], "}"}], ",", 
-   RowBox[{"{", "2.0648260575731285`", "}"}]}], "}"}]], "Output",
+   RowBox[{"{", "4.48870449463443`", "}"}]}], "}"}]], "Output",
  CellChangeTimes->{
   3.824216405986579*^9, 3.824216473735287*^9, 3.8242165154029665`*^9, 
    3.824216825951003*^9, {3.824217034691247*^9, 3.8242171086533937`*^9}, 
    3.8242171516476593`*^9, 3.8242375186537046`*^9, 3.8242480378205585`*^9, 
-   3.8243872141314898`*^9, 3.826678737079198*^9},
- CellLabel->"Out[16]=",ExpressionUUID->"a426af6c-6635-42f3-bdf9-55bc8f5cacfc"]
+   3.8243872141314898`*^9, 3.826678737079198*^9, {3.8268251107890882`*^9, 
+   3.826825116694578*^9}, 3.826825146821621*^9, 3.826826230875386*^9},
+ CellLabel->"Out[19]=",ExpressionUUID->"57148c92-540b-4618-ad95-5d441133b48e"]
 }, Open  ]]
 }, Open  ]]
 },
@@ -644,6 +486,110 @@ WindowSize->{1428., 741.75},
 WindowMargins->{{Automatic, 960}, {Automatic, 0}},
 TaggingRules->{
  "WelcomeScreenSettings" -> {"FEStarting" -> False}, "TryRealOnly" -> False},
+InputAliases->{"intt" -> RowBox[{"\[Integral]", 
+     RowBox[{"\[SelectionPlaceholder]", 
+       RowBox[{"\[DifferentialD]", "\[Placeholder]"}]}]}], "dintt" -> RowBox[{
+     SubsuperscriptBox[
+     "\[Integral]", "\[SelectionPlaceholder]", "\[Placeholder]"], 
+     RowBox[{"\[Placeholder]", 
+       RowBox[{"\[DifferentialD]", "\[Placeholder]"}]}]}], "rintt" -> RowBox[{
+     UnderscriptBox["\[Integral]", 
+      RowBox[{"\[SelectionPlaceholder]", "\[Element]", "\[Placeholder]"}]], 
+     "\[Placeholder]"}], "sumt" -> RowBox[{
+     UnderoverscriptBox["\[Sum]", 
+      RowBox[{"\[SelectionPlaceholder]", "=", "\[Placeholder]"}], 
+      "\[Placeholder]"], "\[Placeholder]"}], "prodt" -> RowBox[{
+     UnderoverscriptBox["\[Product]", 
+      RowBox[{"\[SelectionPlaceholder]", "=", "\[Placeholder]"}], 
+      "\[Placeholder]"], "\[Placeholder]"}], "dt" -> RowBox[{
+     SubscriptBox["\[PartialD]", "\[Placeholder]"], " ", 
+     "\[SelectionPlaceholder]"}], "cbrt" -> 
+  RadicalBox[
+   "\[SelectionPlaceholder]", "3", SurdForm -> True, MultilineFunction -> 
+    None], "surd" -> 
+  RadicalBox[
+   "\[SelectionPlaceholder]", "\[Placeholder]", SurdForm -> True, 
+    MultilineFunction -> None], "ket" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "Ket"], "bra" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "Bra"], "braket" -> 
+  TemplateBox[{"\[SelectionPlaceholder]", "\[Placeholder]"}, "BraKet"], 
+  "delay" -> TemplateBox[{"\[SelectionPlaceholder]"}, "SystemsModelDelay"], 
+  "grad" -> RowBox[{
+     SubscriptBox["\[Del]", "\[SelectionPlaceholder]"], "\[Placeholder]"}], 
+  "del." -> RowBox[{
+     SubscriptBox["\[Del]", "\[SelectionPlaceholder]"], ".", 
+     "\[Placeholder]"}], "delx" -> RowBox[{
+     SubscriptBox["\[Del]", "\[SelectionPlaceholder]"], "\[Cross]", 
+     "\[Placeholder]"}], "del2" -> RowBox[{
+     SubsuperscriptBox["\[Del]", "\[SelectionPlaceholder]", 2], 
+     "\[Placeholder]"}], "kd" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "KroneckerDeltaSeq"], "algs" -> 
+  TemplateBox[{}, "Algebraics"], "bools" -> TemplateBox[{}, "Booleans"], 
+  "comps" -> TemplateBox[{}, "Complexes"], "ints" -> 
+  TemplateBox[{}, "Integers"], "pris" -> TemplateBox[{}, "Primes"], "rats" -> 
+  TemplateBox[{}, "Rationals"], "reals" -> TemplateBox[{}, "Reals"], "pints" -> 
+  TemplateBox[{}, "PositiveIntegers"], "npints" -> 
+  TemplateBox[{}, "NonPositiveIntegers"], "nnints" -> 
+  TemplateBox[{}, "NonNegativeIntegers"], "nints" -> 
+  TemplateBox[{}, "NegativeIntegers"], "prats" -> 
+  TemplateBox[{}, "PositiveRationals"], "nprats" -> 
+  TemplateBox[{}, "NonPositiveRationals"], "nnrats" -> 
+  TemplateBox[{}, "NonNegativeRationals"], "nrats" -> 
+  TemplateBox[{}, "NegativeRationals"], "preals" -> 
+  TemplateBox[{}, "PositiveReals"], "npreals" -> 
+  TemplateBox[{}, "NonPositiveReals"], "nnreals" -> 
+  TemplateBox[{}, "NonNegativeReals"], "nreals" -> 
+  TemplateBox[{}, "NegativeReals"], "dlim" -> RowBox[{
+     UnderscriptBox["\[Limit]", 
+      RowBox[{"\[SelectionPlaceholder]", 
+        UnderscriptBox["\[Rule]", 
+         TemplateBox[{}, "Integers"]], "\[Infinity]"}]], "\[Placeholder]"}], 
+  "dMlim" -> RowBox[{
+     UnderscriptBox["\[MaxLimit]", 
+      RowBox[{"\[SelectionPlaceholder]", 
+        UnderscriptBox["\[Rule]", 
+         TemplateBox[{}, "Integers"]], "\[Infinity]"}]], "\[Placeholder]"}], 
+  "dmlim" -> RowBox[{
+     UnderscriptBox["\[MinLimit]", 
+      RowBox[{"\[SelectionPlaceholder]", 
+        UnderscriptBox["\[Rule]", 
+         TemplateBox[{}, "Integers"]], "\[Infinity]"}]], "\[Placeholder]"}], 
+  "tue" -> OverscriptBox["\[UndirectedEdge]", "\[Placeholder]"], "tde" -> 
+  OverscriptBox["\[DirectedEdge]", "\[Placeholder]"], "notation" -> 
+  RowBox[{"Notation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], " ", 
+       "\[DoubleLongLeftRightArrow]", " ", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "notation>" -> RowBox[{"Notation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], " ", 
+       "\[DoubleLongRightArrow]", " ", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "notation<" -> RowBox[{"Notation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], " ", 
+       "\[DoubleLongLeftArrow]", " ", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "symb" -> RowBox[{"Symbolize", "[", 
+     TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], "]"}], 
+  "infixnotation" -> RowBox[{"InfixNotation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], ",", 
+       "\[Placeholder]"}], "]"}], "addia" -> RowBox[{"AddInputAlias", "[", 
+     RowBox[{"\"\[SelectionPlaceholder]\"", "\[Rule]", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "pattwraper" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "NotationPatternTag"], 
+  "madeboxeswraper" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "NotationMadeBoxesTag"], "rxn" -> 
+  RowBox[{"\[Placeholder]", " ", 
+     OverscriptBox["\[RightArrow]", 
+      RowBox[{" ", "\[Placeholder]", " "}]], " ", "\[Placeholder]", " "}], 
+  "revrxn" -> RowBox[{"\[Placeholder]", " ", 
+     UnderoverscriptBox[
+     "\[RightArrowLeftArrow]", "\[Placeholder]", "\[Placeholder]"], " ", 
+     "\[Placeholder]", " "}]},
 FrontEndVersion->"12.1 for Microsoft Windows (64-bit) (June 19, 2020)",
 StyleDefinitions->"Default.nb",
 ExpressionUUID->"28a0dba9-dcfe-4840-9f91-438146278593"
@@ -664,31 +610,32 @@ Cell[580, 22, 221, 4, 97, "Title",ExpressionUUID->"4c0eacd2-d689-4e3a-90b5-2d666
 Cell[804, 28, 504, 11, 56, "Text",ExpressionUUID->"950455de-c7d2-4e73-bbdd-36296d67d0a7"],
 Cell[CellGroupData[{
 Cell[1333, 43, 184, 2, 28, "Input",ExpressionUUID->"db78ec2f-a791-419d-9f93-b8b8b21d85b8"],
-Cell[1520, 47, 347, 5, 32, "Output",ExpressionUUID->"e458d1db-18a7-45af-9bef-77739e20b7a4"]
+Cell[1520, 47, 420, 6, 32, "Output",ExpressionUUID->"988e8c44-392e-4109-b5c9-efe76064b1da"]
 }, Open  ]],
-Cell[1882, 55, 340, 5, 34, "Text",ExpressionUUID->"f9ae4b93-3271-4901-8c7b-5154d71210c5"],
+Cell[1955, 56, 340, 5, 34, "Text",ExpressionUUID->"f9ae4b93-3271-4901-8c7b-5154d71210c5"],
 Cell[CellGroupData[{
-Cell[2247, 64, 1466, 32, 104, "Input",ExpressionUUID->"57486241-4bc7-4c95-b67f-1dfa27b33a91"],
-Cell[3716, 98, 518, 10, 32, "Output",ExpressionUUID->"52a66298-10a9-4d1c-9bc3-eab11bb4fb7e"]
+Cell[2320, 65, 1466, 32, 104, "Input",ExpressionUUID->"57486241-4bc7-4c95-b67f-1dfa27b33a91"],
+Cell[3789, 99, 590, 11, 32, "Output",ExpressionUUID->"4302b825-6112-4227-990a-515e7f7bea65"]
 }, Open  ]],
-Cell[4249, 111, 911, 18, 56, "Text",ExpressionUUID->"e6311312-7ab8-419a-a166-89ea718500da"],
+Cell[4394, 113, 1149, 22, 56, "Text",ExpressionUUID->"e6311312-7ab8-419a-a166-89ea718500da"],
 Cell[CellGroupData[{
-Cell[5185, 133, 201, 4, 47, "Input",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
-Cell[5389, 139, 7983, 193, 131, "Output",ExpressionUUID->"8281db73-7a70-4afd-940e-03eb7af309ad"]
+Cell[5568, 139, 269, 5, 47, "Input",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
+Cell[5840, 146, 3818, 93, 91, "Output",ExpressionUUID->"1989bcc6-ea45-41cb-a6e9-75aa2424e6b9"]
 }, Open  ]],
-Cell[13387, 335, 307, 7, 34, "Text",ExpressionUUID->"14725567-84e2-414a-8129-28567df334bf"],
+Cell[9673, 242, 355, 7, 34, "Text",ExpressionUUID->"14725567-84e2-414a-8129-28567df334bf"],
 Cell[CellGroupData[{
-Cell[13719, 346, 861, 20, 104, "Input",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
-Cell[14583, 368, 8008, 193, 131, "Output",ExpressionUUID->"69f80886-8768-4def-9931-05e754a8b37c"]
+Cell[10053, 253, 1479, 36, 160, "Input",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
+Cell[11535, 291, 3677, 91, 91, "Output",ExpressionUUID->"4ea6b946-8fb3-4e49-9f2d-3a441c71af99"]
 }, Open  ]],
-Cell[22606, 564, 474, 11, 34, "Text",ExpressionUUID->"8872dfa3-38dc-489c-a312-90890b1566aa"],
+Cell[15227, 385, 474, 11, 34, "Text",ExpressionUUID->"8872dfa3-38dc-489c-a312-90890b1566aa"],
 Cell[CellGroupData[{
-Cell[23105, 579, 745, 18, 122, "Input",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
-Cell[23853, 599, 381, 7, 32, "Output",ExpressionUUID->"6499478b-031f-4574-ab26-e62104f52efc"]
+Cell[15726, 400, 772, 18, 122, "Input",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
+Cell[16501, 420, 803, 19, 42, "Output",ExpressionUUID->"836bf6a0-b970-457f-bde6-589fc8e3dfef"],
+Cell[17307, 441, 454, 8, 32, "Output",ExpressionUUID->"7ebfaaaa-d9b2-49ef-a22e-931df891a47b"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[24271, 611, 671, 13, 28, "Input",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
-Cell[24945, 626, 560, 12, 32, "Output",ExpressionUUID->"a426af6c-6635-42f3-bdf9-55bc8f5cacfc"]
+Cell[17798, 454, 670, 11, 28, "Input",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
+Cell[18471, 467, 654, 13, 32, "Output",ExpressionUUID->"57148c92-540b-4618-ad95-5d441133b48e"]
 }, Open  ]]
 }, Open  ]]
 }

@@ -4,58 +4,12 @@
 (*CRNSSA Package*)
 
 
-Notation`AutoLoadNotationPalette = False;
-Needs["Notation`"]
-BeginPackage["CRNSSA`"]
+Needs["CRNSimulator`"]
+BeginPackage["CRNSSA`", {"CRNSimulator`"}]
 
-
-rxn::usage =
-"rxn[reactants expression, products expression, rate]
-A chemical reaction with a reactants expression,
-products expression, and rate";
-
-revrxn::usage =
-"revrxn[reactants expression, products expression, forward rate, backward rate]
-A reversible chemical reaction with a reactants expression,
-products expression, forwards rate, and backward rate";
-
-rxnl::usage =
-"rxnl[reactants list, products list, forward rate]
-Represents a reaction in which reactants and products are represented as lists
-Unlike the \"+\" notation, this preserves the order of reactants and products
-eg. rxnl[{a,a,b},{a,b},1], rxnl[{},{a},1]
-Functions RxnsToRxnls and RxnlsToRxns convert between the rxnl[] notation and the rxn[] notation";
-
-init::usage =
-"init[species, quantity] sets the initial quantity of a species
-init[species list, quantity] sets the initial quantity of every species in a species list";
-
-RxnsToRxnls::usage =
-"Converts chemistry reaction representation to list reaction representation
-eg rxn[x1+x2,x3,k] to rxn[{x1,x2},{x3},k]";
-
-RxnlsToRxns::usage =
-"Converts list reaction representation to chemistry reaction representation
-eg rxn[{x1,x2},{x3},k] to rxn[x1+x2,x3,k]";
-
-ExpandInits::usage =
-"Expand init[{a,b},1] to init[a,1], init[b,1]";
-
-ExpandRevrxns::usage =
-"Converts revrxn statements into a pair of rxn statements";
-
-GetSpecies::usage =
-"GetSpecies[rxnsys] returns the species that appear in rxnsys
-GetSpecies[rxnsys, pattern] returns the species in rxnsys that match the specified pattern";
-
-GetSpeciesStringPattern::usage =
-"SpeciesInRxnsysPattern[rxnsys, pattern] returns the species that appear in rxnsys
-matching the specified Mathematica string pattern
-eg \"g$*\" matches all species names starting with \"g$\"
-Can also do RegularExpression[\"o..d.\$.*\"]";
 
 SimulateDirectSSA::usage =
-"result = SimulateDirectSSA[{rxn1, rxn2, ..., init1, init2, ...}, Options]
+"result = SimulateDirectSSA[{rxn1, rxn2, ..., conc1, conc2, ...}, Options]
 Simulates the given reaction system via Gillespie Direct SSA
 Backend is optimized in C++ for computational efficiency
 Options include:
@@ -67,16 +21,17 @@ Options include:
 	outputTS (Boolean), default = True, setting to True outputs result as TimeSeries, setting to False outputs result as List";
 	
 SimulateBoundedTauLeaping::usage =
-"result = SimulateBoundedTauLeaping[{rxn1, rxn2, ..., init1, init2, ...}, Options]
+"result = SimulateBoundedTauLeaping[{rxn1, rxn2, ..., conc1, conc2, ...}, Options]
 Simulates the given reaction system via Soloveichik Bounded Tau Leaping
 Backend is optimized in C++ for computational efficiency
+Note: implementation is not complete
 Options include:
 	timeEnd (Real), default = Infinity, ending time of simulation (if useIter = False)
 	iterEnd (Integer), default = Infinity, ending iteration of simulation (if useIter = True)
 	useIter (Boolean), default = False, setting to True uses iterEnd instead of timeEnd
 	finalOnly (Boolean), default = False, only records final state to conserve memory
 	outputTS (Boolean), default = True, setting to True outputs result as TimeSeries, setting to False outputs result as List
-	epsilon (Real), default = 0.0309/numRxns, threshold between 0 and 1 using in calculating firing bounds for each reaction";
+	epsilon (Real), default = 0.0309/numRxns, threshold between 0 and 1 used in calculating firing bounds for each reaction";
 
 PlotLastSimulation::usage =
 "PlotLastSimulation[Options]
@@ -86,48 +41,6 @@ Uses same Options as ListLinePlot"
 
 Begin["`Private`"]
 
-
-Notation[ParsedBoxWrapper[RowBox[{"r_", " ", OverscriptBox["\[RightArrow]", RowBox[{" ", "k_", " "}]], " ", "p_", " "}]] \[DoubleLongLeftRightArrow] ParsedBoxWrapper[RowBox[{"rxn", "[", RowBox[{"r_", ",", "p_", ",", "k_"}], "]"}]]]
-Notation[ParsedBoxWrapper[RowBox[{"r_", " ", UnderoverscriptBox["\[RightArrowLeftArrow]", "k2_", "k1_"], " ", "p_", " "}]] \[DoubleLongLeftRightArrow] ParsedBoxWrapper[RowBox[{"revrxn", "[", RowBox[{"r_", ",", "p_", ",", "k1_", ",", "k2_"}], "]"}]]]
-AddInputAlias[ParsedBoxWrapper[RowBox[{"\[Placeholder]", " ", OverscriptBox["\[RightArrow]", RowBox[{" ", "\[Placeholder]", " "}]], " ", "\[Placeholder]", " "}]],"rxn"]
-AddInputAlias[ParsedBoxWrapper[RowBox[{"\[Placeholder]", " ", UnderoverscriptBox["\[RightArrowLeftArrow]", "\[Placeholder]", "\[Placeholder]"], " ", "\[Placeholder]", " "}]],"revrxn"]
-
-
-(*Expands init[{a, b}, 1] to init[a, 1], init[b, 1]*)
-ExpandInits[rxnsys_] := Replace[rxnsys, init[s_List, n_] :> Sequence @@ (init[#, n] &/@ s), {1}]
-
-(*Converts revrxn statements into a pair of rxn statements*)
-ExpandRevrxns[rxnsys_] := Replace[rxnsys, revrxn[r_, p_, kf_, kb_] :> Sequence[rxn[r, p, kf],rxn[p, r, kb]], {1}]
-
-(*Converts rxn statements to rxnl statements*)
-RxnsToRxnls[rxnsys_] := Module[{unkObjs = GetUnkObjs[rxnsys]},
-	If[Length[unkObjs] =!= 0, Message[RxnsToRxnls::rxnsyswarn, unkObjs]];
-	Replace[ExpandRevrxns[rxnsys], rxn[r_, p_, k_] :> 
-		rxnl[Replace[Replace[r, {ss_Plus :> List @@ ss,s_ :> {s}}], {_Integer -> Sequence[], c_Integer*s_ :> Sequence @@ Table[s, {c}], s_ :> s}, {1}], 
-			Replace[Replace[p, {ss_Plus :> List @@ ss,s_ :> {s}}], {_Integer -> Sequence[], c_Integer*s_ :> Sequence @@ Table[s, {c}], s_ :> s}, {1}], 
-			k],
-	{1}]
-]
-
-(*Converts rxnl statements to rxn statements*)
-RxnlsToRxns[rxnsys_] := Module[{unkObjs = GetUnkObjs[rxnsys]},
-	If[Length[unkObjs] =!= 0, Message[RxnlsToRxns::rxnsyswarn, unkObjs]];
-	Replace[rxnsys, rxnl[r_, p_, k_] :>
-		rxn[Plus @@ r, Plus @@ p,k],
-	{1}]
-]
-
-
-(*Function to obtain list of objects that don't match expected pattern in rxnsys*)
-GetUnkObjs[rxnsys_] := Cases[rxnsys, Except[rxn[_, _, _] | revrxn[_, _, _, _] | rxnl[_List, _List, _] | init[_, _]]]
-
-(*Warning given when unknown objects present in rxnsys*)
-rxnsyswarnMsg = "Warning: Unknown objects detected in rxnsys. These will be ignored by Wolfram pattern matching: `1`"
-GetSpecies::rxnsyswarn = rxnsyswarnMsg
-RxnsToRxnls::rxnsyswarn = rxnsyswarnMsg
-RxnlsToRxns::rxnsyswarn = rxnsyswarnMsg
-SimulateDirectSSA::rxnsyswarn = rxnsyswarnMsg
-SimulateBoundedTauLeaping::rxnsyswarn = rxnsyswarnMsg
 
 (*Error given when timeEnd value is invalid*)
 timeenderrMsg = "Error: timeEnd (`1`) must be a real number greater than zero"
@@ -152,40 +65,14 @@ finalonlyerrMsg = "Error: Cannot plot when finalOnly = True"
 PlotLastSimulation::finalonlyerr = finalonlyerrMsg
 
 
-(*Function to get all species types in rxnsys, obtained from both rxn and init objects*)
-GetSpecies[rxnsys_] := Module[{unkObjs = GetUnkObjs[rxnsys]},
-	If[Length[unkObjs] =!= 0, Message[GetSpecies::rxnsyswarn, unkObjs]];
-	Sort[Union[
-		Cases[Quiet[RxnsToRxnls[rxnsys]], rxnl[rs_List, ps_List, k_] :> Sequence @@ Union[rs, ps]],
-		Cases[ExpandInits[rxnsys], init[x_, _] :> x]
-	]]
-]
-
-(*Allows usage of GetSpecies with a specific pattern that returned species must match*)
-GetSpecies[rxnsys_, pattern_] := Cases[GetSpecies[rxnsys], pattern]
-GetSpeciesStringPattern[rxnsys_, pattern_] := Select[GetSpecies[rsys], StringMatchQ[ToString[#], pattern]&]
-
-
-(*(*Creates initial state vector using init objects*)
-GetInitCounts[inits_, spcs_] := (Plus @@ Cases[inits, init[#, count_] :> count])& /@ spcs
+(*Creates initial state vector using conc objects*)
+GetInitCounts[concs_, spcs_] := (Plus @@ Cases[concs, conc[#, count_] :> count])& /@ spcs
 
 (*Creates reactant count vectors by obtaining reactant coefficients from each reaction*)
-GetReactCounts[rxns_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxns, rxn[r_, _, _] :> r], spcs]
+GetReactCounts[rxnls_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxnls, rxnl[r_List, _List, _] :> Plus @@ r], spcs]
 
 (*Creates product count vectors by obtaining product coefficients from each reaction*)
-GetProdCounts[rxns_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxns, rxn[_, p_, _] :> p], spcs]
-
-(*Creates rate vector by obtaining reaction rate from each reaction*)
-GetRates[rxns_] := Cases[rxns, rxn[_, _, k_] :> k]*)
-
-(*Creates initial state vector using init objects*)
-GetInitCounts[inits_, spcs_] := (Plus @@ Cases[inits, init[#, count_] :> count])& /@ spcs
-
-(*Creates reactant count vectors by obtaining reactant coefficients from each reaction*)
-GetReactCounts[rxnls_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxnls, rxnl[r_List, _, _] :> Plus @@ r], spcs]
-
-(*Creates product count vectors by obtaining product coefficients from each reaction*)
-GetProdCounts[rxnls_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxnls, rxnl[_, p_List, _] :> Plus @@ p], spcs]
+GetProdCounts[rxnls_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxnls, rxnl[_List, p_List, _] :> Plus @@ p], spcs]
 
 (*Creates rate vector by obtaining reaction rate from each reaction*)
 GetRates[rxnls_] := Cases[rxnls, rxnl[_, _, k_] :> k]
@@ -229,12 +116,12 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	(*Define local variables*)
 	{initCounts, reactCounts, prodCounts, rates,
 	initCountsNA, reactCountsNA, prodCountsNA, ratesNA,
-	infTime, infIter, unkObjs = GetUnkObjs[rxnsys]},
+	infTime, infIter},
 	
 	(*Initialize global variables that are stored for PlotLastSimulation*)
-	inits = Quiet[Cases[ExpandInits[rxnsys], init[_, _]]];
+	concs = Quiet[Cases[ExpandConcs[rxnsys], conc[_, _]]];
 	rxnls = Quiet[Cases[RxnsToRxnls[rxnsys], rxnl[_List, _List, _]]];
-	spcs = Quiet[GetSpecies[rxnsys]];
+	spcs = Quiet[SpeciesInRxnsys[rxnsys]];
 	timeEnd = OptionValue["timeEnd"];
 	iterEnd = OptionValue["iterEnd"];
 	useIter = OptionValue["useIter"];
@@ -243,10 +130,7 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	outputTS = OptionValue["outputTS"];
 	
 	(*Exception handling block*)
-	(*If unknown objects present, give warning*)
-	If[Length[unkObjs] =!= 0,
-		Message[SimulateDirectSSA::rxnsyswarn, unkObjs]
-	];
+	CheckSyntaxErrors[rxnsys];
 	(*Set infTime flag if timeEnd is infinity or invalid*)
 	If[timeEnd === Infinity || timeEnd <= 0 || !NumericQ[timeEnd],
 		timeEndR = 1000000.0; infTime = True,
@@ -271,7 +155,7 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	];
 	
 	(*Determine simulation parameters from rxnsys and convert to numeric arrays of correct datatypes*)
-	initCounts = GetInitCounts[inits, spcs];
+	initCounts = GetInitCounts[concs, spcs];
 	reactCounts = GetReactCounts[rxnls, spcs];
 	prodCounts = GetProdCounts[rxnls, spcs];
 	rates = GetRates[rxnls];
@@ -311,12 +195,12 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	(*Define local variables*)
 	{initCounts, reactCounts, prodCounts, rates,
 	initCountsNA, reactCountsNA, prodCountsNA, ratesNA,
-	infTime, infIter, unkObjs = GetUnkObjs[rxnsys]},
+	infTime, infIter},
 	
 	(*Initialize global variables that are stored for PlotLastSimulation*)
-	inits = Quiet[Cases[ExpandInits[rxnsys], init[_, _]]];
+	concs = Quiet[Cases[ExpandInits[rxnsys], conc[_, _]]];
 	rxnls = Quiet[Cases[RxnsToRxnls[rxnsys], rxnl[_List, _List, _]]];
-	spcs = Quiet[GetSpecies[rxnsys]];
+	spcs = Quiet[SpeciesInRxnsys[rxnsys]];
 	timeEnd = OptionValue["timeEnd"];
 	iterEnd = OptionValue["iterEnd"];
 	useIter = OptionValue["useIter"];
@@ -330,10 +214,7 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	];
 	
 	(*Exception handling block*)
-	(*If unknown objects present, give warning*)
-	If[Length[unkObjs] =!= 0,
-		Message[SimulateBoundedTauLeaping::rxnsyswarn, unkObjs]
-	];
+	CheckSyntaxErrors[rxnsys];
 	(*Set infTime flag if timeEnd is infinity or invalid*)
 	If[timeEnd === Infinity || timeEnd <= 0 || !NumericQ[timeEnd],
 		timeEndR = 1000000.0; infTime = True,
@@ -363,7 +244,7 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	];
 	
 	(*Determine simulation parameters from rxnsys and convert to numeric arrays of correct datatypes*)
-	initCounts = GetInitCounts[inits, spcs];
+	initCounts = GetInitCounts[concs, spcs];
 	reactCounts = GetReactCounts[rxnls, spcs];
 	prodCounts = GetProdCounts[rxnls, spcs];
 	rates = GetRates[rxnls];

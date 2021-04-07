@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     45741,        732]
-NotebookOptionsPosition[     44557,        701]
-NotebookOutlinePosition[     45084,        720]
-CellTagsIndexPosition[     45041,        717]
+NotebookDataLength[     49340,        792]
+NotebookOptionsPosition[     42775,        657]
+NotebookOutlinePosition[     48684,        780]
+CellTagsIndexPosition[     48641,        777]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -73,73 +73,35 @@ Cell[BoxData[
             PaneBox[GridBox[{
                {
                 ButtonBox[
-                 StyleBox["BoundedTauLeaping", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-f3cb8f04-af51-487f-a76d-bf5e96b4d087", {
-                   "BoundedTauLeaping", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["DirectSSA", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-f3cb8f04-af51-487f-a76d-bf5e96b4d087", {
-                   "DirectSSA", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["GetSpecies", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-f3cb8f04-af51-487f-a76d-bf5e96b4d087", {
-                   "GetSpecies", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
-                 StyleBox["init", "InformationGridButton"],
-                 Appearance->None,
-                 BaseStyle->"InformationGridLink",
-                 
-                 ButtonData:>{
-                  "Info-f3cb8f04-af51-487f-a76d-bf5e96b4d087", {
-                   "init", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
-                 Evaluator->Automatic], 
-                ButtonBox[
                  StyleBox["PlotLastSimulation", "InformationGridButton"],
                  Appearance->None,
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-f3cb8f04-af51-487f-a76d-bf5e96b4d087", {
+                  "Info-df9ec8b2-c59e-4656-9671-e07fcca26b56", {
                    "PlotLastSimulation", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic], 
                 ButtonBox[
-                 StyleBox["revrxn", "InformationGridButton"],
+                 
+                 StyleBox["SimulateBoundedTauLeaping", 
+                  "InformationGridButton"],
                  Appearance->None,
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-f3cb8f04-af51-487f-a76d-bf5e96b4d087", {
-                   "revrxn", "CRNSSA`"}, False},
+                  "Info-df9ec8b2-c59e-4656-9671-e07fcca26b56", {
+                   "SimulateBoundedTauLeaping", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic], 
                 ButtonBox[
-                 StyleBox["rxn", "InformationGridButton"],
+                 StyleBox["SimulateDirectSSA", "InformationGridButton"],
                  Appearance->None,
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-f3cb8f04-af51-487f-a76d-bf5e96b4d087", {
-                   "rxn", "CRNSSA`"}, False},
+                  "Info-df9ec8b2-c59e-4656-9671-e07fcca26b56", {
+                   "SimulateDirectSSA", "CRNSSA`"}, False},
                  ButtonNote->"CRNSSA`",
                  Evaluator->Automatic]}
               },
@@ -148,7 +110,7 @@ Cell[BoxData[
               GridBoxAlignment->{
                "Columns" -> {{Left}}, "Rows" -> {{Baseline}}},
               GridBoxItemSize->{"Columns" -> {{
-                   Scaled[0.1357142857142857]}}}],
+                   Scaled[0.31666666666666665`]}}}],
              ImageMargins->{{10, 0}, {0, 2}}]}
           },
           GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Baseline}}}],
@@ -167,8 +129,9 @@ Cell[BoxData[
    BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
  CellChangeTimes->{
   3.824248269310271*^9, 3.824249184979843*^9, 3.8260776249070344`*^9, 
-   3.826077757475362*^9, {3.826078525695257*^9, 3.826078537835821*^9}},
- CellLabel->"Out[2]=",ExpressionUUID->"b86f2bea-be4b-481c-9720-e75266811ce8"]
+   3.826077757475362*^9, {3.826078525695257*^9, 3.826078537835821*^9}, {
+   3.8268248747856145`*^9, 3.826824899655695*^9}},
+ CellLabel->"Out[2]=",ExpressionUUID->"1ecdbdf6-6bb1-4173-865a-d09407a3fa4a"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -191,22 +154,15 @@ Cell[BoxData[{
       RowBox[{"{", 
        RowBox[{"notebookPath", ",", "\"\<large_crn.m\>\""}], "}"}], ",", 
       RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}], 
-    "]"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"rxnsys", "=", 
-   RowBox[{"Replace", "[", 
-    RowBox[{"rxnsys", ",", 
-     RowBox[{
-      RowBox[{"conc", "[", "c__", "]"}], "\[RuleDelayed]", 
-      RowBox[{"init", "[", "c", "]"}]}], ",", 
-     RowBox[{"{", "1", "}"}]}], "]"}]}], ";"}]}], "Input",
+    "]"}]}], ";"}]}], "Input",
  CellChangeTimes->{{3.8209405871178603`*^9, 3.8209405988669605`*^9}, {
    3.8209406574982576`*^9, 3.8209407094906034`*^9}, 3.820940849034672*^9, {
    3.8209410857557325`*^9, 3.8209410908423715`*^9}, {3.821200285878623*^9, 
    3.821200286957405*^9}, {3.821202484758175*^9, 3.8212025179974904`*^9}, 
    3.8212883891020403`*^9, {3.822410910964633*^9, 3.8224109164136114`*^9}, 
    3.8260772806438694`*^9, {3.8260773415150213`*^9, 3.826077378945899*^9}, {
-   3.8260784799296474`*^9, 3.826078488504716*^9}},
+   3.8260784799296474`*^9, 3.826078488504716*^9}, {3.8268248487737036`*^9, 
+   3.8268248489883647`*^9}},
  CellLabel->"In[3]:=",ExpressionUUID->"8b417677-a446-4ab6-80dd-94d45d2a2df6"],
 
 Cell[CellGroupData[{
@@ -703,6 +659,110 @@ WindowSize->{1428., 747.75},
 WindowMargins->{{Automatic, 960}, {Automatic, 0}},
 TaggingRules->{
  "WelcomeScreenSettings" -> {"FEStarting" -> False}, "TryRealOnly" -> False},
+InputAliases->{"intt" -> RowBox[{"\[Integral]", 
+     RowBox[{"\[SelectionPlaceholder]", 
+       RowBox[{"\[DifferentialD]", "\[Placeholder]"}]}]}], "dintt" -> RowBox[{
+     SubsuperscriptBox[
+     "\[Integral]", "\[SelectionPlaceholder]", "\[Placeholder]"], 
+     RowBox[{"\[Placeholder]", 
+       RowBox[{"\[DifferentialD]", "\[Placeholder]"}]}]}], "rintt" -> RowBox[{
+     UnderscriptBox["\[Integral]", 
+      RowBox[{"\[SelectionPlaceholder]", "\[Element]", "\[Placeholder]"}]], 
+     "\[Placeholder]"}], "sumt" -> RowBox[{
+     UnderoverscriptBox["\[Sum]", 
+      RowBox[{"\[SelectionPlaceholder]", "=", "\[Placeholder]"}], 
+      "\[Placeholder]"], "\[Placeholder]"}], "prodt" -> RowBox[{
+     UnderoverscriptBox["\[Product]", 
+      RowBox[{"\[SelectionPlaceholder]", "=", "\[Placeholder]"}], 
+      "\[Placeholder]"], "\[Placeholder]"}], "dt" -> RowBox[{
+     SubscriptBox["\[PartialD]", "\[Placeholder]"], " ", 
+     "\[SelectionPlaceholder]"}], "cbrt" -> 
+  RadicalBox[
+   "\[SelectionPlaceholder]", "3", SurdForm -> True, MultilineFunction -> 
+    None], "surd" -> 
+  RadicalBox[
+   "\[SelectionPlaceholder]", "\[Placeholder]", SurdForm -> True, 
+    MultilineFunction -> None], "ket" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "Ket"], "bra" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "Bra"], "braket" -> 
+  TemplateBox[{"\[SelectionPlaceholder]", "\[Placeholder]"}, "BraKet"], 
+  "delay" -> TemplateBox[{"\[SelectionPlaceholder]"}, "SystemsModelDelay"], 
+  "grad" -> RowBox[{
+     SubscriptBox["\[Del]", "\[SelectionPlaceholder]"], "\[Placeholder]"}], 
+  "del." -> RowBox[{
+     SubscriptBox["\[Del]", "\[SelectionPlaceholder]"], ".", 
+     "\[Placeholder]"}], "delx" -> RowBox[{
+     SubscriptBox["\[Del]", "\[SelectionPlaceholder]"], "\[Cross]", 
+     "\[Placeholder]"}], "del2" -> RowBox[{
+     SubsuperscriptBox["\[Del]", "\[SelectionPlaceholder]", 2], 
+     "\[Placeholder]"}], "kd" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "KroneckerDeltaSeq"], "algs" -> 
+  TemplateBox[{}, "Algebraics"], "bools" -> TemplateBox[{}, "Booleans"], 
+  "comps" -> TemplateBox[{}, "Complexes"], "ints" -> 
+  TemplateBox[{}, "Integers"], "pris" -> TemplateBox[{}, "Primes"], "rats" -> 
+  TemplateBox[{}, "Rationals"], "reals" -> TemplateBox[{}, "Reals"], "pints" -> 
+  TemplateBox[{}, "PositiveIntegers"], "npints" -> 
+  TemplateBox[{}, "NonPositiveIntegers"], "nnints" -> 
+  TemplateBox[{}, "NonNegativeIntegers"], "nints" -> 
+  TemplateBox[{}, "NegativeIntegers"], "prats" -> 
+  TemplateBox[{}, "PositiveRationals"], "nprats" -> 
+  TemplateBox[{}, "NonPositiveRationals"], "nnrats" -> 
+  TemplateBox[{}, "NonNegativeRationals"], "nrats" -> 
+  TemplateBox[{}, "NegativeRationals"], "preals" -> 
+  TemplateBox[{}, "PositiveReals"], "npreals" -> 
+  TemplateBox[{}, "NonPositiveReals"], "nnreals" -> 
+  TemplateBox[{}, "NonNegativeReals"], "nreals" -> 
+  TemplateBox[{}, "NegativeReals"], "dlim" -> RowBox[{
+     UnderscriptBox["\[Limit]", 
+      RowBox[{"\[SelectionPlaceholder]", 
+        UnderscriptBox["\[Rule]", 
+         TemplateBox[{}, "Integers"]], "\[Infinity]"}]], "\[Placeholder]"}], 
+  "dMlim" -> RowBox[{
+     UnderscriptBox["\[MaxLimit]", 
+      RowBox[{"\[SelectionPlaceholder]", 
+        UnderscriptBox["\[Rule]", 
+         TemplateBox[{}, "Integers"]], "\[Infinity]"}]], "\[Placeholder]"}], 
+  "dmlim" -> RowBox[{
+     UnderscriptBox["\[MinLimit]", 
+      RowBox[{"\[SelectionPlaceholder]", 
+        UnderscriptBox["\[Rule]", 
+         TemplateBox[{}, "Integers"]], "\[Infinity]"}]], "\[Placeholder]"}], 
+  "tue" -> OverscriptBox["\[UndirectedEdge]", "\[Placeholder]"], "tde" -> 
+  OverscriptBox["\[DirectedEdge]", "\[Placeholder]"], "notation" -> 
+  RowBox[{"Notation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], " ", 
+       "\[DoubleLongLeftRightArrow]", " ", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "notation>" -> RowBox[{"Notation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], " ", 
+       "\[DoubleLongRightArrow]", " ", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "notation<" -> RowBox[{"Notation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], " ", 
+       "\[DoubleLongLeftArrow]", " ", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "symb" -> RowBox[{"Symbolize", "[", 
+     TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], "]"}], 
+  "infixnotation" -> RowBox[{"InfixNotation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], ",", 
+       "\[Placeholder]"}], "]"}], "addia" -> RowBox[{"AddInputAlias", "[", 
+     RowBox[{"\"\[SelectionPlaceholder]\"", "\[Rule]", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "pattwraper" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "NotationPatternTag"], 
+  "madeboxeswraper" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "NotationMadeBoxesTag"], "rxn" -> 
+  RowBox[{"\[Placeholder]", " ", 
+     OverscriptBox["\[RightArrow]", 
+      RowBox[{" ", "\[Placeholder]", " "}]], " ", "\[Placeholder]", " "}], 
+  "revrxn" -> RowBox[{"\[Placeholder]", " ", 
+     UnderoverscriptBox[
+     "\[RightArrowLeftArrow]", "\[Placeholder]", "\[Placeholder]"], " ", 
+     "\[Placeholder]", " "}]},
 Magnification:>1.1 Inherited,
 FrontEndVersion->"12.1 for Microsoft Windows (64-bit) (June 19, 2020)",
 StyleDefinitions->"Default.nb",
@@ -723,14 +783,14 @@ Cell[CellGroupData[{
 Cell[580, 22, 209, 4, 107, "Title",ExpressionUUID->"99313edb-9280-4a33-9415-fe73f5350fe5"],
 Cell[CellGroupData[{
 Cell[814, 30, 451, 8, 52, "Input",ExpressionUUID->"8acb8700-aa44-4b5e-a852-0474740d5f06"],
-Cell[1268, 40, 5346, 130, 104, "Output",ExpressionUUID->"b86f2bea-be4b-481c-9720-e75266811ce8"]
+Cell[1268, 40, 3795, 93, 104, "Output",ExpressionUUID->"1ecdbdf6-6bb1-4173-865a-d09407a3fa4a"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[6651, 175, 265, 4, 58, "Subtitle",ExpressionUUID->"52ad3c2d-9e9e-48e6-8d6d-8ea980b00547"],
-Cell[6919, 181, 1310, 28, 73, "Input",ExpressionUUID->"8b417677-a446-4ab6-80dd-94d45d2a2df6"],
+Cell[5100, 138, 265, 4, 58, "Subtitle",ExpressionUUID->"52ad3c2d-9e9e-48e6-8d6d-8ea980b00547"],
+Cell[5368, 144, 1079, 21, 52, "Input",ExpressionUUID->"8b417677-a446-4ab6-80dd-94d45d2a2df6"],
 Cell[CellGroupData[{
-Cell[8254, 213, 1217, 21, 30, "Input",ExpressionUUID->"e01cb462-3bf6-45d3-aeb7-66e85bb61022"],
-Cell[9474, 236, 35043, 460, 1149, "Output",ExpressionUUID->"5dd98445-01c6-4ea8-af73-1a8369657a28"]
+Cell[6472, 169, 1217, 21, 30, "Input",ExpressionUUID->"e01cb462-3bf6-45d3-aeb7-66e85bb61022"],
+Cell[7692, 192, 35043, 460, 1149, "Output",ExpressionUUID->"5dd98445-01c6-4ea8-af73-1a8369657a28"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]
