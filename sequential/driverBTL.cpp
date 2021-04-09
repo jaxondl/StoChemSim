@@ -1,6 +1,3 @@
-#include "directMethodSSA/directMethodSSA.h"
-#include "directMethodSSA/reactionTree.h"
-#include "directMethodSSA/dependencyGraph.h"
 #include "common/decoder.h"
 #include "common/inputVerifier.h"
 #include "boundedTauLeaping/boundedTauLeaping.h"
@@ -8,7 +5,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <fstream> 
+#include <fstream>
 
 using namespace std;
 
@@ -29,7 +26,7 @@ int main(int argc, char** argv) {
         vector<string> speciesList = inputDecoder->getListOfSpecies();
 
         // begin setting flags from the command line arguments, with every flag by default set to false
-        bool so = false; // states only flag
+        //bool so = false; // states only flag
         bool fo = false; // final only flag
         bool ti = false; // infinite time flag (time infinity)
         bool it = false; // iteration limit flag
@@ -39,38 +36,39 @@ int main(int argc, char** argv) {
             cout << "endValue is " << endValue << endl; // otherwise, print the end value for confirmation to the user
         for(int i = 4; i < argc; i++){ // for all subsequent command line arguments (flags)
             string argument = argv[i];
-            for (int j = 0; j < argument.length(); j++){ // set all strings fully to lower case format   
-  		        argument[j] = tolower(argument[j]);
-  	        }
+            for (int j = 0; j < argument.length(); j++){ // set all strings fully to lower case format
+                argument[j] = tolower(argument[j]);
+            }
             // depending on the user input, set certain flags to true
-            if (argument =="-so" || argument == "-statesonly") 
-                so = true;
-            else if (argument == "-fo" || argument == "-finalonly")
+            //if (argument =="-so" || argument == "-statesonly")
+                //so = true;
+            if (argument == "-fo" || argument == "-finalonly")
                 fo = true;
             else if (argument == "-it"  || argument == "-useiter")
                 it = true;
         }
 
+        double epsilon = 0.05; //TODO: implement a way for the user to pass this to the program; 0.05 is the default until then
         // Create directMethodSSA object and begin simulation
-        directMethodSSA *directSSA = new directMethodSSA(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, endValue, so, fo, ti, it);
-        directSSA->start();
+        boundedTauLeaping *btlAlgorithm = new boundedTauLeaping(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, endValue, fo, ti, it, epsilon);
+        btlAlgorithm->start();
 
         // Get all necessary state from the directMethodSSA object
-        vector<double> allTimes = directSSA->getAllTimes();
-        vector<vector<int> > allStates = directSSA->getAllStates();
-        vector<int> currentState = directSSA->getCurrentState();
-        double currentTime = directSSA->getCurrentTime();
-        int currentIteration = directSSA->getCurrentIteration();
+        vector<double> allTimes = btlAlgorithm->getAllTimes();
+        vector<vector<int> > allStates = btlAlgorithm->getAllStates();
+        vector<int> currentState = btlAlgorithm->getCurrentState();
+        double currentTime = btlAlgorithm->getCurrentTime();
+        int currentIteration = btlAlgorithm->getCurrentIteration();
 
         // Writing to output file depending on input flags
         ofstream outfile;
         outfile.open(outputFilePath);
         int iterationWidth = 15;
         char separator = ' ';
-        if(fo){ 
-            if(so) // final only and state only
-                outfile << "Final State:" << endl;
-            else { // final only with time
+        if(fo){
+            //if(so) // final only and state only
+            // outfile << "Final State:" << endl;
+            //else { // final only with time
                 if(it){
                     outfile << "Final Iteration" << "\t\t\tFinal State" << endl;
                     outfile << left << setw(iterationWidth) << setfill(separator) << currentIteration << "\t\t\t";
@@ -79,25 +77,25 @@ int main(int argc, char** argv) {
                     outfile << "Final Time" << "\t\t\tFinal State" << endl;
                     outfile << setprecision(5) << scientific << currentTime << "\t\t\t";
                 }
-            }
+            //}
             for(int i = 0; i < currentState.size(); i++){
-                    outfile << speciesList[i];
-                    outfile << ": " << currentState[i];
-                    outfile << "\t";
+                outfile << speciesList[i];
+                outfile << ": " << currentState[i];
+                outfile << "\t";
             }
         }
-        else if(so){ // states only (no time)
-            outfile << "Iteration" << "\t\t\tState" << endl;
-            for(int i = 0; i < allStates.size(); i++){
-                outfile << left << setw(iterationWidth) << setfill(separator) << i << "\t\t";
-                for(int j = 0; j < allStates[i].size(); j++){
-                    outfile << speciesList[j];
-                    outfile << ": " << allStates[i][j];
-                    outfile << "\t";
-                }
-                outfile << endl;
-            }
-        }
+//        else if(so){ // states only (no time)
+//            outfile << "Iteration" << "\t\t\tState" << endl;
+//            for(int i = 0; i < allStates.size(); i++){
+//                outfile << left << setw(iterationWidth) << setfill(separator) << i << "\t\t";
+//                for(int j = 0; j < allStates[i].size(); j++){
+//                    outfile << speciesList[j];
+//                    outfile << ": " << allStates[i][j];
+//                    outfile << "\t";
+//                }
+//                outfile << endl;
+//            }
+//        }
         else { // all states and all times
             outfile << "Iteration" << "\t\t\tTime(s)" << "\t\t\tState" << endl;
             for(int i = 0; i < allTimes.size(); i++){

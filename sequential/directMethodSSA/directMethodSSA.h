@@ -4,7 +4,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
-#include "../common/dependencyGraph.h"
+#include "dependencyGraph.h"
 #include "reactionTree.h"
 
 
