@@ -5,7 +5,6 @@
 #include "WolframNumericArrayLibrary.h"
 
 /* backend start */
-#include <iostream>
 #include <string>
 #include <iterator>
 #include <set>
@@ -13,6 +12,7 @@
 #include <vector>
 #include <utility>
 #include <random>
+#include <chrono>
 
 using namespace std;
 
@@ -427,6 +427,11 @@ static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint mo
 vector<vector<int> > allStates;
 vector<double> allTimes;
 
+
+// ****** gloabl storage for debug *******
+int data_type_convertion_time; 
+int algo_time;
+
 // ******** end of global storage ********
 
 /* CRN SSA main function */
@@ -435,6 +440,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	int err = LIBRARY_FUNCTION_ERROR;
 	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
 
+    auto start = std::chrono::steady_clock::now();
 	// convert initCounts
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
 	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
@@ -482,6 +488,12 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 
     // choose endValue
     double endValue = (useIter)? iterEndI : timeEndR;
+    
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    data_type_convertion_time = elapsed_seconds.count();
+
+    auto start0 = std::chrono::steady_clock::now();
 
 	// CRN SSA process: pass everything to backend
 	directMethodSSA* process = new directMethodSSA(
@@ -495,6 +507,10 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
                     inf,
                     useIter);
 	process->start();
+
+    auto end0 = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds0 = end-start;
+    algo_time = elapsed_seconds0.count();
 
     // pass back rerults depends on result
     if (finalOnly) {
@@ -578,6 +594,43 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	
 	// convert output to a NumericArray
 	matrixtoNumericArray<int, mint>(data_out, allStates);
+
+	// pass the result back
+	MArgument_setMNumericArray(res, Mout);
+	return LIBRARY_NO_ERROR;
+
+	cleanup:
+	naFuns->MNumericArray_free(Mout);
+	return err;
+}
+
+EXTERN_C DLLEXPORT int getDebugs(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
+	// debug setup
+	int err = LIBRARY_FUNCTION_ERROR;
+	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
+
+	// reused local varibles setup
+	void *data_in = NULL, *data_out = NULL;
+	mint length;
+	mint const *dims;
+
+	// output setup
+	MNumericArray Mout;
+	int64_t out_size = 2;
+	const mint *dims_out = &out_size;
+	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
+	if (err != 0) {
+		goto cleanup;
+	}
+	data_out = naFuns->MNumericArray_getData(Mout);
+	if (data_out == NULL) {
+		goto cleanup;
+	}
+	
+	// convert output to a NumericArray
+	double *Mout0 = static_cast<double *>(Mout);
+	Mout0[0] = data_type_convertion_time;
+    Mout0[1] = algo_time;
 
 	// pass the result back
 	MArgument_setMNumericArray(res, Mout);
