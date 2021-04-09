@@ -22,11 +22,26 @@ boundedTauLeaping::boundedTauLeaping(vector<int> initialState, vector<double> re
 
 // Draws from gamma distribution defined by a as alpha and b as beta, both must be positive
 double boundedTauLeaping::getGammaRandomVariable(double a, double b) {
+    // mt19937 gen_gamma;
+    // gamma_distribution<double> dis(.5, 2.0);
+    // cout << dis(gen_gamma) << endl;
+    // return 0;
+
+    // random_device rd_uni; // random seed
+    // mt19937 gen_uni(rd_uni()); // mersenne twister engine
+    // this->gen_uni = gen_uni;
+    // random_device rd_exp; // random seed
+    // mt19937 gen_exp(rd_exp()); 
+    // this->gen_exp = gen_exp; // mersenne twister engine
+    // uniform_real_distribution<double> dis(0.0, 1);
+
+
+    cout << "a: " << a << " b: " << b << endl;
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     default_random_engine generator (seed);
     gamma_distribution<double> distribution(a, b);
     double g = distribution(generator);
-    // cout << "gamma RV: " << g << endl;
+    cout << "gamma RV: " << g << endl;
     return g;
 }
 
@@ -50,7 +65,7 @@ vector<double> boundedTauLeaping::calculatePropensities() {
         // start with reaction rate and multiply by reactant amounts according to propensity formula
         for (pair<int, int> reactant : reactantsVector[i]) {
             for (int j = 0; j < reactant.second; j++) {
-                propensity *= (currentState[reactant.first] - i);
+                propensity *= (currentState[reactant.first] - j);
             }
         }
         // determine if all propensities are 0 (no reactions possible, end simulation)
@@ -58,7 +73,9 @@ vector<double> boundedTauLeaping::calculatePropensities() {
             nonePossible = false;
         }
         propensities.push_back(propensity);
+        cout << " PROP IS " << propensity;
     }
+    cout << endl;
     return propensities;
 }
 
@@ -75,12 +92,15 @@ vector<int> boundedTauLeaping::calculateBounds() {
         int minBound = INT_MAX;
         // for all species affected by reaction, determine bj and keep track of minimum
         for (pair<int, int> species : currentStateChangeVector) {
-            int currentBound = ceil( abs( epsilon * currentState[species.first] / species.second));
+            //int currentBound = ceil( abs( epsilon * currentState[species.first] / species.second));
+            int currentBound = abs( epsilon * currentState[species.first] / species.second) + 1;
+            //cout << "curBound is " << currentBound << "; ep*curState = " << epsilon * currentState[species.first] << "; speciesSecond change = " << species.second << endl;
             if (currentBound < minBound) {
                 minBound = currentBound;
             }
         }
         firingBounds.push_back(minBound);
+        cout << "MIN BOUND IS " << minBound << endl;
     }
     return firingBounds;
 }
@@ -164,6 +184,10 @@ void boundedTauLeaping::start() {
     while (!nonePossible && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))) {
         firingBounds = calculateBounds(); // Step 1b
         violatingTimes = determineViolatingTimes(firingBounds, props); // Step 2
+        for(int i = 0; i < violatingTimes.size(); i++){
+            cout << violatingTimes[i] << " ";
+        }
+        cout << endl;
         firstViolatingIndex = determineFirstViolating(violatingTimes); // Step 3
         reactionOccurrences = determineReactionOccurrences(firingBounds, violatingTimes, firstViolatingIndex); // Step 4
         
@@ -173,6 +197,7 @@ void boundedTauLeaping::start() {
         }
 
         updateTime(violatingTimes[firstViolatingIndex]); // Step 5 effecting the leap: time update
+        cout << "TIME ADD: " << violatingTimes[firstViolatingIndex] << endl;
         updateState(reactionOccurrences); // Step 5 effecting the leap: state update
 
         // record the updated time only if the finalOnly flag is false
