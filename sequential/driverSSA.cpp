@@ -14,7 +14,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
     inputVerifier *iv = new inputVerifier(); // create input verifier for validating input file
-    string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\sample_input_SSA_file.txt
+    string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\large_crn.txt
     string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\output.txt
     double endValue = stod(argv[3]); // a double used to specify the end time or iteration, depending on the user's flags
     bool safeToRun = iv->verifyFile(inputFilePath); // the input verifier will indicate whether the input file is valid and safe to run
@@ -27,6 +27,13 @@ int main(int argc, char** argv) {
         vector<double> reactionRates = inputDecoder->getkValueVector();
         vector<int> moleculeAmounts = inputDecoder->getPopulationSizes();
         vector<string> speciesList = inputDecoder->getListOfSpecies();
+        /**for (int i = 0; i<reactantsVector[6268].size(); i++){ //6409
+            cout << "Species: " << speciesList[reactantsVector[6268][i].first]<<  " Amount"<< reactantsVector[6268][i].second << endl;
+        }
+        
+        for (int i = 0; i<stateChangeVector[6268].size(); i++){
+            cout << "Species: " << speciesList[stateChangeVector[6268][i].first] << " Amount" << stateChangeVector[6268][i].second << endl;
+        }**/
 
         // begin setting flags from the command line arguments, with every flag by default set to false
         bool so = false; // states only flag

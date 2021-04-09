@@ -45,11 +45,7 @@ bool inputVerifier::verifyFile(string iFile) {
             while(fullReactionDefLine.empty()) {
                 getline(inputFile,fullReactionDefLine);
                 lineNumber++;
-                //cout << "Now checking line " << lineNumber << endl;
-                //cout << "<" << fullReactionDefLine << ">" << endl;
-                //cout << fullReactionDefLine.length() << endl;
-                if(fullReactionDefLine.empty()) { //if the line is empty even before removing the comments, increment the count
-                    //cout << "line number " << lineNumber << " is empty" << endl;
+                if(fullReactionDefLine.empty()) {
                     numCompleteEmptyLinesBeforeData++;
                     if(numCompleteEmptyLinesBeforeData > 3) {
                         cout << "Warning: Your file only contains commented lines or contains too many empty lines before the data." << endl;
