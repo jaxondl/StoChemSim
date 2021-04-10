@@ -22,8 +22,11 @@ boundedTauLeaping::boundedTauLeaping(vector<int> initialState, vector<double> re
 
 // Draws from gamma distribution defined by a as alpha and b as beta, both must be positive
 double boundedTauLeaping::getGammaRandomVariable(double a, double b) {
-    // mt19937 gen_gamma;
-    // gamma_distribution<double> dis(.5, 2.0);
+    //default_random_engine gen_gamma;
+    //gamma_distribution<double> dis(1, 0.000000001);
+    
+    //double g = dis(gen_gamma);
+
     // cout << dis(gen_gamma) << endl;
     // return 0;
 
@@ -34,14 +37,12 @@ double boundedTauLeaping::getGammaRandomVariable(double a, double b) {
     // mt19937 gen_exp(rd_exp()); 
     // this->gen_exp = gen_exp; // mersenne twister engine
     // uniform_real_distribution<double> dis(0.0, 1);
-
-
-    cout << "a: " << a << " b: " << b << endl;
+    
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     default_random_engine generator (seed);
-    gamma_distribution<double> distribution(a, b);
+    gamma_distribution<double> distribution(a, 1/b);
     double g = distribution(generator);
-    cout << "gamma RV: " << g << endl;
+    cout << "a: " << a << " b: " << b << " gamma RV: " << g << endl;
     return g;
 }
 
@@ -51,7 +52,7 @@ int boundedTauLeaping::getBinomialRandomVariable(int n, double p) {
     default_random_engine generator (seed);
     binomial_distribution<int> distribution(n, p);
     int b = distribution(generator);
-    // cout << "binomial RV: " << b << endl;
+    cout << "binomial RV: " << b << endl;
     return b;
 }
 
@@ -73,7 +74,7 @@ vector<double> boundedTauLeaping::calculatePropensities() {
             nonePossible = false;
         }
         propensities.push_back(propensity);
-        cout << " PROP IS " << propensity;
+        cout << "PROP IS " << propensity << " ";
     }
     cout << endl;
     return propensities;
@@ -92,16 +93,19 @@ vector<int> boundedTauLeaping::calculateBounds() {
         int minBound = INT_MAX;
         // for all species affected by reaction, determine bj and keep track of minimum
         for (pair<int, int> species : currentStateChangeVector) {
-            //int currentBound = ceil( abs( epsilon * currentState[species.first] / species.second));
-            int currentBound = abs( epsilon * currentState[species.first] / species.second) + 1;
+            int currentBound = ceil( abs( epsilon * currentState[species.first] / species.second));
+            if(currentBound == 0){
+                currentBound = 1;
+            }
             //cout << "curBound is " << currentBound << "; ep*curState = " << epsilon * currentState[species.first] << "; speciesSecond change = " << species.second << endl;
             if (currentBound < minBound) {
                 minBound = currentBound;
             }
         }
         firingBounds.push_back(minBound);
-        cout << "MIN BOUND IS " << minBound << endl;
+        cout << "MIN BOUND IS " << minBound << " ";
     }
+    cout << endl;
     return firingBounds;
 }
 
@@ -138,9 +142,12 @@ vector<int> boundedTauLeaping::determineReactionOccurrences(vector<int> firingBo
         else {
             double p = firstViolatingTime/violatingTimes[i];
             nj = getBinomialRandomVariable(firingBounds[i] - 1, p);
+            cout << "firing bounds: " << firingBounds[i] << " p is " << p << " nj is " << nj << endl;
         }
         result.push_back(nj);
+        cout << "change " << nj << " times ";
     }
+    cout << endl;
     return result;
 }
 
@@ -184,10 +191,6 @@ void boundedTauLeaping::start() {
     while (!nonePossible && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))) {
         firingBounds = calculateBounds(); // Step 1b
         violatingTimes = determineViolatingTimes(firingBounds, props); // Step 2
-        for(int i = 0; i < violatingTimes.size(); i++){
-            cout << violatingTimes[i] << " ";
-        }
-        cout << endl;
         firstViolatingIndex = determineFirstViolating(violatingTimes); // Step 3
         reactionOccurrences = determineReactionOccurrences(firingBounds, violatingTimes, firstViolatingIndex); // Step 4
         
