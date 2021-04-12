@@ -40,9 +40,9 @@ double boundedTauLeaping::getGammaRandomVariable(double a, double b) {
     
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     default_random_engine generator (seed);
-    gamma_distribution<double> distribution(a, 1/b);
+    gamma_distribution<double> distribution(a, 1/b); // 1/b BECAUSE USE SCALE, NOT RATE
     double g = distribution(generator);
-    cout << "a: " << a << " b: " << b << " gamma RV: " << g << endl;
+    //cout << "a: " << a << " b: " << b << " gamma RV: " << g << endl;
     return g;
 }
 
@@ -52,7 +52,7 @@ int boundedTauLeaping::getBinomialRandomVariable(int n, double p) {
     default_random_engine generator (seed);
     binomial_distribution<int> distribution(n, p);
     int b = distribution(generator);
-    cout << "binomial RV: " << b << endl;
+    //cout << "binomial RV: " << b << endl;
     return b;
 }
 
@@ -60,6 +60,7 @@ int boundedTauLeaping::getBinomialRandomVariable(int n, double p) {
 vector<double> boundedTauLeaping::calculatePropensities() {
     nonePossible = true;
     vector<double> propensities;
+    double total = 0;
     // compute propensity for every reaction
     for (int i = 0; i < reactionRates.size(); i++) {
         double propensity = reactionRates[i];
@@ -73,10 +74,18 @@ vector<double> boundedTauLeaping::calculatePropensities() {
         if (propensity > 0) {
             nonePossible = false;
         }
+
+        if (propensity < 0){
+            nonePossible = true;
+            cout << "Ran into negative propensity!" << endl;
+            break;
+        }
+
         propensities.push_back(propensity);
-        cout << "PROP IS " << propensity << " ";
+        total += propensity;
+        //cout << "PROP IS " << propensity << " ";
     }
-    cout << endl;
+    cout << "Total Propensity: " << total << endl;
     return propensities;
 }
 
@@ -103,9 +112,9 @@ vector<int> boundedTauLeaping::calculateBounds() {
             }
         }
         firingBounds.push_back(minBound);
-        cout << "MIN BOUND IS " << minBound << " ";
+        //cout << "MIN BOUND IS " << minBound << " ";
     }
-    cout << endl;
+    //cout << endl;
     return firingBounds;
 }
 
@@ -142,12 +151,12 @@ vector<int> boundedTauLeaping::determineReactionOccurrences(vector<int> firingBo
         else {
             double p = firstViolatingTime/violatingTimes[i];
             nj = getBinomialRandomVariable(firingBounds[i] - 1, p);
-            cout << "firing bounds: " << firingBounds[i] << " p is " << p << " nj is " << nj << endl;
+            //cout << "firing bounds: " << firingBounds[i] << " p is " << p << " nj is " << nj << endl;
         }
         result.push_back(nj);
-        cout << "change " << nj << " times ";
+        //cout << "change " << nj << " times ";
     }
-    cout << endl;
+    //cout << endl;
     return result;
 }
 
@@ -200,7 +209,7 @@ void boundedTauLeaping::start() {
         }
 
         updateTime(violatingTimes[firstViolatingIndex]); // Step 5 effecting the leap: time update
-        cout << "TIME ADD: " << violatingTimes[firstViolatingIndex] << endl;
+        //cout << "TIME ADD: " << violatingTimes[firstViolatingIndex] << endl;
         updateState(reactionOccurrences); // Step 5 effecting the leap: state update
 
         // record the updated time only if the finalOnly flag is false
@@ -209,11 +218,11 @@ void boundedTauLeaping::start() {
             allStates.push_back(currentState);
         }
 
-        cout << "iter and time: " << currentIteration << " " << currentTime << endl;
-        cout << "state: ";
-        for(int i=0; i < currentState.size(); i++)
-            cout << currentState.at(i) << ' ';
-        cout << endl;
+        //cout << "iter and time: " << currentIteration << " " << currentTime << endl;
+        //cout << "state: ";
+        //for(int i=0; i < currentState.size(); i++)
+        //    cout << currentState.at(i) << ' ';
+        //cout << endl;
         
         currentIteration++; // update iteration
         props = calculatePropensities(); // Step 1a, sets nonePossible
