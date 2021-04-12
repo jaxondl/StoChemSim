@@ -427,14 +427,11 @@ static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint mo
 vector<vector<int> > allStates;
 vector<double> allTimes;
 
-<<<<<<< Updated upstream
-=======
 
 // ****** gloabl storage for debug *******
 double data_type_convertion_time; 
 double algo_time;
 
->>>>>>> Stashed changes
 // ******** end of global storage ********
 
 /* CRN SSA main function */
@@ -504,13 +501,10 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
                     useIter);
 	process->start();
 
-<<<<<<< Updated upstream
-=======
     auto end0 = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed_seconds0 = end0-start0;
     algo_time = elapsed_seconds0.count();
 
->>>>>>> Stashed changes
     // pass back rerults depends on result
     if (finalOnly) {
 		vector<vector<int> > current_state;
@@ -602,8 +596,6 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	naFuns->MNumericArray_free(Mout);
 	return err;
 }
-<<<<<<< Updated upstream
-=======
 
 EXTERN_C DLLEXPORT int getDebugs(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
 	// debug setup
@@ -641,4 +633,3 @@ EXTERN_C DLLEXPORT int getDebugs(WolframLibraryData libData, mint Argc, MArgumen
 	naFuns->MNumericArray_free(Mout);
 	return err;
 }
->>>>>>> Stashed changes
