@@ -34,6 +34,8 @@ int main(int argc, char** argv) {
             ti = true;
         else
             cout << "endValue is " << endValue << endl; // otherwise, print the end value for confirmation to the user
+        double epsilon = 0.05;
+        bool checkEpsilon = false;
         for(int i = 4; i < argc; i++){ // for all subsequent command line arguments (flags)
             string argument = argv[i];
             for (int j = 0; j < argument.length(); j++){ // set all strings fully to lower case format
@@ -42,13 +44,19 @@ int main(int argc, char** argv) {
             // depending on the user input, set certain flags to true
             //if (argument =="-so" || argument == "-statesonly")
                 //so = true;
+            if(checkEpsilon) {
+                epsilon = stod(argument);
+                checkEpsilon = false;
+            }
             if (argument == "-fo" || argument == "-finalonly")
                 fo = true;
             else if (argument == "-it"  || argument == "-useiter")
                 it = true;
+            else if (argument == "-e" ||  argument == "-epsilon")
+                checkEpsilon = true;
         }
 
-        double epsilon = 0.05; //TODO: implement a way for the user to pass this to the program; 0.05 is the default until then
+
         // Create directMethodSSA object and begin simulation
         boundedTauLeaping *btlAlgorithm = new boundedTauLeaping(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, endValue, fo, ti, it, epsilon);
         btlAlgorithm->start();
