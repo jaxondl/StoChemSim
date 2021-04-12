@@ -427,6 +427,14 @@ static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint mo
 vector<vector<int> > allStates;
 vector<double> allTimes;
 
+<<<<<<< Updated upstream
+=======
+
+// ****** gloabl storage for debug *******
+double data_type_convertion_time; 
+double algo_time;
+
+>>>>>>> Stashed changes
 // ******** end of global storage ********
 
 /* CRN SSA main function */
@@ -496,6 +504,13 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
                     useIter);
 	process->start();
 
+<<<<<<< Updated upstream
+=======
+    auto end0 = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds0 = end0-start0;
+    algo_time = elapsed_seconds0.count();
+
+>>>>>>> Stashed changes
     // pass back rerults depends on result
     if (finalOnly) {
 		vector<vector<int> > current_state;
@@ -587,3 +602,43 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	naFuns->MNumericArray_free(Mout);
 	return err;
 }
+<<<<<<< Updated upstream
+=======
+
+EXTERN_C DLLEXPORT int getDebugs(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
+	// debug setup
+	int err = LIBRARY_FUNCTION_ERROR;
+	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
+
+	// reused local varibles setup
+	void *data_in = NULL, *data_out = NULL;
+	mint length;
+	mint const *dims;
+
+	// output setup
+	MNumericArray Mout;
+	int64_t out_size = 2;
+	const mint *dims_out = &out_size;
+	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
+	if (err != 0) {
+		goto cleanup;
+	}
+	data_out = naFuns->MNumericArray_getData(Mout);
+	if (data_out == NULL) {
+		goto cleanup;
+	}
+	
+	// convert output to a NumericArray
+	double *Mout0 = static_cast<double *>(data_out);
+	Mout0[0] = data_type_convertion_time;
+    Mout0[1] = algo_time;
+
+	// pass the result back
+	MArgument_setMNumericArray(res, Mout);
+	return LIBRARY_NO_ERROR;
+
+	cleanup:
+	naFuns->MNumericArray_free(Mout);
+	return err;
+}
+>>>>>>> Stashed changes
