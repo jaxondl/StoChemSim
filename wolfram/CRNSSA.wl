@@ -99,6 +99,7 @@ DirectSSABackend = LibraryFunctionLoad[library, "directSSAInterface",
 (*Once DirectSSABackend has been run, these functions obtain the simulation results*)
 GetStates = LibraryFunctionLoad[library, "getStates", {}, LibraryDataType[NumericArray]];
 GetTimes = LibraryFunctionLoad[library, "getTimes", {}, LibraryDataType[NumericArray]];
+GetDebugs = LibraryFunctionLoad[library, "getDebugs", {}, LibraryDataType[NumericArray]];
 
 
 (*Specifies options that can be passed into SimulateDirectSSA with default values*)
@@ -119,6 +120,7 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	infTime, infIter},
 	
 	(*Initialize global variables that are stored for PlotLastSimulation*)
+	initTime = Timing[Module[{},
 	concs = Quiet[Cases[ExpandConcs[rxnsys], conc[_, _]]];
 	rxnls = Quiet[Cases[RxnsToRxnls[rxnsys], rxnl[_List, _List, _]]];
 	spcs = Quiet[SpeciesInRxnsys[rxnsys]];
@@ -128,8 +130,10 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	statesOnly = OptionValue["statesOnly"];
 	finalOnly = OptionValue["finalOnly"];
 	outputTS = OptionValue["outputTS"];
+	];][[1]];
 	
 	(*Exception handling block*)
+	exceptionTime = Timing[Module[{},
 	CheckSyntaxErrors[rxnsys];
 	(*Set infTime flag if timeEnd is infinity or invalid*)
 	If[timeEnd === Infinity || timeEnd <= 0 || !NumericQ[timeEnd],
@@ -153,8 +157,10 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 		inf = True,
 		inf = False
 	];
+	];][[1]];
 	
 	(*Determine simulation parameters from rxnsys and convert to numeric arrays of correct datatypes*)
+	naTime = Timing[Module[{},
 	initCounts = GetInitCounts[concs, spcs];
 	reactCounts = GetReactCounts[rxnls, spcs];
 	prodCounts = GetProdCounts[rxnls, spcs];
@@ -163,10 +169,14 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	reactCountsNA = NumericArray[reactCounts, "Integer64"];
 	prodCountsNA = NumericArray[prodCounts, "Integer64"];
 	ratesNA = NumericArray[rates, "Real64"];
+	];][[1]];
 	
 	(*Run simulation via C++ library*)
+	backendTime = Timing[Module[{},
 	DirectSSABackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, statesOnly, finalOnly];
+	];][[1]];
 	(*Output format depends on outputTS and statesOnly flags*)
+	resultTime = Timing[Module[{},
 	If[outputTS,
 		If[statesOnly,
 			simulationResult = TimeSeries[Normal[GetStates[]], {0, Length[Normal[GetStates[]]]-1}],
@@ -176,7 +186,9 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 			simulationResult = Normal[GetStates[]],
 			simulationResult = {Normal[GetStates[]], Normal[GetTimes[]]}
 		]
-	]
+	];
+	];][[1]];
+	{simulationResult, {initTime, exceptionTime, naTime, backendTime, resultTime, Normal[GetDebugs[]]}}
 ]
 
 
