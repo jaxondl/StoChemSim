@@ -303,7 +303,7 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 		simulationResult = TimeSeries[Normal[GetStates[]], {Normal[GetTimes[]]}],
 		simulationResult = {Normal[GetStates[]], Normal[GetTimes[]]}
 	];
-	runtimeInfo = Normal[GetRuntimes[]];
+	runtimeInfo = {Normal[GetRuntimes[]]};
 	simulationResult
 ]
 
