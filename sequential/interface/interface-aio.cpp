@@ -5,7 +5,6 @@
 #include "WolframNumericArrayLibrary.h"
 
 /* backend start */
-#include <iostream>
 #include <string>
 #include <iterator>
 #include <set>
@@ -13,6 +12,7 @@
 #include <vector>
 #include <utility>
 #include <random>
+#include <chrono>
 
 using namespace std;
 
@@ -440,6 +440,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	int err = LIBRARY_FUNCTION_ERROR;
 	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
 
+    auto start = std::chrono::steady_clock::now();
 	// convert initCounts
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
 	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
@@ -487,6 +488,12 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 
     // choose endValue
     double endValue = (useIter)? iterEndI : timeEndR;
+    
+    auto end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    data_type_convertion_time = elapsed_seconds.count();
+
+    auto start0 = std::chrono::steady_clock::now();
 
 	// CRN SSA process: pass everything to backend
 	directMethodSSA* process = new directMethodSSA(

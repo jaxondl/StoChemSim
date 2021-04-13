@@ -37,13 +37,14 @@ bool inputVerifier::verifyFile(string iFile) {
         //cout << fullReactionDefLine << endl;
 
         //cout << "Now checking line " << lineNumber << endl;
-        //cout << reactionDefLine.length() << endl;
+        //cout << fullReactionDefLine.length() << endl;
 
         int numCompleteEmptyLinesBeforeData = 0;
 
         if(fullReactionDefLine.empty()) { //if the line is only comments, keep checking the next line until you get to a non-comment-only line
             while(fullReactionDefLine.empty()) {
                 getline(inputFile,fullReactionDefLine);
+                lineNumber++;
                 if(fullReactionDefLine.empty()) {
                     numCompleteEmptyLinesBeforeData++;
                     if(numCompleteEmptyLinesBeforeData > 3) {
@@ -51,7 +52,6 @@ bool inputVerifier::verifyFile(string iFile) {
                         return false;
                     }
                 }
-                lineNumber++;
                 fullReactionDefLine = chopOffComments(fullReactionDefLine);
             }
         }
