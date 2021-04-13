@@ -24,22 +24,26 @@ SimulateBoundedTauLeaping::usage =
 "result = SimulateBoundedTauLeaping[{rxn1, rxn2, ..., conc1, conc2, ...}, Options]
 Simulates the given reaction system via Soloveichik Bounded Tau Leaping
 Backend is optimized in C++ for computational efficiency
-Note: implementation is not complete
 Options include:
 	timeEnd (Real), default = Infinity, ending time of simulation (if useIter = False)
 	iterEnd (Integer), default = Infinity, ending iteration of simulation (if useIter = True)
 	useIter (Boolean), default = False, setting to True uses iterEnd instead of timeEnd
 	finalOnly (Boolean), default = False, only records final state to conserve memory
 	outputTS (Boolean), default = True, setting to True outputs result as TimeSeries, setting to False outputs result as List
-	epsilon (Real), default = 0.0309/numRxns, threshold between 0 and 1 used in calculating firing bounds for each reaction";
+	rho (Real), default = 0.25, threshold between 0 and 1 used in calculating epsilon (ignored if epsilon given)
+	epsilon (Real), default = 3/(4*numRxns)*(1 - Sqrt[(1 + rho/9)/(1 + rho)]),
+		threshold between 0 and 1 used in calculating firing bounds for each reaction
+Note: epsilon must be well chosen to guarantee correct functionality of Bounded Tau Leaping
+A rho value can be provided instead, and a valid epsilon will be calculated given that all reactions are unimolecular or bimolecular
+See https://arxiv.org/pdf/0803.1030.pdf for more details";
 
 PlotLastSimulation::usage =
 "PlotLastSimulation[Options]
 Plots the last simulation ran
 Uses same Options as ListLinePlot"
 
-GetRuntimes::usage=
-"For debug"
+GetRuntimeInfo::usage=
+"Retrieves runtime data collected from previous simulation"
 
 
 Begin["`Private`"]
@@ -82,7 +86,7 @@ GetRates[rxnls_] := Cases[rxnls, rxnl[_, _, k_] :> k]
 
 
 (*Loads C++ library and loads interface functions with specified argument types*)
-library = LibraryLoad["directSSAinterface"];
+library = LibraryLoad["CRNSSAInterface"];
 
 (*Entire backend implementation for Direct SSA, has no return type*)
 DirectSSABackend = LibraryFunctionLoad[library, "directSSAInterface",
@@ -99,7 +103,7 @@ DirectSSABackend = LibraryFunctionLoad[library, "directSSAInterface",
 	"Void"
 ];
 
-(*(*Entire backend implementation for BTL, has no return type*)
+(*Entire backend implementation for BTL, has no return type*)
 BTLBackend = LibraryFunctionLoad[library, "BTLInterface",
 	{LibraryDataType[NumericArray],
 	LibraryDataType[NumericArray],
@@ -112,12 +116,12 @@ BTLBackend = LibraryFunctionLoad[library, "BTLInterface",
 	True|False,
 	Real},
 	"Void"
-];*)
+];
 
 (*Once a simulation has been run, these functions obtain the simulation results*)
 GetStates = LibraryFunctionLoad[library, "getStates", {}, LibraryDataType[NumericArray]];
 GetTimes = LibraryFunctionLoad[library, "getTimes", {}, LibraryDataType[NumericArray]];
-GetDebugs = LibraryFunctionLoad[library, "getDebugs", {}, LibraryDataType[NumericArray]];
+GetRuntimes = LibraryFunctionLoad[library, "getRuntimes", {}, LibraryDataType[NumericArray]];
 
 
 (*Specifies options that can be passed into SimulateDirectSSA with default values*)
@@ -208,11 +212,9 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 		]
 	];
 	];][[1]];
-	runtimes = {{initTime, exceptionTime}, {initCountsTime, reactCountsTime, prodCountsTime, ratesTime}, {naTime, backendTime, resultTime}, Normal[GetDebugs[]]};
+	runtimeInfo = {{initTime, exceptionTime}, {initCountsTime, reactCountsTime, prodCountsTime, ratesTime}, {naTime, backendTime, resultTime}, Normal[GetRuntimes[]]};
 	simulationResult
 ]
-
-GetRuntimes[] := runtimes;
 
 
 (*Specifies options that can be passed into SimulateBoundedTauLeaping with default values*)
@@ -222,6 +224,7 @@ Options[SimulateBoundedTauLeaping] = {
 	"useIter" -> False,
 	"finalOnly" -> False,
 	"outputTS" -> True,
+	"rho" -> Null,
 	"epsilon" -> Null
 }
 
@@ -233,7 +236,7 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	infTime, infIter},
 	
 	(*Initialize global variables that are stored for PlotLastSimulation*)
-	concs = Quiet[Cases[ExpandInits[rxnsys], conc[_, _]]];
+	concs = Quiet[Cases[ExpandConcs[rxnsys], conc[_, _]]];
 	rxnls = Quiet[Cases[RxnsToRxnls[rxnsys], rxnl[_List, _List, _]]];
 	spcs = Quiet[SpeciesInRxnsys[rxnsys]];
 	timeEnd = OptionValue["timeEnd"];
@@ -242,10 +245,14 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	statesOnly = False;
 	finalOnly = OptionValue["finalOnly"];
 	outputTS = OptionValue["outputTS"];
+	rho = OptionValue["rho"];
 	epsilon = OptionValue["epsilon"];
-	(*If no epsilon set, use well-defined epsilon (equivalent to p=0.1)*)
+	(*If no rho or epsilon set, use well-defined epsilon (equivalent to p=0.25)*)
+	If[rho === Null && epsilon === Null,
+		rho = 0.25
+	];
 	If[epsilon === Null,
-		epsilon = 0.0309/Length[rxnls]
+		epsilon = 3/(4*Length[rxnls])*(1 - Sqrt[(1 + rho/9)/(1 + rho)])
 	];
 	
 	(*Exception handling block*)
@@ -275,7 +282,8 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	(*If epsilon is invalid, give error*)
 	If[!NumericQ[epsilon] || epsilon < 0 || epsilon > 1,
 		Message[SimulateBoundedTauLeaping::epsilonerr, epsilon];
-		epsilon = 0.0309/Length[rxnls]
+		rho = 0.25;
+		epsilon = 3/(4*Length[rxnls])*(1 - Sqrt[(1 + rho/9)/(1 + rho)])
 	];
 	
 	(*Determine simulation parameters from rxnsys and convert to numeric arrays of correct datatypes*)
@@ -288,17 +296,20 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	prodCountsNA = NumericArray[prodCounts, "Integer64"];
 	ratesNA = NumericArray[rates, "Real64"];
 	
-(*	(*Run simulation via C++ library*)
+	(*Run simulation via C++ library*)
 	BTLBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, finalOnly, epsilon];
 	(*Output format depends on outputTS flag*)
 	If[outputTS,
 		simulationResult = TimeSeries[Normal[GetStates[]], {Normal[GetTimes[]]}],
 		simulationResult = {Normal[GetStates[]], Normal[GetTimes[]]}
-	]*)
-	(*Temporary return while backend unimplemented*)
-	epsilon
+	];
+	runtimeInfo = Normal[GetRuntimes[]];
+	simulationResult
 ]
 
+
+(*Gets stored runtime results*)
+GetRuntimeInfo[] := runtimeInfo;
 
 (*Plots the last simulation ran using the same options as ListLinePlot*)
 PlotLastSimulation[opts:OptionsPattern[ListLinePlot]] := Module[
