@@ -429,8 +429,8 @@ vector<double> allTimes;
 
 
 // ****** gloabl storage for debug *******
-int data_type_convertion_time; 
-int algo_time;
+double data_type_convertion_time; 
+double algo_time;
 
 // ******** end of global storage ********
 
@@ -509,7 +509,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	process->start();
 
     auto end0 = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsed_seconds0 = end-start;
+    std::chrono::duration<double> elapsed_seconds0 = end0-start0;
     algo_time = elapsed_seconds0.count();
 
     // pass back rerults depends on result
@@ -628,7 +628,7 @@ EXTERN_C DLLEXPORT int getDebugs(WolframLibraryData libData, mint Argc, MArgumen
 	}
 	
 	// convert output to a NumericArray
-	double *Mout0 = static_cast<double *>(Mout);
+	double *Mout0 = static_cast<double *>(data_out);
 	Mout0[0] = data_type_convertion_time;
     Mout0[1] = algo_time;
 

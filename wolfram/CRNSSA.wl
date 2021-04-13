@@ -38,6 +38,9 @@ PlotLastSimulation::usage =
 Plots the last simulation ran
 Uses same Options as ListLinePlot"
 
+GetRuntimes::usage=
+"For debug"
+
 
 Begin["`Private`"]
 
@@ -96,9 +99,25 @@ DirectSSABackend = LibraryFunctionLoad[library, "directSSAInterface",
 	"Void"
 ];
 
-(*Once DirectSSABackend has been run, these functions obtain the simulation results*)
+(*(*Entire backend implementation for BTL, has no return type*)
+BTLBackend = LibraryFunctionLoad[library, "BTLInterface",
+	{LibraryDataType[NumericArray],
+	LibraryDataType[NumericArray],
+	LibraryDataType[NumericArray],
+	LibraryDataType[NumericArray],
+	Real,
+	Integer,
+	True|False,
+	True|False,
+	True|False,
+	Real},
+	"Void"
+];*)
+
+(*Once a simulation has been run, these functions obtain the simulation results*)
 GetStates = LibraryFunctionLoad[library, "getStates", {}, LibraryDataType[NumericArray]];
 GetTimes = LibraryFunctionLoad[library, "getTimes", {}, LibraryDataType[NumericArray]];
+GetDebugs = LibraryFunctionLoad[library, "getDebugs", {}, LibraryDataType[NumericArray]];
 
 
 (*Specifies options that can be passed into SimulateDirectSSA with default values*)
@@ -116,9 +135,12 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	(*Define local variables*)
 	{initCounts, reactCounts, prodCounts, rates,
 	initCountsNA, reactCountsNA, prodCountsNA, ratesNA,
-	infTime, infIter},
+	infTime, infIter,
+	initTime, exceptionTime, initCountsTime, reactCountsTime,
+	prodCountsTime, ratesTime, naTime, backendTime, resultTime},
 	
 	(*Initialize global variables that are stored for PlotLastSimulation*)
+	initTime = Timing[Module[{},
 	concs = Quiet[Cases[ExpandConcs[rxnsys], conc[_, _]]];
 	rxnls = Quiet[Cases[RxnsToRxnls[rxnsys], rxnl[_List, _List, _]]];
 	spcs = Quiet[SpeciesInRxnsys[rxnsys]];
@@ -128,8 +150,10 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	statesOnly = OptionValue["statesOnly"];
 	finalOnly = OptionValue["finalOnly"];
 	outputTS = OptionValue["outputTS"];
+	];][[1]];
 	
 	(*Exception handling block*)
+	exceptionTime = Timing[Module[{},
 	CheckSyntaxErrors[rxnsys];
 	(*Set infTime flag if timeEnd is infinity or invalid*)
 	If[timeEnd === Infinity || timeEnd <= 0 || !NumericQ[timeEnd],
@@ -153,20 +177,26 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 		inf = True,
 		inf = False
 	];
+	];][[1]];
 	
 	(*Determine simulation parameters from rxnsys and convert to numeric arrays of correct datatypes*)
-	initCounts = GetInitCounts[concs, spcs];
-	reactCounts = GetReactCounts[rxnls, spcs];
-	prodCounts = GetProdCounts[rxnls, spcs];
-	rates = GetRates[rxnls];
+	{initCountsTime, initCounts} = Timing[GetInitCounts[concs, spcs]];
+	{reactCountsTime, reactCounts} = Timing[GetReactCounts[rxnls, spcs]];
+	{prodCountsTime, prodCounts} = Timing[GetProdCounts[rxnls, spcs]];
+	{ratesTime, rates} = Timing[GetRates[rxnls]];
+	naTime = Timing[Module[{},
 	initCountsNA = NumericArray[initCounts, "Integer32"];
 	reactCountsNA = NumericArray[reactCounts, "Integer64"];
 	prodCountsNA = NumericArray[prodCounts, "Integer64"];
 	ratesNA = NumericArray[rates, "Real64"];
+	];][[1]];
 	
 	(*Run simulation via C++ library*)
+	backendTime = Timing[Module[{},
 	DirectSSABackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, statesOnly, finalOnly];
+	];][[1]];
 	(*Output format depends on outputTS and statesOnly flags*)
+	resultTime = Timing[Module[{},
 	If[outputTS,
 		If[statesOnly,
 			simulationResult = TimeSeries[Normal[GetStates[]], {0, Length[Normal[GetStates[]]]-1}],
@@ -176,8 +206,13 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 			simulationResult = Normal[GetStates[]],
 			simulationResult = {Normal[GetStates[]], Normal[GetTimes[]]}
 		]
-	]
+	];
+	];][[1]];
+	runtimes = {{initTime, exceptionTime}, {initCountsTime, reactCountsTime, prodCountsTime, ratesTime}, {naTime, backendTime, resultTime}, Normal[GetDebugs[]]};
+	simulationResult
 ]
+
+GetRuntimes[] := runtimes;
 
 
 (*Specifies options that can be passed into SimulateBoundedTauLeaping with default values*)
@@ -254,7 +289,7 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	ratesNA = NumericArray[rates, "Real64"];
 	
 (*	(*Run simulation via C++ library*)
-	BoundedTauLeapingBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, finalOnly, epsilon];
+	BTLBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, finalOnly, epsilon];
 	(*Output format depends on outputTS flag*)
 	If[outputTS,
 		simulationResult = TimeSeries[Normal[GetStates[]], {Normal[GetTimes[]]}],
