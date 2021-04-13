@@ -2,7 +2,13 @@
 #include <cstdint>
 #include <vector>
 #include "../directMethodSSA/directMethodSSA.h"
+#include "../directMethodSSA/directMethodSSA.cpp"
+#include "../directMethodSSA/dependencyGraph.h"
+#include "../directMethodSSA/dependencyGraph.cpp"
+#include "../directMethodSSA/reactionTree.h"
+#include "../directMethodSSA/reactionTree.cpp"
 #include "../boundedTauLeaping/boundedTauLeaping.h"
+#include "../boundedTauLeaping/boundedTauLeaping.cpp"
 #include "WolframLibrary.h"
 #include "WolframNumericArrayLibrary.h"
 
