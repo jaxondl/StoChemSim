@@ -78,6 +78,7 @@ vector<double> boundedTauLeaping::calculatePropensities() {
         if (propensity < 0){
             nonePossible = true;
             cout << "Ran into negative propensity!" << endl;
+            // throw new exception. Try catch block in the driver itself
             break;
         }
 
