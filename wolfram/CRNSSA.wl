@@ -76,17 +76,33 @@ PlotLastSimulation::finalonlyerr = finalonlyerrMsg
 GetInitCounts[concs_, spcs_] := (Plus @@ Cases[concs, conc[#, count_] :> count])& /@ spcs
 
 (*Creates reactant count vectors by obtaining reactant coefficients from each reaction*)
-GetReactCounts[rxnls_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxnls, rxnl[r_List, _List, _] :> Plus @@ r], spcs]
+GetReactCounts[rxnls_, spcs_] := Module[
+	{numRxnls = Count[rxnls, rxnl[__]],
+	reactants = Cases[rxnls, rxnl[r_, _, _] :> r],
+	reactantsStoich, spcsIndexMapping},
+	reactantsStoich = Table[0, {numRxnls},{Length[spcs]}];
+	spcsIndexMapping = AssociationThread[spcs, Range[Length[spcs]]];
+	MapIndexed[(reactantsStoich[[First[#2], spcsIndexMapping[#1]]]++)&, reactants, {2}];
+	reactantsStoich
+]
 
 (*Creates product count vectors by obtaining product coefficients from each reaction*)
-GetProdCounts[rxnls_, spcs_] := Outer[Coefficient[#1, #2]&, Cases[rxnls, rxnl[_List, p_List, _] :> Plus @@ p], spcs]
+GetProdCounts[rxnls_, spcs_] := Module[
+	{numRxnls = Count[rxnls, rxnl[__]],
+	products = Cases[rxnls, rxnl[_, p_, _] :> p],
+	productsStoich, spcsIndexMapping},
+	productsStoich = Table[0, {numRxnls},{Length[spcs]}];
+	spcsIndexMapping = AssociationThread[spcs, Range[Length[spcs]]];
+	MapIndexed[(productsStoich[[First[#2], spcsIndexMapping[#1]]]++)&, products, {2}];
+	productsStoich
+]
 
 (*Creates rate vector by obtaining reaction rate from each reaction*)
 GetRates[rxnls_] := Cases[rxnls, rxnl[_, _, k_] :> k]
 
 
 (*Loads C++ library and loads interface functions with specified argument types*)
-library = LibraryLoad["CRNSSAInterface"];
+library = LibraryLoad["CRNSSAInterface"]
 
 (*Entire backend implementation for Direct SSA, has no return type*)
 DirectSSABackend = LibraryFunctionLoad[library, "directSSAInterface",
@@ -101,7 +117,7 @@ DirectSSABackend = LibraryFunctionLoad[library, "directSSAInterface",
 	True|False,
 	True|False},
 	"Void"
-];
+]
 
 (*Entire backend implementation for BTL, has no return type*)
 BTLBackend = LibraryFunctionLoad[library, "BTLInterface",
@@ -116,12 +132,12 @@ BTLBackend = LibraryFunctionLoad[library, "BTLInterface",
 	True|False,
 	Real},
 	"Void"
-];
+]
 
 (*Once a simulation has been run, these functions obtain the simulation results*)
-GetStates = LibraryFunctionLoad[library, "getStates", {}, LibraryDataType[NumericArray]];
-GetTimes = LibraryFunctionLoad[library, "getTimes", {}, LibraryDataType[NumericArray]];
-GetRuntimes = LibraryFunctionLoad[library, "getRuntimes", {}, LibraryDataType[NumericArray]];
+GetStates = LibraryFunctionLoad[library, "getStates", {}, LibraryDataType[NumericArray]]
+GetTimes = LibraryFunctionLoad[library, "getTimes", {}, LibraryDataType[NumericArray]]
+GetRuntimes = LibraryFunctionLoad[library, "getRuntimes", {}, LibraryDataType[NumericArray]]
 
 
 (*Specifies options that can be passed into SimulateDirectSSA with default values*)
