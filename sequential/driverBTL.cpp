@@ -34,56 +34,75 @@ int main(int argc, char** argv) {
             ti = true;
         else
             cout << "endValue is " << endValue << endl; // otherwise, print the end value for confirmation to the user
-        for(int i = 4; i < argc; i++){ // for all subsequent command line arguments (flags)
+        double epsilon = 0.05;
+        bool checkEpsilon = false;
+        bool checkRho = false;
+        for(int i = 4; i < argc; i++) { // for all subsequent command line arguments (flags)
             string argument = argv[i];
-            for (int j = 0; j < argument.length(); j++){ // set all strings fully to lower case format
+            for (int j = 0; j < argument.length(); j++) { // set all strings fully to lower case format
                 argument[j] = tolower(argument[j]);
             }
             // depending on the user input, set certain flags to true
             //if (argument =="-so" || argument == "-statesonly")
-                //so = true;
-            if (argument == "-fo" || argument == "-finalonly")
-                fo = true;
-            else if (argument == "-it"  || argument == "-useiter")
-                it = true;
+            //so = true;
+            if (checkEpsilon) {
+                epsilon = stod(argument);
+                checkEpsilon = false;
+            } else if (checkRho) {
+                double rho = stod(argument);
+                epsilon = (3.0 / (4.0*reactantsVector.size())) * (1.0 - sqrt((1.0+(rho/9.0)) / (1.0+rho)));
+                checkEpsilon = false;
+            } else {
+                if (argument == "-fo" || argument == "-finalonly")
+                    fo = true;
+                else if (argument == "-it" || argument == "-useiter")
+                    it = true;
+                else if (argument == "-e" || argument == "-epsilon")
+                    checkEpsilon = true;
+                else if (argument == "-p" || argument == "-rho") {
+                    checkRho = true;
+                }
+            }
         }
 
-        double epsilon = 0.05; //TODO: implement a way for the user to pass this to the program; 0.05 is the default until then
-        // Create directMethodSSA object and begin simulation
-        boundedTauLeaping *btlAlgorithm = new boundedTauLeaping(moleculeAmounts, reactionRates, reactantsVector, stateChangeVector, endValue, fo, ti, it, epsilon);
-        btlAlgorithm->start();
+        if (epsilon > 1 || epsilon < 0) {
+            cout << "An invalid epsilon or rho value was provided." << endl;
+        } else {
+            // Create directMethodSSA object and begin simulation
+            boundedTauLeaping *btlAlgorithm = new boundedTauLeaping(moleculeAmounts, reactionRates, reactantsVector,
+                                                                    stateChangeVector, endValue, fo, ti, it, epsilon);
+            btlAlgorithm->start();
 
-        // Get all necessary state from the directMethodSSA object
-        vector<double> allTimes = btlAlgorithm->getAllTimes();
-        vector<vector<int> > allStates = btlAlgorithm->getAllStates();
-        vector<int> currentState = btlAlgorithm->getCurrentState();
-        double currentTime = btlAlgorithm->getCurrentTime();
-        int currentIteration = btlAlgorithm->getCurrentIteration();
+            // Get all necessary state from the directMethodSSA object
+            vector<double> allTimes = btlAlgorithm->getAllTimes();
+            vector<vector<int> > allStates = btlAlgorithm->getAllStates();
+            vector<int> currentState = btlAlgorithm->getCurrentState();
+            double currentTime = btlAlgorithm->getCurrentTime();
+            int currentIteration = btlAlgorithm->getCurrentIteration();
 
-        // Writing to output file depending on input flags
-        ofstream outfile;
-        outfile.open(outputFilePath);
-        int iterationWidth = 15;
-        char separator = ' ';
-        if(fo){
-            //if(so) // final only and state only
-            // outfile << "Final State:" << endl;
-            //else { // final only with time
-                if(it){
+            // Writing to output file depending on input flags
+            ofstream outfile;
+            outfile.open(outputFilePath);
+            int iterationWidth = 15;
+            char separator = ' ';
+            if (fo) {
+                //if(so) // final only and state only
+                // outfile << "Final State:" << endl;
+                //else { // final only with time
+                if (it) {
                     outfile << "Final Iteration" << "\t\t\tFinal State" << endl;
                     outfile << left << setw(iterationWidth) << setfill(separator) << currentIteration << "\t\t\t";
-                }
-                else {
+                } else {
                     outfile << "Final Time" << "\t\t\tFinal State" << endl;
                     outfile << setprecision(5) << scientific << currentTime << "\t\t\t";
                 }
-            //}
-            for(int i = 0; i < currentState.size(); i++){
-                outfile << speciesList[i];
-                outfile << ": " << currentState[i];
-                outfile << "\t";
+                //}
+                for (int i = 0; i < currentState.size(); i++) {
+                    outfile << speciesList[i];
+                    outfile << ": " << currentState[i];
+                    outfile << "\t";
+                }
             }
-        }
 //        else if(so){ // states only (no time)
 //            outfile << "Iteration" << "\t\t\tState" << endl;
 //            for(int i = 0; i < allStates.size(); i++){
@@ -96,22 +115,26 @@ int main(int argc, char** argv) {
 //                outfile << endl;
 //            }
 //        }
-        else { // all states and all times
-            outfile << "Iteration" << "\t\t\tTime(s)" << "\t\t\tState" << endl;
-            for(int i = 0; i < allTimes.size(); i++){
-                outfile << left << setw(iterationWidth) << setfill(separator) << i << "\t\t" << setprecision(5) << scientific << allTimes[i] << "\t\t";
-                for(int j = 0; j < allStates[i].size(); j++){
-                    outfile << speciesList[j];
-                    outfile << ": " << allStates[i][j];
-                    outfile << "\t";
+            else { // all states and all times
+                outfile << "Iteration" << "\t\t\tTime(s)" << "\t\t\tState" << endl;
+                for (int i = 0; i < allTimes.size(); i++) {
+                    outfile << left << setw(iterationWidth) << setfill(separator) << i << "\t\t" << setprecision(5)
+                            << scientific << allTimes[i] << "\t\t";
+                    for (int j = 0; j < allStates[i].size(); j++) {
+                        outfile << speciesList[j];
+                        outfile << ": " << allStates[i][j];
+                        outfile << "\t";
+                    }
+                    outfile << endl;
                 }
-                outfile << endl;
             }
+            outfile.close();
         }
-        outfile.close();
     }
     else {
         cout << "There were issue(s) with your input file." << endl;
     }
     return 0;
 }
+
+

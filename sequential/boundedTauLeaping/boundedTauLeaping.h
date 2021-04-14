@@ -8,6 +8,8 @@ using namespace std;
 #include <random>
 #include <vector>
 #include <chrono>
+#include <algorithm>
+#include <climits>
 
 class boundedTauLeaping {
 private:

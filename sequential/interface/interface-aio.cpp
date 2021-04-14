@@ -4,8 +4,7 @@
 #include "WolframLibrary.h"
 #include "WolframNumericArrayLibrary.h"
 
-/* backend start */
-#include <iostream>
+/* Direct SSA backend start */
 #include <string>
 #include <iterator>
 #include <set>
@@ -13,6 +12,9 @@
 #include <vector>
 #include <utility>
 #include <random>
+#include <chrono>
+#include <cmath>
+#include <climits>
 
 using namespace std;
 
@@ -335,7 +337,242 @@ void directMethodSSA::start(){
         currentIteration++; // update iteration
     }
 }
-/* backend end */
+/* Direct SSA backend end */
+
+/* BTL backend start */
+class boundedTauLeaping {
+private:
+    vector<vector<int> > allStates;
+    vector<double> allTimes;
+    vector<double> reactionRates;
+    vector<vector<pair<int, int> > > reactantsVector;
+    vector<vector<pair<int, int> > > stateChangeVector;
+
+    vector<int> currentState;
+    double currentTime;
+    int currentIteration;
+    double endValue;
+    bool nonePossible;
+    bool endInfinity;
+    bool finalOnly;
+    bool endByIteration;
+    double epsilon;
+
+    double getGammaRandomVariable(double a, double b);
+    int getBinomialRandomVariable(int n, double p);
+
+    vector<double> calculatePropensities();
+    vector<int> calculateBounds();
+    vector<double> determineViolatingTimes(vector<int> firingBounds, vector<double> propensities);
+    int determineFirstViolating(vector<double> violatingTimes);
+    vector<int> determineReactionOccurrences(vector<int> firingBounds, vector<double> violatingTimes, int violatingIndex);
+
+    void updateTime(double tau);
+    void updateState(vector<int> reactionOccurrences);
+
+public:
+    boundedTauLeaping(vector<int> initialState, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool finalOnly, bool endInfinity, bool endByIteration, double epsilon);
+
+    vector<vector<int> > getAllStates();
+    vector<double> getAllTimes();
+    vector<int> getCurrentState();
+    double getCurrentTime();
+    int getCurrentIteration();
+
+    void start();
+};
+
+boundedTauLeaping::boundedTauLeaping(vector<int> initialState, vector<double> reactionRates, vector<vector<pair<int, int> > > reactantsVector, vector<vector<pair<int, int> > > stateChangeVector, double endValue, bool finalOnly, bool endInfinity, bool endByIteration, double epsilon) {
+    this->allStates.push_back(initialState);
+    this->allTimes.push_back(0);
+    this->reactionRates = reactionRates;
+    this->reactantsVector = reactantsVector;
+    this->stateChangeVector = stateChangeVector;
+    this->currentState = initialState;
+    this->currentTime = 0;
+    this->currentIteration = 0;
+    this->endValue = endValue;
+    this->finalOnly = finalOnly;
+    this->endInfinity = endInfinity;
+    this->endByIteration = endByIteration;
+    this->epsilon = epsilon;
+}
+
+// Draws from gamma distribution defined by a as alpha and b as beta, both must be positive
+double boundedTauLeaping::getGammaRandomVariable(double a, double b) {  
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator (seed);
+    gamma_distribution<double> distribution(a, 1/b); // 1/b BECAUSE USE SCALE, NOT RATE
+    double g = distribution(generator);
+    return g;
+}
+
+// Draws from binomial distribution defined by n experiments (positive) and success probability p (between 0 and 1)
+int boundedTauLeaping::getBinomialRandomVariable(int n, double p) {
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator (seed);
+    binomial_distribution<int> distribution(n, p);
+    int b = distribution(generator);
+    return b;
+}
+
+// Propensity calculation for each reaction = k * (amount(reactantSpecies1)) * (amount(reactantSpecies1)-1)...(amount(reactantSpecies1)-reactantCoefficient + 1) * ...
+vector<double> boundedTauLeaping::calculatePropensities() {
+    nonePossible = true;
+    vector<double> propensities;
+    double total = 0;
+    // compute propensity for every reaction
+    for (int i = 0; i < reactionRates.size(); i++) {
+        double propensity = reactionRates[i];
+        // start with reaction rate and multiply by reactant amounts according to propensity formula
+        for (pair<int, int> reactant : reactantsVector[i]) {
+            for (int j = 0; j < reactant.second; j++) {
+                propensity *= (currentState[reactant.first] - j);
+            }
+        }
+        // determine if all propensities are 0 (no reactions possible, end simulation)
+        if (propensity > 0) {
+            nonePossible = false;
+        }
+
+        if (propensity < 0){
+            nonePossible = true;
+            break;
+        }
+
+        propensities.push_back(propensity);
+        total += propensity;
+    }
+    return propensities;
+}
+
+// Firing bound for each reaction is minimum bj such that |bj * vij| > epsilon * xi for some species i
+// This implies bj = ceil(|epsilon * xi / vij|) for each affected species
+// For each reaction, minimum bj across all affected species is the firing bound
+vector<int> boundedTauLeaping::calculateBounds() {
+    vector<int> firingBounds;
+    // compute firing bound for every reaction
+    for (int i = 0; i < stateChangeVector.size(); i++) {
+         // use state change vector to determine affected species
+        vector<pair<int, int> > currentStateChangeVector = stateChangeVector[i];
+
+        int minBound = INT_MAX;
+        // for all species affected by reaction, determine bj and keep track of minimum
+        for (pair<int, int> species : currentStateChangeVector) {
+            int currentBound = ceil( abs( epsilon * currentState[species.first] / species.second));
+            if(currentBound == 0){
+                currentBound = 1;
+            }
+            if (currentBound < minBound) {
+                minBound = currentBound;
+            }
+        }
+        firingBounds.push_back(minBound);
+    }
+    return firingBounds;
+}
+
+// Determines violating times Tj by drawing from gamma distribution for every reaction using firing bounds and propensities
+vector<double> boundedTauLeaping::determineViolatingTimes(vector<int> firingBounds, vector<double> propensities) {
+    vector<double> violatingTimes;
+    // draw from gamma distribution for every reaction
+    for (int i = 0; i < firingBounds.size(); i++) {
+        violatingTimes.push_back(getGammaRandomVariable(firingBounds[i], propensities[i]));
+    }
+    return violatingTimes;
+}
+
+// Determines first violating time index via argmin
+int boundedTauLeaping::determineFirstViolating(vector<double> violatingTimes) {
+    vector<double>::iterator iter = min_element(violatingTimes.begin(), violatingTimes.end());
+    return distance(violatingTimes.begin(), iter);
+}
+
+// Determines number of occurrences nj for each reaction during leap T
+// For violating reaction, nj = bj
+// For all other reactions, nj is drawn from binomial distribution with n = bj - 1 and p = T / Tj
+vector<int> boundedTauLeaping::determineReactionOccurrences(vector<int> firingBounds, vector<double> violatingTimes, int violatingIndex) {
+    vector<int> result;
+    double firstViolatingTime = violatingTimes[violatingIndex];
+    // determine number of occurrences for every reaction during leap
+    for (int i = 0; i < violatingTimes.size(); i++) {
+        int nj;
+        // if violating reaction, nj = bj
+        if (i == violatingIndex) {
+            nj = firingBounds[violatingIndex];
+        }
+        // else, draw from binomial distribution to determine occurrences
+        else {
+            double p = firstViolatingTime/violatingTimes[i];
+            nj = getBinomialRandomVariable(firingBounds[i] - 1, p);
+        }
+        result.push_back(nj);
+    }
+    return result;
+}
+
+// Updates time by leap amount tau
+void boundedTauLeaping::updateTime(double tau) {
+    currentTime += tau;
+}
+
+// Effects the leap by replacing ~x[j] with ~x[j] + ~ν[j] * n[j]
+// Notation: ~x means the x vector (v is the state change vector, x is the current state vector)
+void boundedTauLeaping::updateState(vector<int> reactionOccurrences) {
+    // update state for each reaction based on number of occurrences
+    for (int i = 0; i < reactionOccurrences.size(); i++) {
+        vector<pair<int, int> > chosenReactionChange = stateChangeVector[i]; // ~v[j] vector
+        int numberOccurrences = reactionOccurrences[i]; // n[j]
+        // update the state change by individually updating the amounts of the affected species for each time the reaction occurred
+        for (pair<int, int> species: chosenReactionChange) {
+            currentState[species.first] += species.second*numberOccurrences;
+        }
+    }
+}
+
+vector<vector<int> > boundedTauLeaping::getAllStates() {return allStates;}
+
+vector<double> boundedTauLeaping::getAllTimes() {return allTimes;}
+
+vector<int> boundedTauLeaping::getCurrentState() {return currentState;}
+
+double boundedTauLeaping::getCurrentTime() {return currentTime;}
+
+int boundedTauLeaping::getCurrentIteration() {return currentIteration;}
+    
+void boundedTauLeaping::start() {
+    vector<double> props = calculatePropensities(); // Step 1a, sets nonePossible
+    vector<int> firingBounds;
+    vector<double> violatingTimes;
+    int firstViolatingIndex;
+    vector<int> reactionOccurrences;
+
+    // run until no reactions are possible or time/iteration termination condition is met
+    while (!nonePossible && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))) {
+        firingBounds = calculateBounds(); // Step 1b
+        violatingTimes = determineViolatingTimes(firingBounds, props); // Step 2
+        firstViolatingIndex = determineFirstViolating(violatingTimes); // Step 3
+        reactionOccurrences = determineReactionOccurrences(firingBounds, violatingTimes, firstViolatingIndex); // Step 4
+        
+        // if updating the time violates the finite end time value, terminate the simulation
+        if (currentTime + violatingTimes[firstViolatingIndex] > endValue && !endInfinity) {
+            break;
+        }
+
+        updateTime(violatingTimes[firstViolatingIndex]); // Step 5 effecting the leap: time update
+        updateState(reactionOccurrences); // Step 5 effecting the leap: state update
+
+        // record the updated time only if the finalOnly flag is false
+        if (!finalOnly) {
+            allTimes.push_back(currentTime);
+            allStates.push_back(currentState);
+        }
+        
+        currentIteration++; // update iteration
+        props = calculatePropensities(); // Step 1a, sets nonePossible
+    }    
+}
+/* BTL backend end */
 
 /* Return the version of Library Link */
 DLLEXPORT mint WolframLibrary_getVersion() { return WolframLibraryVersion; }
@@ -427,6 +664,11 @@ static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint mo
 vector<vector<int> > allStates;
 vector<double> allTimes;
 
+
+// ****** gloabl storage for runtimes *******
+double conversionTime; 
+double algoTime;
+
 // ******** end of global storage ********
 
 /* CRN SSA main function */
@@ -435,6 +677,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	int err = LIBRARY_FUNCTION_ERROR;
 	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
 
+    auto startConversion = std::chrono::steady_clock::now();
 	// convert initCounts
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
 	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
@@ -482,6 +725,12 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 
     // choose endValue
     double endValue = (useIter)? iterEndI : timeEndR;
+    
+    auto endConversion = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSecondsConversion = endConversion - startConversion;
+    conversionTime = elapsedSecondsConversion.count();
+
+    auto startAlgo = std::chrono::steady_clock::now();
 
 	// CRN SSA process: pass everything to backend
 	directMethodSSA* process = new directMethodSSA(
@@ -496,6 +745,10 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
                     useIter);
 	process->start();
 
+    auto endAlgo = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSecondsAlgo = endAlgo - startAlgo;
+    algoTime = elapsedSecondsAlgo.count();
+
     // pass back rerults depends on result
     if (finalOnly) {
 		vector<vector<int> > current_state;
@@ -506,11 +759,108 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 			current_time.push_back(process->getCurrentTime());
             allTimes = current_time;
         }
-    } else {
+    }
+    else {
         allStates = process->getAllStates();
         if (!statesOnly) {
             allTimes = process->getAllTimes();
         }
+    }
+
+	return LIBRARY_NO_ERROR;
+}
+
+/* BTL main function */
+EXTERN_C DLLEXPORT int BTLInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
+	// debug setup
+	int err = LIBRARY_FUNCTION_ERROR;
+	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
+
+    auto startConversion = std::chrono::steady_clock::now();
+	// convert initCounts
+	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
+	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
+	mint length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
+    const int64_t *initIn = static_cast<const int64_t *>(MinitCounts_in);
+	vector<int> moleculeAmounts = numericArraytoVector<int, int>(initIn, length);
+
+	// convert reactantsArray & stateChangeArray
+	MNumericArray MreactCounts = MArgument_getMNumericArray(Args[1]);
+	MNumericArray MprodCounts = MArgument_getMNumericArray(Args[2]);
+	mint const * dims = naFuns->MNumericArray_getDimensions(MreactCounts);
+	mint reactionCount = dims[0];
+	mint moleculeCount = dims[1];
+	void* MreactCounts_in = naFuns->MNumericArray_getData(MreactCounts);
+	void* MprodCounts_in = naFuns->MNumericArray_getData(MprodCounts);
+	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in);
+	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);
+    vector<vector<pair<int, int> > > reactantsArray;
+	vector<vector<pair<int, int> > > stateChangeArray;
+    reactantsAndStateChangeArrayConstruction<int, int>(reactionCount, moleculeCount, reactIn, prodIn, reactantsArray, stateChangeArray);
+
+	// convert rates
+	MNumericArray Mrates = MArgument_getMNumericArray(Args[3]);
+	void* rateIn = naFuns->MNumericArray_getData(Mrates);
+	length = naFuns->MNumericArray_getFlattenedLength(Mrates);
+	vector<double> kValues = numericArraytoVector<double, double>(rateIn, length);
+
+	// extract timeEndR
+	double timeEndR = MArgument_getReal(Args[4]);
+
+    // extract iterEndI
+    double iterEndI = (double)MArgument_getInteger(Args[5]);
+
+    // extract inf (flag)
+    mbool inf = MArgument_getBoolean(Args[6]);
+
+    // extract useIter (flag)
+    mbool useIter = MArgument_getBoolean(Args[7]);
+
+    // extract finalOnly (flag)
+    mbool finalOnly = MArgument_getBoolean(Args[8]);
+
+	// extract epsilon
+	double epsilon = MArgument_getReal(Args[9]);
+
+    // choose endValue
+    double endValue = (useIter)? iterEndI : timeEndR;
+
+    auto endConversion = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSecondsConversion = endConversion - startConversion;
+    conversionTime = elapsedSecondsConversion.count();
+
+    auto startAlgo = std::chrono::steady_clock::now();
+
+	// CRN SSA process: pass everything to backend
+	boundedTauLeaping* process = new boundedTauLeaping(
+					moleculeAmounts,
+					kValues,
+					reactantsArray,
+					stateChangeArray,
+					endValue,
+                    finalOnly,
+                    inf,
+                    useIter,
+					epsilon);
+	process->start();
+
+    auto endAlgo = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSecondsAlgo = endAlgo - startAlgo;
+    algoTime = elapsedSecondsAlgo.count();
+
+    // pass back rerults depends on result
+    if (finalOnly) {
+		vector<vector<int> > current_state;
+		current_state.push_back(process->getCurrentState());
+        allStates = current_state;
+
+        vector<double> current_time;
+        current_time.push_back(process->getCurrentTime());
+        allTimes = current_time;
+    }
+    else {
+        allStates = process->getAllStates();
+        allTimes = process->getAllTimes();
     }
 
 	return LIBRARY_NO_ERROR;
@@ -578,6 +928,43 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	
 	// convert output to a NumericArray
 	matrixtoNumericArray<int, mint>(data_out, allStates);
+
+	// pass the result back
+	MArgument_setMNumericArray(res, Mout);
+	return LIBRARY_NO_ERROR;
+
+	cleanup:
+	naFuns->MNumericArray_free(Mout);
+	return err;
+}
+
+EXTERN_C DLLEXPORT int getRuntimes(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
+	// debug setup
+	int err = LIBRARY_FUNCTION_ERROR;
+	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
+
+	// reused local varibles setup
+	void *data_in = NULL, *data_out = NULL;
+	mint length;
+	mint const *dims;
+
+	// output setup
+	MNumericArray Mout;
+	int64_t out_size = 2;
+	const mint *dims_out = &out_size;
+	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
+	if (err != 0) {
+		goto cleanup;
+	}
+	data_out = naFuns->MNumericArray_getData(Mout);
+	if (data_out == NULL) {
+		goto cleanup;
+	}
+	
+	// convert output to a NumericArray
+	double *Mout0 = static_cast<double *>(data_out);
+	Mout0[0] = conversionTime;
+    Mout0[1] = algoTime;
 
 	// pass the result back
 	MArgument_setMNumericArray(res, Mout);
