@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     33873,        797]
-NotebookOptionsPosition[     25794,        640]
-NotebookOutlinePosition[     31674,        762]
-CellTagsIndexPosition[     31631,        759]
+NotebookDataLength[     30521,        707]
+NotebookOptionsPosition[     22448,        550]
+NotebookOutlinePosition[     28327,        672]
+CellTagsIndexPosition[     28284,        669]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -68,106 +68,15 @@ Cell[BoxData[{
   RowBox[{"repoPath", "=", 
    RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{
-   RowBox[{"pathInterface", "=", 
-    RowBox[{"FileNameJoin", "[", 
-     RowBox[{
-      RowBox[{"{", 
-       RowBox[{
-       "repoPath", ",", "\"\<sequential\\\\interface\\\\interface.cpp\>\""}], 
-       "}"}], ",", 
-      RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
-   ";"}], "\[IndentingNewLine]", 
-  RowBox[{"(*", 
-   RowBox[{
-    RowBox[{"pathDirectMethodSSAHeader", "=", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{
-        "repoPath", ",", 
-         "\"\<sequential\\\\directMethodSSA\\\\directMethodSSA.h\>\""}], 
-        "}"}], ",", 
-       RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
-    ";", "\[IndentingNewLine]", 
-    RowBox[{"pathDirectMethodSSA", "=", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{
-        "repoPath", ",", 
-         "\"\<sequential\\\\directMethodSSA\\\\directMethodSSA.cpp\>\""}], 
-        "}"}], ",", 
-       RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
-    ";", "\[IndentingNewLine]", 
-    RowBox[{"pathDependencyGraphHeader", " ", "=", " ", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{
-        "repoPath", ",", 
-         "\"\<sequential\\\\directMethodSSA\\\\dependencyGraph.h\>\""}], 
-        "}"}], ",", 
-       RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
-    ";", "\[IndentingNewLine]", 
-    RowBox[{"pathDependencyGraph", " ", "=", " ", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{
-        "repoPath", ",", 
-         "\"\<sequential\\\\directMethodSSA\\\\dependencyGraph.cpp\>\""}], 
-        "}"}], ",", 
-       RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
-    ";", "\[IndentingNewLine]", 
-    RowBox[{"pathReactionTreeHeader", " ", "=", " ", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{
-        "repoPath", ",", 
-         "\"\<sequential\\\\directMethodSSA\\\\reactionTree.h\>\""}], "}"}], 
-       ",", 
-       RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
-    ";", "\[IndentingNewLine]", 
-    RowBox[{"pathReactionTree", " ", "=", " ", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{
-        "repoPath", ",", 
-         "\"\<sequential\\\\directMethodSSA\\\\reactionTree.cpp\>\""}], "}"}],
-        ",", 
-       RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
-    ";", "\[IndentingNewLine]", 
-    RowBox[{"pathBoundedTauLeapingHeader", "=", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{
-        "repoPath", ",", 
-         "\"\<sequential\\\\boundedTauLeaping\\\\boundedTauLeaping.h\>\""}], 
-        "}"}], ",", 
-       RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
-    ";", "\[IndentingNewLine]", 
-    RowBox[{"pathBoundedTauLeaping", "=", 
-     RowBox[{"FileNameJoin", "[", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{
-        "repoPath", ",", 
-         "\"\<sequential\\\\boundedTauLeaping\\\\boundedTauLeaping.cpp\>\""}],
-         "}"}], ",", 
-       RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
-    ";", "\[IndentingNewLine]", 
-    RowBox[{"codePaths", "=", 
+  RowBox[{"pathInterface", "=", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{
      RowBox[{"{", 
       RowBox[{
-      "pathInterface", ",", "pathDirectMethodSSAHeader", ",", 
-       "pathDirectMethodSSA", ",", "pathDependencyGraphHeader", ",", 
-       "pathDependencyGraph", ",", "pathReactionTreeHeader", ",", 
-       "pathReactionTree", ",", "pathBoundedTauLeapingHeader"}], "}"}]}]}], 
-   "*)"}]}], "\n", 
+      "repoPath", ",", "\"\<sequential\\\\interface\\\\interface.cpp\>\""}], 
+      "}"}], ",", 
+     RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{"library", "=", 
   RowBox[{"CreateLibrary", "[", 
    RowBox[{
@@ -180,8 +89,9 @@ Cell[BoxData[{
    3.82728607174475*^9}, {3.827286125272987*^9, 3.827286125496958*^9}, {
    3.827286262104565*^9, 3.8272864293206177`*^9}, {3.8272864878827477`*^9, 
    3.8272864881941023`*^9}, {3.827287353792966*^9, 3.827287370161483*^9}, {
-   3.827287412805532*^9, 3.8272874738325443`*^9}},
- CellLabel->"In[6]:=",ExpressionUUID->"ec758e12-6837-4980-9082-75a77f70492c"],
+   3.827287412805532*^9, 3.8272874738325443`*^9}, {3.827343412215541*^9, 
+   3.8273434226052885`*^9}},ExpressionUUID->"ec758e12-6837-4980-9082-\
+75a77f70492c"],
 
 Cell[BoxData["\<\"C:\\\\Users\\\\jaxon\\\\AppData\\\\Roaming\\\\Mathematica\\\
 \\SystemFiles\\\\LibraryResources\\\\Windows-x86-64\\\\CRNSSAInterface.dll\"\>\
@@ -638,8 +548,8 @@ Cell[BoxData[
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1440., 747.75},
-WindowMargins->{{Automatic, 957}, {Automatic, -6}},
+WindowSize->{1428., 741.75},
+WindowMargins->{{Automatic, 960}, {Automatic, 0}},
 TaggingRules->{
  "WelcomeScreenSettings" -> {"FEStarting" -> False}, "TryRealOnly" -> False},
 InputAliases->{"intt" -> RowBox[{"\[Integral]", 
@@ -770,33 +680,33 @@ Cell[1520, 47, 203, 3, 32, "Output",ExpressionUUID->"a4633e44-d4a4-4729-b002-cb4
 }, Open  ]],
 Cell[1738, 53, 398, 6, 34, "Text",ExpressionUUID->"f9ae4b93-3271-4901-8c7b-5154d71210c5"],
 Cell[CellGroupData[{
-Cell[2161, 63, 4705, 120, 254, "Input",ExpressionUUID->"ec758e12-6837-4980-9082-75a77f70492c"],
-Cell[6869, 185, 742, 10, 32, "Output",ExpressionUUID->"f8422c38-f30f-4fe3-841b-9305aa438fea"]
+Cell[2161, 63, 1359, 30, 85, "Input",ExpressionUUID->"ec758e12-6837-4980-9082-75a77f70492c"],
+Cell[3523, 95, 742, 10, 32, "Output",ExpressionUUID->"f8422c38-f30f-4fe3-841b-9305aa438fea"]
 }, Open  ]],
-Cell[7626, 198, 442, 6, 34, "Text",ExpressionUUID->"49fd3b73-82f5-4081-abb1-ac2af886d96f"],
+Cell[4280, 108, 442, 6, 34, "Text",ExpressionUUID->"49fd3b73-82f5-4081-abb1-ac2af886d96f"],
 Cell[CellGroupData[{
-Cell[8093, 208, 1558, 32, 85, "Input",ExpressionUUID->"57486241-4bc7-4c95-b67f-1dfa27b33a91"],
-Cell[9654, 242, 294, 4, 32, "Output",ExpressionUUID->"4a64b20c-5c14-49b0-8d3a-7183997651cf"]
+Cell[4747, 118, 1558, 32, 85, "Input",ExpressionUUID->"57486241-4bc7-4c95-b67f-1dfa27b33a91"],
+Cell[6308, 152, 294, 4, 32, "Output",ExpressionUUID->"4a64b20c-5c14-49b0-8d3a-7183997651cf"]
 }, Open  ]],
-Cell[9963, 249, 1149, 22, 56, "Text",ExpressionUUID->"e6311312-7ab8-419a-a166-89ea718500da"],
+Cell[6617, 159, 1149, 22, 56, "Text",ExpressionUUID->"e6311312-7ab8-419a-a166-89ea718500da"],
 Cell[CellGroupData[{
-Cell[11137, 275, 270, 5, 47, "Input",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
-Cell[11410, 282, 4310, 104, 91, "Output",ExpressionUUID->"ead5b616-6f14-4c45-af92-828a0681c4ea"]
+Cell[7791, 185, 270, 5, 47, "Input",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
+Cell[8064, 192, 4310, 104, 91, "Output",ExpressionUUID->"ead5b616-6f14-4c45-af92-828a0681c4ea"]
 }, Open  ]],
-Cell[15735, 389, 355, 7, 34, "Text",ExpressionUUID->"14725567-84e2-414a-8129-28567df334bf"],
+Cell[12389, 299, 355, 7, 34, "Text",ExpressionUUID->"14725567-84e2-414a-8129-28567df334bf"],
 Cell[CellGroupData[{
-Cell[16115, 400, 1346, 31, 122, "Input",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
-Cell[17464, 433, 4169, 102, 91, "Output",ExpressionUUID->"7eb20b4b-7535-4663-95d3-7ed8c5bc1ccc"]
+Cell[12769, 310, 1346, 31, 122, "Input",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
+Cell[14118, 343, 4169, 102, 91, "Output",ExpressionUUID->"7eb20b4b-7535-4663-95d3-7ed8c5bc1ccc"]
 }, Open  ]],
-Cell[21648, 538, 474, 11, 34, "Text",ExpressionUUID->"8872dfa3-38dc-489c-a312-90890b1566aa"],
+Cell[18302, 448, 474, 11, 34, "Text",ExpressionUUID->"8872dfa3-38dc-489c-a312-90890b1566aa"],
 Cell[CellGroupData[{
-Cell[22147, 553, 772, 18, 122, "Input",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
-Cell[22922, 573, 874, 20, 42, "Output",ExpressionUUID->"13ad8dc3-efc3-4098-bfe9-e945254e39e1"],
-Cell[23799, 595, 527, 9, 32, "Output",ExpressionUUID->"803b5f95-7eb8-4ba0-a3ed-162394ef80c8"]
+Cell[18801, 463, 772, 18, 122, "Input",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
+Cell[19576, 483, 874, 20, 42, "Output",ExpressionUUID->"13ad8dc3-efc3-4098-bfe9-e945254e39e1"],
+Cell[20453, 505, 527, 9, 32, "Output",ExpressionUUID->"803b5f95-7eb8-4ba0-a3ed-162394ef80c8"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[24363, 609, 670, 11, 28, "Input",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
-Cell[25036, 622, 730, 14, 32, "Output",ExpressionUUID->"9fb0e13d-7104-4278-8bc8-7563f7e8e2f4"]
+Cell[21017, 519, 670, 11, 28, "Input",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
+Cell[21690, 532, 730, 14, 32, "Output",ExpressionUUID->"9fb0e13d-7104-4278-8bc8-7563f7e8e2f4"]
 }, Open  ]]
 }, Open  ]]
 }
