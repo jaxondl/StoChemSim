@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
             ti = true;
         else
             cout << "endValue is " << endValue << endl; // otherwise, print the end value for confirmation to the user
-        double rho = 0.25
+        double rho = 0.25;
         double epsilon = (3.0 / (4.0*reactantsVector.size())) * (1.0 - sqrt((1.0+(rho/9.0)) / (1.0+rho)));
         bool checkEpsilon = false;
         bool checkRho = false;
