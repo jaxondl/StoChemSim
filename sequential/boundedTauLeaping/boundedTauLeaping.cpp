@@ -38,8 +38,9 @@ double boundedTauLeaping::getGammaRandomVariable(double a, double b) {
     
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     default_random_engine generator (seed);
+    //if (1/b <= -0){    cout << "ERROR" << endl;}
     gamma_distribution<double> distribution(a, 1/b); // 1/b BECAUSE USE SCALE, NOT RATE
-    double g = distribution(generator);
+    double g = distribution(generator); // gets rid of potential -0 values and hence -inf gamma dist values
     //cout << "a: " << a << " b: " << b << " gamma RV: " << g << endl;
     return g;
 }
@@ -65,7 +66,16 @@ vector<double> boundedTauLeaping::calculatePropensities() {
         // start with reaction rate and multiply by reactant amounts according to propensity formula
         for (pair<int, int> reactant : reactantsVector[i]) {
             for (int j = 0; j < reactant.second; j++) {
+                if(currentState[reactant.first] < 0){
+                    nonePossible = true;
+                    cout << "Ran into negative state species counts!" << " Propensity: " << propensity << endl;
+                    // throw new exception. Try catch block in the driver itself
+                    return propensities;
+                }
+
+                if((currentState[reactant.first] - j) < 0) break;
                 propensity *= (currentState[reactant.first] - j);
+                //if(propensity == 0) {cout << "YO THE PROP IS " << propensity << endl;}
             }
         }
         // determine if all propensities are 0 (no reactions possible, end simulation)
@@ -73,18 +83,18 @@ vector<double> boundedTauLeaping::calculatePropensities() {
             nonePossible = false;
         }
 
-        if (propensity < 0){
-            nonePossible = true;
-            cout << "Ran into negative propensity!" << endl;
-            // throw new exception. Try catch block in the driver itself
-            break;
-        }
+        // if (propensity < 0){
+        //     nonePossible = true;
+        //     cout << "Ran into negative propensity!" << " Propensity: " << propensity << endl;
+        //     // throw new exception. Try catch block in the driver itself
+        //     break;
+        // }
 
         propensities.push_back(propensity);
         total += propensity;
         //cout << "PROP IS " << propensity << " ";
     }
-    cout << "Total Propensity: " << total << endl;
+    cout << "Total Propensity: " << total << endl << endl;
     return propensities;
 }
 
@@ -197,6 +207,7 @@ void boundedTauLeaping::start() {
 
     // run until no reactions are possible or time/iteration termination condition is met
     while (!nonePossible && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))) {
+        cout << "Leap Iteration: " << currentIteration << endl;
         firingBounds = calculateBounds(); // Step 1b
         violatingTimes = determineViolatingTimes(firingBounds, props); // Step 2
         firstViolatingIndex = determineFirstViolating(violatingTimes); // Step 3
