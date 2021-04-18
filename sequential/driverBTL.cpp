@@ -34,7 +34,8 @@ int main(int argc, char** argv) {
             ti = true;
         else
             cout << "endValue is " << endValue << endl; // otherwise, print the end value for confirmation to the user
-        double epsilon = 0.05;
+        double rho = 0.25
+        double epsilon = (3.0 / (4.0*reactantsVector.size())) * (1.0 - sqrt((1.0+(rho/9.0)) / (1.0+rho)));
         bool checkEpsilon = false;
         bool checkRho = false;
         for(int i = 4; i < argc; i++) { // for all subsequent command line arguments (flags)
@@ -49,7 +50,7 @@ int main(int argc, char** argv) {
                 epsilon = stod(argument);
                 checkEpsilon = false;
             } else if (checkRho) {
-                double rho = stod(argument);
+                rho = stod(argument);
                 epsilon = (3.0 / (4.0*reactantsVector.size())) * (1.0 - sqrt((1.0+(rho/9.0)) / (1.0+rho)));
                 checkEpsilon = false;
             } else {
