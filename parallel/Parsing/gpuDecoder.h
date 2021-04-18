@@ -29,6 +29,8 @@ private:
     std::vector<int> state_change_matrix;
     std::vector<int> reactants_table;
     std::vector<double> propensity_matrix;
+    std::vector<int> header_indices;
+    std::vector<std::string> custom_header;
 public:
     void decode(std::string iFile);
     std::string chopOffComments(std::string line);
@@ -53,6 +55,8 @@ public:
     std::vector<double> getRRCVector();
     std::vector<int> getReactantsTableVector();
     std::vector<double> getPropensityMatrix();
+    std::vector<int> getHeaderIndices();
+    std::vector<std::string> getCustomHeader();
     void printVectors();
 };
 
