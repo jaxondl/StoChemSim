@@ -1,16 +1,24 @@
-#include "gpuDecoder.h"
+//
+// Created by user on 3/5/2021.
+//
+
+#include "inputParser.h"
 
 using namespace std;
 
 //the methods in this class assume that the input file is formatted correctly according to the documentation
 
-void gpuDecoder::decode(string iFile) {
+//modified to return whether or not the number of simulations was specified in the input file
+bool gpuDecoderPrototype::decode(string iFile) {
+    bool ret = false;
     ifstream inputFile;
     inputFile.open(iFile);
     if (!inputFile) {
         cerr << "Unable to open file";
         exit(1);   // call system to stop
     }
+
+    //cout << "Beginning decoding." << endl;
 
     string inputLine;
     int numReactions;
@@ -34,8 +42,16 @@ void gpuDecoder::decode(string iFile) {
 
         int spaceIndex = inputLine.find(" ");
         numReactions = stoi(inputLine.substr(0, spaceIndex));
-        this->numSimulations = stoi(inputLine.substr(spaceIndex + 1, inputLine.length()));
-        cout << "number of simulations: " << this->numSimulations << endl;
+
+        // Try to read number of simulations from input file, do not hang if not present (may be in command line)
+        this->numSimulations = -1;
+        for (int idx = spaceIndex; idx < inputLine.length(); idx++) {
+            if (inputLine[idx] != ' ') {
+                this->numSimulations = stoi(inputLine.substr(spaceIndex + 1, inputLine.length()));
+                ret = true;
+                break;
+            }
+        }
 
         //numReactions = stoi(inputLine);
         //cout << "Space " << spaceIndex << endl;
@@ -153,7 +169,6 @@ void gpuDecoder::decode(string iFile) {
         }
 
     } // done checking reaction definitions now
-    cout << "number of reactions: " << this->numberOfReactions << endl;
 
     //next check the initial population sizes
     for (string x : this->listOfSpecies) {
@@ -164,7 +179,7 @@ void gpuDecoder::decode(string iFile) {
     // keep taking in lines until one is not blank
 
     while (true) {
-        //cout << "looking for non-blank line for initial population sizes" << endl;
+        //cout << "Now checking line " << lineNumber << endl;
         if (inputFile.peek() != EOF) {
             getline(inputFile, inputLine); //break if this line is not blank after removing comments
             inputLine = chopOffComments(inputLine);
@@ -175,18 +190,12 @@ void gpuDecoder::decode(string iFile) {
         }
     }
 
-    //cout << "checking initial population sizes" << endl;
-    // The next lines should define molecule populations (stop when we get to a blank line)
-    while (true) { // check remaining lines until one is empty
+    // The remaining lines should define molecule populations
+    while (inputFile.peek() != EOF) { // check all remaining lines
+        //cout << "Now checking line " << lineNumber << endl;
         if (!firstEntry) getline(inputFile, inputLine); //the first time we enter, the line has already been read
         firstEntry = false;
         inputLine = chopOffComments(inputLine);
-
-        //cout << inputLine << endl;
-
-        if(inputLine.empty()) {
-            break;
-        }
 
         //get the molecule name
         string moleculeName = "";
@@ -234,34 +243,48 @@ void gpuDecoder::decode(string iFile) {
             }
             this->populationSizes[moleculeIndex] = stoi(moleculeCount);
         }
-    }
 
-    //create user-specified vector of header indices
-    getline(inputFile, inputLine); //next line after a single blank line should be the first custom index value
-    firstEntry = true;
-
-    for (int i = 0; i < this->listOfSpecies.size(); i++) {
-        this->header_indices.push_back(-1); //set all header indices to -1 at first, change them later
-    }
-    //cout << "initialized header_indices" << endl;
-
-    int customIndexLineNumber = 0;
-    while (inputFile.peek() != EOF) {
-        if (!firstEntry) getline(inputFile, inputLine); //the first time we enter, the line has already been read
-        firstEntry = false;
-        inputLine = chopOffComments(inputLine);
-        int customIndex = stoi(inputLine);
-        //cout << customIndex << endl;
-        this->header_indices[customIndexLineNumber] = customIndex;
-        this->custom_header.push_back(this->listOfSpecies[customIndex]);
-        customIndexLineNumber++;
     }
 
     inputFile.close(); //done parsing and creating the needed data structures
 
+//    cout << "List of species:" << endl;
+//    for (string x : this->listOfSpecies)
+//        cout << x << " ";
+//    cout << endl;
+//    cout << "List of reaction rates for each reaction:" << endl;
+//    for (float x : this->kValueVector)
+//        cout << x << " ";
+//    cout << endl;
+//    cout << "reactantVector:" << endl;
+//    cout << "[ ";
+//    for (vector<pair<int, int>> x : this->reactantVector) {
+//        cout << "[ ";
+//        for (pair<int, int> y : x) {
+//            cout << "[" << y.first << "," << y.second << "]" << ", ";
+//        }
+//        cout << "]," << endl;
+//    }
+//    cout << "]" << endl;
+//    cout << "stateChangeVector:" << endl;
+//    cout << "[ ";
+//    for (vector<pair<int, int>> x : this->stateChangeVector) {
+//        cout << "[ ";
+//        for (pair<int, int> y : x) {
+//            cout << "[" << y.first << "," << y.second << "]" << ", ";
+//        }
+//        cout << "]," << endl;
+//    }
+//    cout << "]" << endl;
+//    cout << "List of initial population sizes for each species:" << endl;
+//    for (int x : this->populationSizes)
+//        cout << x << " ";
+//    cout << endl;
+
+    return ret;
 }
 
-string gpuDecoder::chopOffComments(string line) {
+string gpuDecoderPrototype::chopOffComments(string line) {
     if (line.find("#") != std::string::npos) {
         string temp = "";
         for (int i = 0; i < line.find("#"); i++) {
@@ -280,8 +303,20 @@ string gpuDecoder::chopOffComments(string line) {
     return line;
 }
 
+int gpuDecoderPrototype::getNumSimulations() {
+    return this->numSimulations;
+}
+
+int gpuDecoderPrototype::getNumReactions() {
+    return this->numberOfReactions;
+}
+
+int gpuDecoderPrototype::getNumSpecies() {
+    return this->listOfSpecies.size();
+}
+
 //stores reaction rates and molecule names; does not store state changes or reactant amounts
-void gpuDecoder::parseReactionSlice(string reactionSlice, bool isReversible, bool fencepost, int reactionNumber, bool isReactant) { //check the forward direction of the reaction
+void gpuDecoderPrototype::parseReactionSlice(string reactionSlice, bool isReversible, bool fencepost, int reactionNumber, bool isReactant) { //check the forward direction of the reaction
     //cout << "Now checking " << reactionSlice << endl;
 
     //if the reaction slice is "->" or "<->", ignore it
@@ -340,7 +375,7 @@ void gpuDecoder::parseReactionSlice(string reactionSlice, bool isReversible, boo
 }
 
 //only gets called if the reaction is reversible
-void gpuDecoder::parseReverseReactionSlice(string reactionSlice, bool fencepost, int reactionNumber, bool isReactant) {
+void gpuDecoderPrototype::parseReverseReactionSlice(string reactionSlice, bool fencepost, int reactionNumber, bool isReactant) {
     //forward direction has already been checked, so we won't see any new molecule names here
     //just store the reverse reaction rate
 
@@ -365,7 +400,7 @@ void gpuDecoder::parseReverseReactionSlice(string reactionSlice, bool fencepost,
 }
 
 //access this->reactantVector[reactionNumber] and store the pair {this->listOfSpecies.indexof(moleculeName), moleculeCount} if isReactant is true
-void gpuDecoder::updateReactantsVector(int reactionNumber, string reactionSlice, bool isReactant) {
+void gpuDecoderPrototype::updateReactantsVector(int reactionNumber, string reactionSlice, bool isReactant) {
     //if the reaction slice is "->" or "<->", ignore it
     if (reactionSlice == "->" || reactionSlice == "<->") {
         return;
@@ -444,7 +479,7 @@ void gpuDecoder::updateReactantsVector(int reactionNumber, string reactionSlice,
     }
 }
 
-void gpuDecoder::updateReactantsVectorReverse(int reactionNumber, string reactionSlice, bool isReactant) {
+void gpuDecoderPrototype::updateReactantsVectorReverse(int reactionNumber, string reactionSlice, bool isReactant) {
     //cout << "updating reactantVector for " << reactionSlice << endl;
     //if the reaction slice is "->" or "<->", ignore it
     if (reactionSlice == "->" || reactionSlice == "<->") {
@@ -518,7 +553,7 @@ void gpuDecoder::updateReactantsVectorReverse(int reactionNumber, string reactio
     }
 }
 
-void gpuDecoder::updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant) {
+void gpuDecoderPrototype::updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant) {
     //if the reaction slice is "->" or "<->", ignore it
     if (reactionSlice == "->" || reactionSlice == "<->") {
         return;
@@ -612,7 +647,7 @@ void gpuDecoder::updateStateChangeVector(int reactionNumber, std::string reactio
     }
 }
 
-void gpuDecoder::updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant) {
+void gpuDecoderPrototype::updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant) {
     //if the reaction slice is "->" or "<->", ignore it
     if (reactionSlice == "->" || reactionSlice == "<->") {
         return;
@@ -707,31 +742,25 @@ void gpuDecoder::updateStateChangeVectorReverse(int reactionNumber, std::string 
     }
 }
 
-vector<string> gpuDecoder::getListOfSpecies() {
+vector<string> gpuDecoderPrototype::getListOfSpecies() {
     return this->listOfSpecies;
 }
-vector<int> gpuDecoder::getPopulationSizes() {
+vector<int> gpuDecoderPrototype::getPopulationSizes() {
     return this->populationSizes;
 }
-vector<vector<pair<int, int>>> gpuDecoder::getStateChangeVector() {
+vector<vector<pair<int, int>>> gpuDecoderPrototype::getStateChangeVector() {
     return this->stateChangeVector;
 }
-vector<vector<pair<int, int>>> gpuDecoder::getReactantVector() {
+vector<vector<pair<int, int>>> gpuDecoderPrototype::getReactantVector() {
     return this->reactantVector;
 }
-vector<double> gpuDecoder::getkValueVector() {
+vector<double> gpuDecoderPrototype::getkValueVector() {
     return this->kValueVector;
 }
-vector<double> gpuDecoder::getRRCVector() { //done
+vector<double> gpuDecoderPrototype::getRRCVector() { //done
     return this->kValueVector;
 }
-vector<int> gpuDecoder::getHeaderIndices() {
-    return this->header_indices;
-}
-vector<string> gpuDecoder::getCustomHeader() {
-    return this->custom_header;
-}
-vector<int> gpuDecoder::getConfigurationMatrix() { //done
+vector<int> gpuDecoderPrototype::getConfigurationMatrix() { //done
     //this is a flattened vector of ints
     //for each row, add the initial population size of each species, in order of index
     //should have numSpecies*numSimulations elements in total
@@ -742,7 +771,15 @@ vector<int> gpuDecoder::getConfigurationMatrix() { //done
     }
     return this->configuration_matrix;
 }
-vector<int> gpuDecoder::getReactantsTableVector() { //done
+vector<int>gpuDecoderPrototype::getConfigurationMatrix(int s) {
+    for (int i = 0; i < s; i++) {
+        for (int speciesIndex = 0; speciesIndex < listOfSpecies.size(); speciesIndex++) {
+            this->configuration_matrix.push_back(populationSizes[speciesIndex]);
+        }
+    }
+    return this->configuration_matrix;
+}
+vector<int> gpuDecoderPrototype::getReactantsTableVector() { //done
     int maxNumReactantsInAReaction = 0;
     for (int i = 0; i < this->reactantVector.size(); i++) {
         if (this->reactantVector[i].size() > maxNumReactantsInAReaction) maxNumReactantsInAReaction = this->reactantVector[i].size();
@@ -770,7 +807,7 @@ vector<int> gpuDecoder::getReactantsTableVector() { //done
     }
     return this->reactants_table;
 }
-vector<int> gpuDecoder::getStateChangeMatrix() { //done
+vector<int> gpuDecoderPrototype::getStateChangeMatrix() { //done
     int numSpecies = listOfSpecies.size();
     //fill/pad state_change_matrix with the correct number of zeroes
     for (int i = 0; i < this->numberOfReactions; i++) {
@@ -790,7 +827,7 @@ vector<int> gpuDecoder::getStateChangeMatrix() { //done
     }
     return this->state_change_matrix;
 }
-vector<double> gpuDecoder::getPropensityMatrix() { //done
+vector<double> gpuDecoderPrototype::getPropensityMatrix() { //done
     for (int i = 0; i < this->numSimulations; i++) { //each row is initially identical, so i is not used
         for (int j = 0; j < this->numberOfReactions; j++) {
             double propValue = calcPropensity(this->kValueVector[j], this->populationSizes, this->reactantVector[j]);
@@ -800,7 +837,18 @@ vector<double> gpuDecoder::getPropensityMatrix() { //done
     return this->propensity_matrix;
 }
 
-double gpuDecoder::calcPropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){
+vector<double> gpuDecoderPrototype::getPropensityMatrix(int s) {
+    return vector<double>(s * this->numberOfReactions, 0);
+    //for (int i = 0; i < s; i++) { //each row is initially identical, so i is not used
+    //    for (int j = 0; j < this->numberOfReactions; j++) {
+    //        double propValue = calcPropensity(this->kValueVector[j], this->populationSizes, this->reactantVector[j]);
+    //        propensity_matrix.push_back(propValue);
+    //    }
+    //}
+    //return this->propensity_matrix;
+}
+
+double gpuDecoderPrototype::calcPropensity(double reactionRate, vector<int> moleculeAmounts, vector<pair<int, int>> reactants){
     double propensity = reactionRate;
     for (pair<int, int> reactant: reactants) {
         for (int i=0; i<reactant.second; i++) {
@@ -810,14 +858,12 @@ double gpuDecoder::calcPropensity(double reactionRate, vector<int> moleculeAmoun
     return propensity;
 }
 
-void gpuDecoder::printVectors(){
+void gpuDecoderPrototype::printVectors(){
     vector<double> rrc_vector = this->getRRCVector();
     vector<int> state_change_matrix = this->getStateChangeMatrix();
     vector<int> configuration_matrix = this->getConfigurationMatrix();
     vector<double> propensity_matrix = this->getPropensityMatrix();
     vector<int> reactants_table = this->getReactantsTableVector();
-    vector<int> header_indices = this->getHeaderIndices();
-    vector<string> custom_header = this->getCustomHeader();
 
     cout << "List of species:" << endl;
     for (string x : this->listOfSpecies)
@@ -848,16 +894,6 @@ void gpuDecoder::printVectors(){
     cout << "propensity_matrix:" << endl;
     cout << "[ ";
     for (double x : propensity_matrix)
-        cout << x << " ";
-    cout << "]" << endl;
-    cout << "header_indices:" << endl;
-    cout << "[ ";
-    for (int x : header_indices)
-        cout << x << " ";
-    cout << "]" << endl;
-    cout << "custom_header:" << endl;
-    cout << "[ ";
-    for (string x : custom_header)
         cout << x << " ";
     cout << "]" << endl;
 }

@@ -1,5 +1,10 @@
-#ifndef SENIORDESIGN_GPUDECODER_H
-#define SENIORDESIGN_GPUDECODER_H
+//
+// Created by user on 3/5/2021.
+//
+
+#ifndef INPUT_PARSER_H
+#define INPUT_PARSER_H
+
 
 #include <iostream>
 #include <string>
@@ -8,7 +13,7 @@
 #include <algorithm>
 #include <utility>
 
-class gpuDecoder {
+class gpuDecoderPrototype {
 private:
     int numSimulations; //exclusive to GPU implementation
     int numberOfReactions; //exclusive to GPU implementation
@@ -29,10 +34,9 @@ private:
     std::vector<int> state_change_matrix;
     std::vector<int> reactants_table;
     std::vector<double> propensity_matrix;
-    std::vector<int> header_indices;
-    std::vector<std::string> custom_header;
+    std::vector<int> copy_back_indices;
 public:
-    void decode(std::string iFile);
+    bool decode(std::string iFile);
     std::string chopOffComments(std::string line);
     void parseReactionSlice(std::string reactionSlice, bool isReversible, bool fencepost, int reactionNumber, bool isReactant);
     void parseReverseReactionSlice(std::string reactionSlice, bool fencepost, int reactionNumber, bool isReactant);
@@ -40,6 +44,9 @@ public:
     void updateReactantsVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
     void updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant);
     void updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
+    int getNumSimulations();
+    int getNumReactions();
+    int getNumSpecies();
     std::vector<std::string> getListOfSpecies();
     std::vector<int> getPopulationSizes();
     std::vector<std::vector<std::pair<int, int>>> getStateChangeVector();
@@ -52,12 +59,14 @@ public:
     double calcPropensity(double reactionRate, std::vector<int> moleculeCounts, std::vector<std::pair<int,int>> reactants);
     std::vector<int> getStateChangeMatrix();
     std::vector<int> getConfigurationMatrix();
+    std::vector<int> getConfigurationMatrix(int s);
+    std::vector<int> getCopyBackIndices();
     std::vector<double> getRRCVector();
     std::vector<int> getReactantsTableVector();
     std::vector<double> getPropensityMatrix();
-    std::vector<int> getHeaderIndices();
-    std::vector<std::string> getCustomHeader();
+    std::vector<double> getPropensityMatrix(int s);
     void printVectors();
 };
 
-#endif //SENIORDESIGN_GPUDECODER_H
+
+#endif //SENIORDESIGN_GPUDECODERPROTOTYPE_H

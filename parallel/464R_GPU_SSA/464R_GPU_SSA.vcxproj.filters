@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CudaCompile Include="DirectMethod.cu" />
+    <CudaCompile Include="kernels.cu" />
+    <CudaCompile Include="testfuncs.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="cudaUtils.cpp" />
+    <ClCompile Include="inputParser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DirectMethod.cuh" />
+    <ClInclude Include="kernels.cuh" />
+    <ClInclude Include="testfuncs.cuh" />
+    <ClInclude Include="utils.h" />
+    <ClInclude Include="cudaUtils.h" />
+    <ClInclude Include="inputParser.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="banner_logo.txt" />
+    <Text Include="in\large_crn.txt" />
+    <Text Include="in\small_crn.txt" />
+  </ItemGroup>
+</Project>
