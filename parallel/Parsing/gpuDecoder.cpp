@@ -12,8 +12,6 @@ void gpuDecoder::decode(string iFile) {
         exit(1);   // call system to stop
     }
 
-    //cout << "Beginning decoding." << endl;
-
     string inputLine;
     int numReactions;
     string reactionSlice = "";
@@ -166,7 +164,7 @@ void gpuDecoder::decode(string iFile) {
     // keep taking in lines until one is not blank
 
     while (true) {
-        //cout << "Now checking line " << lineNumber << endl;
+        //cout << "looking for non-blank line for initial population sizes" << endl;
         if (inputFile.peek() != EOF) {
             getline(inputFile, inputLine); //break if this line is not blank after removing comments
             inputLine = chopOffComments(inputLine);
@@ -177,12 +175,18 @@ void gpuDecoder::decode(string iFile) {
         }
     }
 
-    // The remaining lines should define molecule populations
-    while (inputFile.peek() != EOF) { // check all remaining lines
-        //cout << "Now checking line " << lineNumber << endl;
+    //cout << "checking initial population sizes" << endl;
+    // The next lines should define molecule populations (stop when we get to a blank line)
+    while (true) { // check remaining lines until one is empty
         if (!firstEntry) getline(inputFile, inputLine); //the first time we enter, the line has already been read
         firstEntry = false;
         inputLine = chopOffComments(inputLine);
+
+        //cout << inputLine << endl;
+
+        if(inputLine.empty()) {
+            break;
+        }
 
         //get the molecule name
         string moleculeName = "";
@@ -230,44 +234,30 @@ void gpuDecoder::decode(string iFile) {
             }
             this->populationSizes[moleculeIndex] = stoi(moleculeCount);
         }
+    }
 
+    //create user-specified vector of header indices
+    getline(inputFile, inputLine); //next line after a single blank line should be the first custom index value
+    firstEntry = true;
+
+    for (int i = 0; i < this->listOfSpecies.size(); i++) {
+        this->header_indices.push_back(-1); //set all header indices to -1 at first, change them later
+    }
+    //cout << "initialized header_indices" << endl;
+
+    int customIndexLineNumber = 0;
+    while (inputFile.peek() != EOF) {
+        if (!firstEntry) getline(inputFile, inputLine); //the first time we enter, the line has already been read
+        firstEntry = false;
+        inputLine = chopOffComments(inputLine);
+        int customIndex = stoi(inputLine);
+        //cout << customIndex << endl;
+        this->header_indices[customIndexLineNumber] = customIndex;
+        this->custom_header.push_back(this->listOfSpecies[customIndex]);
+        customIndexLineNumber++;
     }
 
     inputFile.close(); //done parsing and creating the needed data structures
-
-//    cout << "List of species:" << endl;
-//    for (string x : this->listOfSpecies)
-//        cout << x << " ";
-//    cout << endl;
-//    cout << "List of reaction rates for each reaction:" << endl;
-//    for (float x : this->kValueVector)
-//        cout << x << " ";
-//    cout << endl;
-//    cout << "reactantVector:" << endl;
-//    cout << "[ ";
-//    for (vector<pair<int, int>> x : this->reactantVector) {
-//        cout << "[ ";
-//        for (pair<int, int> y : x) {
-//            cout << "[" << y.first << "," << y.second << "]" << ", ";
-//        }
-//        cout << "]," << endl;
-//    }
-//    cout << "]" << endl;
-//    cout << "stateChangeVector:" << endl;
-//    cout << "[ ";
-//    for (vector<pair<int, int>> x : this->stateChangeVector) {
-//        cout << "[ ";
-//        for (pair<int, int> y : x) {
-//            cout << "[" << y.first << "," << y.second << "]" << ", ";
-//        }
-//        cout << "]," << endl;
-//    }
-//    cout << "]" << endl;
-//    cout << "List of initial population sizes for each species:" << endl;
-//    for (int x : this->populationSizes)
-//        cout << x << " ";
-//    cout << endl;
-
 
 }
 
@@ -735,6 +725,12 @@ vector<double> gpuDecoder::getkValueVector() {
 vector<double> gpuDecoder::getRRCVector() { //done
     return this->kValueVector;
 }
+vector<int> gpuDecoder::getHeaderIndices() {
+    return this->header_indices;
+}
+vector<string> gpuDecoder::getCustomHeader() {
+    return this->custom_header;
+}
 vector<int> gpuDecoder::getConfigurationMatrix() { //done
     //this is a flattened vector of ints
     //for each row, add the initial population size of each species, in order of index
@@ -820,6 +816,8 @@ void gpuDecoder::printVectors(){
     vector<int> configuration_matrix = this->getConfigurationMatrix();
     vector<double> propensity_matrix = this->getPropensityMatrix();
     vector<int> reactants_table = this->getReactantsTableVector();
+    vector<int> header_indices = this->getHeaderIndices();
+    vector<string> custom_header = this->getCustomHeader();
 
     cout << "List of species:" << endl;
     for (string x : this->listOfSpecies)
@@ -850,6 +848,16 @@ void gpuDecoder::printVectors(){
     cout << "propensity_matrix:" << endl;
     cout << "[ ";
     for (double x : propensity_matrix)
+        cout << x << " ";
+    cout << "]" << endl;
+    cout << "header_indices:" << endl;
+    cout << "[ ";
+    for (int x : header_indices)
+        cout << x << " ";
+    cout << "]" << endl;
+    cout << "custom_header:" << endl;
+    cout << "[ ";
+    for (string x : custom_header)
         cout << x << " ";
     cout << "]" << endl;
 }

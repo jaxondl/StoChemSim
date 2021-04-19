@@ -69,6 +69,7 @@ int main(int argc, char** argv) {
         if (epsilon > 1 || epsilon < 0) {
             cout << "An invalid epsilon or rho value was provided." << endl;
         } else {
+            cout << "Epsilon value is " << epsilon << endl;
             // Create directMethodSSA object and begin simulation
             boundedTauLeaping *btlAlgorithm = new boundedTauLeaping(moleculeAmounts, reactionRates, reactantsVector,
                                                                     stateChangeVector, endValue, fo, ti, it, epsilon);
