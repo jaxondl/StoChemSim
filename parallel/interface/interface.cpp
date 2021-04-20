@@ -2,6 +2,13 @@
 #include <cstdint>
 #include <vector>
 #include "../directMethodSSA/directMethodSSA.h"
+#include "../directMethodSSA/directMethodSSA.cpp"
+#include "../directMethodSSA/dependencyGraph.h"
+#include "../directMethodSSA/dependencyGraph.cpp"
+#include "../directMethodSSA/reactionTree.h"
+#include "../directMethodSSA/reactionTree.cpp"
+#include "../boundedTauLeaping/boundedTauLeaping.h"
+#include "../boundedTauLeaping/boundedTauLeaping.cpp"
 #include "WolframLibrary.h"
 #include "WolframNumericArrayLibrary.h"
 
@@ -95,14 +102,20 @@ static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint mo
 vector<vector<int> > allStates;
 vector<double> allTimes;
 
+
+// ****** gloabl storage for runtimes *******
+double conversionTime; 
+double algoTime;
+
 // ******** end of global storage ********
 
-/* direct SSA main function */
+/* CRN SSA main function */
 EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
 	// debug setup
 	int err = LIBRARY_FUNCTION_ERROR;
 	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
 
+    auto startConversion = std::chrono::steady_clock::now();
 	// convert initCounts
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
 	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
@@ -150,6 +163,12 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 
     // choose endValue
     double endValue = (useIter)? iterEndI : timeEndR;
+    
+    auto endConversion = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSecondsConversion = endConversion - startConversion;
+    conversionTime = elapsedSecondsConversion.count();
+
+    auto startAlgo = std::chrono::steady_clock::now();
 
 	// CRN SSA process: pass everything to backend
 	directMethodSSA* process = new directMethodSSA(
@@ -164,6 +183,10 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
                     useIter);
 	process->start();
 
+    auto endAlgo = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSecondsAlgo = endAlgo - startAlgo;
+    algoTime = elapsedSecondsAlgo.count();
+
     // pass back rerults depends on result
     if (finalOnly) {
 		vector<vector<int> > current_state;
@@ -173,99 +196,9 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 			vector<double> current_time;
 			current_time.push_back(process->getCurrentTime());
             allTimes = current_time;
-        }
-    } else {
-        allStates = process->getAllStates();
-        if (!statesOnly) {
-            allTimes = process->getAllTimes();
         }
     }
-
-	return LIBRARY_NO_ERROR;
-}
-
-/* BTL main function */
-EXTERN_C DLLEXPORT int BLTInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
-	// debug setup
-	int err = LIBRARY_FUNCTION_ERROR;
-	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
-
-	// convert initCounts
-	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
-	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
-	mint length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
-    const int64_t *initIn = static_cast<const int64_t *>(MinitCounts_in);
-	vector<int> moleculeAmounts = numericArraytoVector<int, int>(initIn, length);
-
-	// convert reactantsArray & stateChangeArray
-	MNumericArray MreactCounts = MArgument_getMNumericArray(Args[1]);
-	MNumericArray MprodCounts = MArgument_getMNumericArray(Args[2]);
-	mint const * dims = naFuns->MNumericArray_getDimensions(MreactCounts);
-	mint reactionCount = dims[0];
-	mint moleculeCount = dims[1];
-	void* MreactCounts_in = naFuns->MNumericArray_getData(MreactCounts);
-	void* MprodCounts_in = naFuns->MNumericArray_getData(MprodCounts);
-	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in);
-	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);
-    vector<vector<pair<int, int> > > reactantsArray;
-	vector<vector<pair<int, int> > > stateChangeArray;
-    reactantsAndStateChangeArrayConstruction<int, int>(reactionCount, moleculeCount, reactIn, prodIn, reactantsArray, stateChangeArray);
-
-	// convert rates
-	MNumericArray Mrates = MArgument_getMNumericArray(Args[3]);
-	void* rateIn = naFuns->MNumericArray_getData(Mrates);
-	length = naFuns->MNumericArray_getFlattenedLength(Mrates);
-	vector<double> kValues = numericArraytoVector<double, double>(rateIn, length);
-
-	// extract timeEndR
-	double timeEndR = MArgument_getReal(Args[4]);
-
-    // extract iterEndI
-    double iterEndI = (double)MArgument_getInteger(Args[5]);
-
-    // extract inf (flag)
-    mbool inf = MArgument_getBoolean(Args[6]);
-
-    // extract useIter (flag)
-    mbool useIter = MArgument_getBoolean(Args[7]);
-
-    // extract statesOnly (flag)
-    mbool statesOnly = MArgument_getBoolean(Args[8]);
-
-    // extract finalOnly (flag)
-    mbool finalOnly = MArgument_getBoolean(Args[9]);
-
-	// extract epsilon
-	double epsilon = MArgument_getReal(Args[10]);
-
-    // choose endValue
-    double endValue = (useIter)? iterEndI : timeEndR;
-
-	// CRN SSA process: pass everything to backend
-	boundedTauLeaping* process = new boundedTauLeaping(
-					moleculeAmounts,
-					kValues,
-					reactantsArray,
-					stateChangeArray,
-					endValue,
-                    statesOnly,
-                    finalOnly,
-                    inf,
-                    useIter,
-					epsilon);
-	process->start();
-
-    // pass back rerults depends on result
-    if (finalOnly) {
-		vector<vector<int> > current_state;
-		current_state.push_back(process->getCurrentState());
-        allStates = current_state;
-        if (!statesOnly) {
-			vector<double> current_time;
-			current_time.push_back(process->getCurrentTime());
-            allTimes = current_time;
-        }
-    } else {
+    else {
         allStates = process->getAllStates();
         if (!statesOnly) {
             allTimes = process->getAllTimes();
@@ -290,12 +223,16 @@ EXTERN_C DLLEXPORT int getTimes(WolframLibraryData libData, mint Argc, MArgument
 	int64_t out_size = allTimes.size();
 	const mint *dims_out = &out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
+	
+	// if create Numeric Array fails
 	if (err != 0) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
+
 	data_out = naFuns->MNumericArray_getData(Mout);
+	// if data does not exist
 	if (data_out == NULL) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
 	
 	// convert output to a NumericArray
@@ -327,16 +264,59 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	int64_t out_size[2] = {row, col};
 	const mint *dims_out = out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Bit64, 2, dims_out, &Mout);
+	
+	// if create Numeric Array fails
 	if (err != 0) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
+
 	data_out = naFuns->MNumericArray_getData(Mout);
+	// if data does not exist
 	if (data_out == NULL) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
 	
 	// convert output to a NumericArray
 	matrixtoNumericArray<int, mint>(data_out, allStates);
+
+	// pass the result back
+	MArgument_setMNumericArray(res, Mout);
+	return LIBRARY_NO_ERROR;
+
+	return err;
+}
+
+EXTERN_C DLLEXPORT int getRuntimes(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
+	// debug setup
+	int err = LIBRARY_FUNCTION_ERROR;
+	WolframNumericArrayLibrary_Functions naFuns = libData->numericarrayLibraryFunctions;
+
+	// reused local varibles setup
+	void *data_in = NULL, *data_out = NULL;
+	mint length;
+	mint const *dims;
+
+	// output setup
+	MNumericArray Mout;
+	int64_t out_size = 2;
+	const mint *dims_out = &out_size;
+	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
+	
+	// if create Numeric Array fails
+	if (err != 0) {
+		naFuns->MNumericArray_free(Mout);
+	}
+
+	data_out = naFuns->MNumericArray_getData(Mout);
+	// if data does not exist
+	if (data_out == NULL) {
+		naFuns->MNumericArray_free(Mout);
+	}
+	
+	// convert output to a NumericArray
+	double *Mout0 = static_cast<double *>(data_out);
+	Mout0[0] = conversionTime;
+    Mout0[1] = algoTime;
 
 	// pass the result back
 	MArgument_setMNumericArray(res, Mout);

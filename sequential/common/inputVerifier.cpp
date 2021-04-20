@@ -34,7 +34,7 @@ bool inputVerifier::verifyFile(string iFile) {
         lineNumber++;
         //cout << fullReactionDefLine << endl;
         fullReactionDefLine = chopOffComments(fullReactionDefLine); //get rid of the comments, if any
-        //cout << fullReactionDefLine << endl;
+        //cout << "line without comments is <" << fullReactionDefLine << ">" << endl;
 
         //cout << "Now checking line " << lineNumber << endl;
         //cout << fullReactionDefLine.length() << endl;
@@ -53,7 +53,10 @@ bool inputVerifier::verifyFile(string iFile) {
                     }
                 }
                 fullReactionDefLine = chopOffComments(fullReactionDefLine);
+                //cout << "line without comments is <" << fullReactionDefLine << ">" << endl;
+                //cout << fullReactionDefLine.length() << endl;
             }
+            //cout << "line number " << lineNumber << " is the first non-empty line" << endl;
         }
 
 //        int spaceIndex = fullReactionDefLine.find(" ");
@@ -69,10 +72,10 @@ bool inputVerifier::verifyFile(string iFile) {
         reactionSlice = fullReactionDefLine;
         //cout << reactionSlice.length() << endl;
         for (int i = 0; i < reactionSlice.length(); i++) {
-            //cout << "checking index " << i << " of line " << lineNumber << " which is " << reactionSlice.at(i) << endl;
+            //cout << "checking index " << i << " of line " << lineNumber << " which is <" << reactionSlice.at(i) << ">" << endl;
             if (!(isdigit(reactionSlice.at(i))) && !errorExists) {
-                //first line contains a character that is not a number!
-                cout << "Warning: Your first line contains a non-int number of reactions." << endl;
+                cout << "Warning: Your first line contains a non-int number of reactions" << endl;
+                cout << "[[" << reactionSlice << "]]" << endl;
                 valid = false;
                 errorExists = true;
             }

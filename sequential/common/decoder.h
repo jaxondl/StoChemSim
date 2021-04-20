@@ -10,6 +10,7 @@
 
 class decoder {
 private:
+    int testInt;
     std::vector<std::string> listOfSpecies;
     std::vector<int> populationSizes; //indices correspond to the indices in listOfSpecies
     std::vector<std::vector<std::pair<int, int> > > stateChangeVector; //a vector of vectors of pairs
@@ -28,15 +29,14 @@ public:
     std::string chopOffComments(std::string line);
     void parseReactionSlice(std::string reactionSlice, bool isReversible, bool fencepost, int reactionNumber, bool isReactant);
     void parseReverseReactionSlice(std::string reactionSlice, bool fencepost, int reactionNumber, bool isReactant);
-    void updateReactantsVector(int reactionNumber, std::string reactionSlice, bool isReactant);
-    void updateReactantsVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
-    void updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant);
-    void updateStateChangeVectorReverse(int reactionNumber, std::string reactionSlice, bool isReactant);
+    void updateReactantsVector(int reactionNumber, std::string reactionSlice, bool isReactant, bool reverseUpdate);
+    void updateStateChangeVector(int reactionNumber, std::string reactionSlice, bool isReactant, bool reverseUpdate);
     std::vector<std::string> getListOfSpecies();
     std::vector<int> getPopulationSizes();
     std::vector<std::vector<std::pair<int, int> > > getStateChangeVector();
     std::vector<std::vector<std::pair<int, int> > > getReactantVector();
     std::vector<double> getkValueVector();
+    void printVectors();
 };
 
 #endif //DECODER_H

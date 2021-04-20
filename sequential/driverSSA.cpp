@@ -1,8 +1,9 @@
 #include "directMethodSSA/directMethodSSA.h"
 #include "directMethodSSA/reactionTree.h"
+#include "directMethodSSA/dependencyGraph.h"
 #include "common/decoder.h"
-#include "common/dependencyGraph.h"
 #include "common/inputVerifier.h"
+#include "boundedTauLeaping/boundedTauLeaping.h"
 
 #include <iostream>
 #include <iomanip>
@@ -119,7 +120,7 @@ int main(int argc, char** argv) {
         outfile.close();
     }
     else {
-        cout << "There were issue with your input file." << endl;
+        cout << "There were issue(s) with your input file." << endl;
     }
     return 0;
 }

@@ -78,7 +78,10 @@ int directMethodSSA::getCurrentIteration(){return currentIteration;}
 void directMethodSSA::start(){
     // continue the simulation while the total propensity > 0 AND (the endInfinity flag is true OR the current time/iteration hasn't exceeded the inputted limit)
     while (getTotalPropensity() > 0 && ((!endByIteration && (currentTime < endValue || endInfinity)) || (endByIteration && (currentIteration < endValue || endInfinity)))){
-        cout << "total prop: " << getTotalPropensity() << " iteration: " << currentIteration << endl;
+        cout << "Current Iteration: " << currentIteration << endl;
+        cout << "Current Time: " << currentTime << endl;
+        cout << "Total Propensity: " << getTotalPropensity() << endl;
+
         if (!statesOnly) { // only calculate if the user wants to also calculate the times (default)
             double timeUntilNextReaction = getTimeUntilNextReaction(getTotalPropensity()); // obtain the time until the next reaction
             if(currentTime + timeUntilNextReaction > endValue && !endInfinity) // if updating the time violates the finite end time value, terminate the simulation
@@ -88,6 +91,7 @@ void directMethodSSA::start(){
         }
         double RV = getUniformRandomVariable(); // obtain sampled value
         int reactionIndex = reaction_tree->searchForNode(RV); // search for reaction
+        cout << "Chosen Reaction Index: " << reactionIndex << endl << endl;
         if(reactionIndex == -1)
             break;
         updateState(stateChangeVector, reactionIndex); // update state/configuration
@@ -100,4 +104,7 @@ void directMethodSSA::start(){
         }
         currentIteration++; // update iteration
     }
+    cout << endl << "Final Iteration: " << currentIteration << endl;
+    cout << "Final Time: " << currentTime << endl;
+    cout << "Final Total Propensity: " << getTotalPropensity() << endl;
 }
