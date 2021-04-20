@@ -319,12 +319,16 @@ EXTERN_C DLLEXPORT int getTimes(WolframLibraryData libData, mint Argc, MArgument
 	int64_t out_size = allTimes.size();
 	const mint *dims_out = &out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
+	
+	// if create Numeric Array fails
 	if (err != 0) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
+
 	data_out = naFuns->MNumericArray_getData(Mout);
+	// if data does not exist
 	if (data_out == NULL) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
 	
 	// convert output to a NumericArray
@@ -356,12 +360,16 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	int64_t out_size[2] = {row, col};
 	const mint *dims_out = out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Bit64, 2, dims_out, &Mout);
+	
+	// if create Numeric Array fails
 	if (err != 0) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
+
 	data_out = naFuns->MNumericArray_getData(Mout);
+	// if data does not exist
 	if (data_out == NULL) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
 	
 	// convert output to a NumericArray
@@ -371,8 +379,6 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 	MArgument_setMNumericArray(res, Mout);
 	return LIBRARY_NO_ERROR;
 
-	cleanup:
-	naFuns->MNumericArray_free(Mout);
 	return err;
 }
 
@@ -391,12 +397,16 @@ EXTERN_C DLLEXPORT int getRuntimes(WolframLibraryData libData, mint Argc, MArgum
 	int64_t out_size = 2;
 	const mint *dims_out = &out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
+	
+	// if create Numeric Array fails
 	if (err != 0) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
+
 	data_out = naFuns->MNumericArray_getData(Mout);
+	// if data does not exist
 	if (data_out == NULL) {
-		goto cleanup;
+		naFuns->MNumericArray_free(Mout);
 	}
 	
 	// convert output to a NumericArray
