@@ -184,7 +184,7 @@ void gpuDecoder::decode(string iFile) {
 
         //cout << inputLine << endl;
 
-        if(inputLine.empty()) {
+        if(inputLine.empty() || inputFile.peek() == EOF) {
             break;
         }
 
@@ -236,25 +236,27 @@ void gpuDecoder::decode(string iFile) {
         }
     }
 
-    //create user-specified vector of header indices
-    getline(inputFile, inputLine); //next line after a single blank line should be the first custom index value
-    firstEntry = true;
+    if (inputFile.peek() != EOF) { //if user opted to add custom indices
+        //create user-specified vector of header indices
+        getline(inputFile, inputLine); //next line after a single blank line should be the first custom index value
+        firstEntry = true;
 
-    for (int i = 0; i < this->listOfSpecies.size(); i++) {
-        this->header_indices.push_back(-1); //set all header indices to -1 at first, change them later
-    }
-    //cout << "initialized header_indices" << endl;
+        for (int i = 0; i < this->listOfSpecies.size(); i++) {
+            this->header_indices.push_back(-1); //set all header indices to -1 at first, change them later
+        }
+        //cout << "initialized header_indices" << endl;
 
-    int customIndexLineNumber = 0;
-    while (inputFile.peek() != EOF) {
-        if (!firstEntry) getline(inputFile, inputLine); //the first time we enter, the line has already been read
-        firstEntry = false;
-        inputLine = chopOffComments(inputLine);
-        int customIndex = stoi(inputLine);
-        //cout << customIndex << endl;
-        this->header_indices[customIndexLineNumber] = customIndex;
-        this->custom_header.push_back(this->listOfSpecies[customIndex]);
-        customIndexLineNumber++;
+        int customIndexLineNumber = 0;
+        while (inputFile.peek() != EOF) {
+            if (!firstEntry) getline(inputFile, inputLine); //the first time we enter, the line has already been read
+            firstEntry = false;
+            inputLine = chopOffComments(inputLine);
+            int customIndex = stoi(inputLine);
+            //cout << customIndex << endl;
+            this->header_indices[customIndexLineNumber] = customIndex;
+            this->custom_header.push_back(this->listOfSpecies[customIndex]);
+            customIndexLineNumber++;
+        }
     }
 
     inputFile.close(); //done parsing and creating the needed data structures
