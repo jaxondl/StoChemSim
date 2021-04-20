@@ -92,8 +92,10 @@ void directMethodSSA::start(){
         double RV = getUniformRandomVariable(); // obtain sampled value
         int reactionIndex = reaction_tree->searchForNode(RV); // search for reaction
         cout << "Chosen Reaction Index: " << reactionIndex << endl << endl;
-        if(reactionIndex == -1)
+        if(reactionIndex == -1){
+            allTimes.pop_back();
             break;
+        }
         updateState(stateChangeVector, reactionIndex); // update state/configuration
         if (!finalOnly) { // only save the state vectors of the iteration if the finalOnly flag is false
             allStates.push_back(currentState);
@@ -107,4 +109,6 @@ void directMethodSSA::start(){
     cout << endl << "Final Iteration: " << currentIteration << endl;
     cout << "Final Time: " << currentTime << endl;
     cout << "Final Total Propensity: " << getTotalPropensity() << endl;
+    cout << "Time length" << allStates.size() << endl;
+    cout << "States length" << allTimes.size() << endl;
 }
