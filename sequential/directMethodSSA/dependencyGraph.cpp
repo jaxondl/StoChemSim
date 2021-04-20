@@ -49,7 +49,7 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
 
     //no need for an affects vector if just going to use state change molecules
     int numMolecules = moleculeAmounts.size();
-    vector<set<int>> dependsOn(numMolecules);  // each molecule index will have a set of the reaction indices of which have the molecule as a reactant
+    vector<set<int> > dependsOn(numMolecules);  // each molecule index will have a set of the reaction indices of which have the molecule as a reactant
 
     for(int i = 0; i < reactantsVector.size(); i++){
         for(pair<int, int> element : reactantsVector[i]){
