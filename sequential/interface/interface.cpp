@@ -109,7 +109,7 @@ double algoTime;
 
 // ******** end of global storage ********
 
-/* CRN SSA main function */
+/* Direct SSA main function */
 EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc, MArgument *Args, MArgument res) {
 	// debug setup
 	int err = LIBRARY_FUNCTION_ERROR;
@@ -170,7 +170,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 
     auto startAlgo = std::chrono::steady_clock::now();
 
-	// CRN SSA process: pass everything to backend
+	// Direct SSA process: pass everything to backend
 	directMethodSSA* process = new directMethodSSA(
 					moleculeAmounts,
 					kValues,
@@ -269,7 +269,7 @@ EXTERN_C DLLEXPORT int BTLInterface(WolframLibraryData libData, mint Argc, MArgu
 
     auto startAlgo = std::chrono::steady_clock::now();
 
-	// CRN SSA process: pass everything to backend
+	// BTL process: pass everything to backend
 	boundedTauLeaping* process = new boundedTauLeaping(
 					moleculeAmounts,
 					kValues,

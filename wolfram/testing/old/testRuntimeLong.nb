@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     77735,       1803]
-NotebookOptionsPosition[     70196,       1658]
-NotebookOutlinePosition[     76104,       1781]
-CellTagsIndexPosition[     76061,       1778]
+NotebookDataLength[     77790,       1804]
+NotebookOptionsPosition[     70247,       1659]
+NotebookOutlinePosition[     76159,       1782]
+CellTagsIndexPosition[     76116,       1779]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -1393,7 +1393,7 @@ originally assumed this calculation to be O(1), but in system 2 and 3 this \
 would be O(sqrt(n)) and O(n) for each propensity calculation given the number \
 of reactants in each reaction. Since we have to calculate propensities for \
 O(sqrt(n)) and O(n) reactions in systems 2 and 3, this would mean that \
-calculating all propensities would be O(n) and O(n^2) in systems 2 and 
+calculating all propensities would be O(n) and O(n^2) in systems 2 and 3.
 
 So in hindsight, these results make sense, and there might not be anything \
 hugely wrong with the algorithm given that system 1 seems to perform quite \
@@ -1407,8 +1407,9 @@ runtime, so either avoiding drawing from the exponential random variable \
 simply doesn\[CloseCurlyQuote]t improve runtime asymptotically, or this \
 feature is implemented incorrectly.\
 \>", "Text",
- CellChangeTimes->{{3.8243897635089755`*^9, 
-  3.8243899614313135`*^9}},ExpressionUUID->"cc649977-3ee4-43e3-aa2c-\
+ CellChangeTimes->{{3.8243897635089755`*^9, 3.8243899614313135`*^9}, {
+  3.828140551689975*^9, 
+  3.828140553009327*^9}},ExpressionUUID->"cc649977-3ee4-43e3-aa2c-\
 ff419f29707f"],
 
 Cell[BoxData[{
@@ -1765,7 +1766,7 @@ InputAliases->{"intt" -> RowBox[{"\[Integral]",
      "\[RightArrowLeftArrow]", "\[Placeholder]", "\[Placeholder]"], " ", 
      "\[Placeholder]", " "}]},
 Magnification:>1. Inherited,
-FrontEndVersion->"12.1 for Microsoft Windows (64-bit) (June 19, 2020)",
+FrontEndVersion->"12.2 for Microsoft Windows (64-bit) (December 12, 2020)",
 StyleDefinitions->"Default.nb",
 ExpressionUUID->"f23d6fbc-8a22-41cf-879a-3ab05f213427"
 ]
@@ -1797,12 +1798,12 @@ Cell[24665, 615, 3215, 85, 202, "Input",ExpressionUUID->"f81dd610-55fa-4424-8a12
 Cell[27883, 702, 2639, 70, 142, "Output",ExpressionUUID->"892e2aea-d83d-491f-8c1d-2cf6b6d77628"],
 Cell[30525, 774, 28947, 597, 196, "Output",ExpressionUUID->"0ec927ff-640c-4c27-ba77-1f530f20f34b"]
 }, Open  ]],
-Cell[59487, 1374, 2046, 37, 518, "Text",ExpressionUUID->"cc649977-3ee4-43e3-aa2c-ff419f29707f"],
-Cell[61536, 1413, 1247, 27, 67, "Input",ExpressionUUID->"cc423eb7-7ac1-4be0-8fed-3690d7519208"],
+Cell[59487, 1374, 2097, 38, 518, "Text",ExpressionUUID->"cc649977-3ee4-43e3-aa2c-ff419f29707f"],
+Cell[61587, 1414, 1247, 27, 67, "Input",ExpressionUUID->"cc423eb7-7ac1-4be0-8fed-3690d7519208"],
 Cell[CellGroupData[{
-Cell[62808, 1444, 1031, 23, 67, "Input",ExpressionUUID->"0237f8e0-63be-44fe-a612-98fd25a466c3"],
-Cell[63842, 1469, 4029, 118, 269, "Output",ExpressionUUID->"14fdafbb-2aff-490f-8c05-18e3f1c4b653"],
-Cell[67874, 1589, 2294, 65, 142, "Output",ExpressionUUID->"506a2d0b-0ff5-4cfb-bc4b-0d95823b1305"]
+Cell[62859, 1445, 1031, 23, 67, "Input",ExpressionUUID->"0237f8e0-63be-44fe-a612-98fd25a466c3"],
+Cell[63893, 1470, 4029, 118, 269, "Output",ExpressionUUID->"14fdafbb-2aff-490f-8c05-18e3f1c4b653"],
+Cell[67925, 1590, 2294, 65, 142, "Output",ExpressionUUID->"506a2d0b-0ff5-4cfb-bc4b-0d95823b1305"]
 }, Open  ]]
 }, Open  ]]
 }

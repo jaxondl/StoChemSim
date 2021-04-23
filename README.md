@@ -1,5 +1,8 @@
-# crn-ssa-wolfram-pkg
+# StoChemSim
 Wolfram Language package to stochastically simulate chemical reaction networks.
 
-## Setup Instructions
-For instructions on how to set up the CRNSSA Wolfram Language package, use the notebook setupCRNSSA.nb.
+
+## Wolfram Language Package Setup Instructions
+For instructions on how to set up the StoChemSim Wolfram Language package, use the setup.nb notebook.
+
+## Command Line Tool Setup Instructions

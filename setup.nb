@@ -10,33 +10,34 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     27061,        636]
-NotebookOptionsPosition[     19301,        484]
-NotebookOutlinePosition[     25184,        606]
-CellTagsIndexPosition[     25141,        603]
+NotebookDataLength[     27619,        645]
+NotebookOptionsPosition[     19857,        493]
+NotebookOutlinePosition[     25740,        615]
+CellTagsIndexPosition[     25697,        612]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 
 Cell[CellGroupData[{
-Cell["CRNSSA Setup Instructions", "Title",
+Cell["StoChemSim Setup Instructions", "Title",
  CellChangeTimes->{{3.824211999682989*^9, 3.8242120180817876`*^9}, {
-  3.8243872273062887`*^9, 
-  3.824387232025869*^9}},ExpressionUUID->"4c0eacd2-d689-4e3a-90b5-\
+   3.8243872273062887`*^9, 3.824387232025869*^9}, 
+   3.828140056818573*^9},ExpressionUUID->"4c0eacd2-d689-4e3a-90b5-\
 2d666b6e6543"],
 
 Cell[TextData[{
  "1. Clone the GitHub repo ",
- StyleBox["crn-ssa-wolfram-pkg", "Code"],
- " with the URL ",
+ StyleBox["StoChemSim ", "Code"],
+ "with the URL ",
  StyleBox["https://github.com/jaxondl/crn-ssa-wolfram-pkg.git", "Code"],
  ".\n2. Ensure that Wolfram Mathematica 12 is installed."
 }], "Text",
  CellChangeTimes->{{3.8242120280591063`*^9, 3.824212029170171*^9}, {
    3.824212064858651*^9, 3.8242121450655775`*^9}, 3.824217196140025*^9, {
    3.8242172357083006`*^9, 3.824217247452568*^9}, {3.827826729525326*^9, 
-   3.8278267304679947`*^9}},ExpressionUUID->"950455de-c7d2-4e73-bbdd-\
+   3.8278267304679947`*^9}, {3.8281403947382083`*^9, 
+   3.828140397282817*^9}},ExpressionUUID->"950455de-c7d2-4e73-bbdd-\
 36296d67d0a7"],
 
 Cell[CellGroupData[{
@@ -47,8 +48,9 @@ Cell[BoxData["$VersionNumber"], "Input",
 
 Cell[BoxData["12.2`"], "Output",
  CellChangeTimes->{3.827827328528883*^9, 3.8278311422897577`*^9, 
-  3.8278636721440525`*^9, 3.827864994702963*^9, 3.8278716395696774`*^9},
- CellLabel->"Out[1]=",ExpressionUUID->"9d9c0fd4-3286-4fa7-896f-160d7269be58"]
+  3.8278636721440525`*^9, 3.827864994702963*^9, 3.8278716395696774`*^9, 
+  3.8281403651363564`*^9},
+ CellLabel->"Out[1]=",ExpressionUUID->"41e47382-f35d-4830-a9ce-88edaaaea09f"]
 }, Open  ]],
 
 Cell["3. Run this cell to install the interface library.", "Text",
@@ -80,7 +82,8 @@ Cell[BoxData[{
  RowBox[{"library", "=", 
   RowBox[{"CreateLibrary", "[", 
    RowBox[{
-    RowBox[{"{", "pathInterface", "}"}], ",", "\"\<CRNSSAInterface\>\"", ",", 
+    RowBox[{"{", "pathInterface", "}"}], ",", "\"\<StoChemSimInterface\>\"", 
+    ",", 
     RowBox[{"\"\<Language\>\"", "\[Rule]", "\"\<C++\>\""}]}], 
    "]"}]}]}], "Input",
  CellChangeTimes->{{3.8272855731921997`*^9, 3.827285586335804*^9}, {
@@ -91,29 +94,27 @@ Cell[BoxData[{
    3.8272864881941023`*^9}, {3.827287353792966*^9, 3.827287370161483*^9}, {
    3.827287412805532*^9, 3.8272874738325443`*^9}, {3.827343412215541*^9, 
    3.8273434226052885`*^9}, {3.8278267690272293`*^9, 3.827826771808778*^9}, {
-   3.827827029630948*^9, 3.827827038427281*^9}},
+   3.827827029630948*^9, 3.827827038427281*^9}, 3.828140063484174*^9},
  CellLabel->"In[2]:=",ExpressionUUID->"ec758e12-6837-4980-9082-75a77f70492c"],
 
 Cell[BoxData["\<\"C:\\\\Users\\\\jaxon\\\\AppData\\\\Roaming\\\\Mathematica\\\
-\\SystemFiles\\\\LibraryResources\\\\Windows-x86-64\\\\CRNSSAInterface.dll\"\>\
-"], "Output",
+\\SystemFiles\\\\LibraryResources\\\\Windows-x86-64\\\\StoChemSimInterface.\
+dll\"\>"], "Output",
  CellChangeTimes->{3.8278636820200424`*^9, 3.827865021271489*^9, 
-  3.82787164903607*^9},
- CellLabel->"Out[5]=",ExpressionUUID->"31146227-9f4c-42a5-a348-67d31d1b95ef"]
+  3.82787164903607*^9, 3.8281403723845353`*^9},
+ CellLabel->"Out[5]=",ExpressionUUID->"4d377cd0-5a63-405d-afba-fe2a756e1633"]
 }, Open  ]],
 
 Cell[TextData[{
- "4. Permanently install the CRNSSA package by going to ",
+ "4. Permanently install the StoChemSim package by going to ",
  StyleBox["File -> Install", "Code"],
  ". Set the type as ",
  StyleBox["Package", "Code"],
  " and use ",
- StyleBox["crn-ssa-wolfram-pkg\\wolfram\\CRNSSA.wl", "Code"],
- " as the source. Use install name ",
- StyleBox["CRNSSA", "Code"],
- ". CRNSSA depends on the CRNSimulator package, which must also be installed \
-the same way using ",
- StyleBox["crn-ssa-wolfram-pkg\\wolfram\\CRNSimulator.m", "Code"],
+ StyleBox["StoChemSim\\wolfram\\StoChemSim.wl", "Code"],
+ " as the source. Use install name StoChemSim. StoChemSim depends on the \
+CRNSimulator package, which must also be installed the same way using ",
+ StyleBox["StoChemSim\\wolfram\\CRNSimulator.m", "Code"],
  "  as the source. Running this cell in any notebook will load the package."
 }], "Text",
  CellChangeTimes->{{3.824215627021496*^9, 3.8242157193176284`*^9}, {
@@ -124,17 +125,19 @@ the same way using ",
   3.8242477677653847`*^9, 3.8242478227666845`*^9}, {3.8242478535840497`*^9, 
   3.82424795835365*^9}, {3.8268258800790367`*^9, 3.826825967223147*^9}, {
   3.827827098131174*^9, 3.827827103797823*^9}, {3.827827173362007*^9, 
-  3.8278271805101023`*^9}, {3.827827558999836*^9, 
-  3.827827586442079*^9}},ExpressionUUID->"e6311312-7ab8-419a-a166-\
+  3.8278271805101023`*^9}, {3.827827558999836*^9, 3.827827586442079*^9}, {
+  3.828140072256442*^9, 3.828140081806712*^9}, {3.8281404122686987`*^9, 
+  3.82814041553207*^9}},ExpressionUUID->"e6311312-7ab8-419a-a166-\
 89ea718500da"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[{
  RowBox[{
-  RowBox[{"<<", "CRNSSA`"}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"?", "CRNSSA`*"}]}], "Input",
- CellChangeTimes->{{3.8268260718320875`*^9, 3.826826088823308*^9}},
+  RowBox[{"<<", "StoChemSim`"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"?", "StoChemSim`*"}]}], "Input",
+ CellChangeTimes->{{3.8268260718320875`*^9, 3.826826088823308*^9}, {
+  3.828140085325059*^9, 3.828140087613048*^9}},
  CellLabel->"In[6]:=",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
 
 Cell[BoxData[
@@ -148,7 +151,7 @@ Cell[BoxData[
           
           DynamicBox[FEPrivate`FrontEndResource[
            "FEBitmaps", "RightPointerOpener"]], " ", 
-          StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+          StyleBox["StoChemSim`", "InformationGridGroupHeader"]}],
          Appearance->None,
          BaseStyle->"InformationGridLink",
          ButtonFunction:>FEPrivate`Set[Typeset`open$$, True],
@@ -162,7 +165,7 @@ Cell[BoxData[
               DynamicBox[FEPrivate`FrontEndResource[
                "FEBitmaps", "DownPointerOpener"],
                ImageSizeCache->{10., {2., 8.}}], " ", 
-              StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+              StyleBox["StoChemSim`", "InformationGridGroupHeader"]}],
              Appearance->None,
              BaseStyle->"InformationGridLink",
              ButtonFunction:>FEPrivate`Set[Typeset`open$$, False],
@@ -177,9 +180,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-4c73314d-705c-41e4-842d-eb3025c4b855", {
-                   "GetRuntimeInfo", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-dbe2ddee-07ba-4c0b-b51a-6c383d29b1d4", {
+                   "GetRuntimeInfo", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic], 
                 ButtonBox[
                  StyleBox["PlotLastSimulation", "InformationGridButton"],
@@ -187,9 +190,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-4c73314d-705c-41e4-842d-eb3025c4b855", {
-                   "PlotLastSimulation", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-dbe2ddee-07ba-4c0b-b51a-6c383d29b1d4", {
+                   "PlotLastSimulation", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic], 
                 ButtonBox[
                  
@@ -199,9 +202,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-4c73314d-705c-41e4-842d-eb3025c4b855", {
-                   "SimulateBoundedTauLeaping", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-dbe2ddee-07ba-4c0b-b51a-6c383d29b1d4", {
+                   "SimulateBoundedTauLeaping", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic], 
                 ButtonBox[
                  StyleBox["SimulateDirectSSA", "InformationGridButton"],
@@ -209,9 +212,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-4c73314d-705c-41e4-842d-eb3025c4b855", {
-                   "SimulateDirectSSA", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-dbe2ddee-07ba-4c0b-b51a-6c383d29b1d4", {
+                   "SimulateDirectSSA", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic]}
               },
               DefaultBaseStyle->"Text",
@@ -237,8 +240,8 @@ Cell[BoxData[
         Offset[0.2]}}],
    BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
  CellChangeTimes->{3.8278273419125767`*^9, 3.8278311467957573`*^9, 
-  3.8278650424294605`*^9, 3.8278717053929977`*^9},
- CellLabel->"Out[7]=",ExpressionUUID->"03a77859-2453-4a24-8e8c-876a9fd566c9"]
+  3.8278650424294605`*^9, 3.8278717053929977`*^9, 3.8281403762279835`*^9},
+ CellLabel->"Out[7]=",ExpressionUUID->"a6b7c81b-534e-4e39-ab97-a621133c8681"]
 }, Open  ]],
 
 Cell["\<\
@@ -273,7 +276,8 @@ Cell[BoxData[{
    RowBox[{"FileNameJoin", "[", 
     RowBox[{
      RowBox[{"{", 
-      RowBox[{"repoPath", ",", "\"\<wolfram\>\"", ",", "\"\<CRNSSA.wl\>\""}], 
+      RowBox[{
+      "repoPath", ",", "\"\<wolfram\>\"", ",", "\"\<StoChemSim.wl\>\""}], 
       "}"}], ",", 
      RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
@@ -281,12 +285,13 @@ Cell[BoxData[{
   RowBox[{"Get", "[", "pathPackageDep", "]"}], ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Get", "[", "pathPackage", "]"}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"?", "CRNSSA`*"}]}], "Input",
+ RowBox[{"?", "StoChemSim`*"}]}], "Input",
  CellChangeTimes->{{3.8242476739147367`*^9, 3.824247705412258*^9}, {
   3.8243871580344224`*^9, 3.8243871591853123`*^9}, {3.8268259905592165`*^9, 
   3.8268260564551325`*^9}, {3.826826100480337*^9, 3.8268261750884175`*^9}, {
   3.8272878735698404`*^9, 3.8272878837770786`*^9}, {3.827287920200903*^9, 
-  3.827287933080968*^9}, {3.827827131698516*^9, 3.8278271355776577`*^9}},
+  3.827287933080968*^9}, {3.827827131698516*^9, 3.8278271355776577`*^9}, {
+  3.8281400918537235`*^9, 3.8281400962529*^9}},
  CellLabel->"In[8]:=",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
 
 Cell[BoxData[
@@ -300,7 +305,7 @@ Cell[BoxData[
           
           DynamicBox[FEPrivate`FrontEndResource[
            "FEBitmaps", "RightPointerOpener"]], " ", 
-          StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+          StyleBox["StoChemSim`", "InformationGridGroupHeader"]}],
          Appearance->None,
          BaseStyle->"InformationGridLink",
          ButtonFunction:>FEPrivate`Set[Typeset`open$$, True],
@@ -314,7 +319,7 @@ Cell[BoxData[
               DynamicBox[FEPrivate`FrontEndResource[
                "FEBitmaps", "DownPointerOpener"],
                ImageSizeCache->{10., {2., 8.}}], " ", 
-              StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+              StyleBox["StoChemSim`", "InformationGridGroupHeader"]}],
              Appearance->None,
              BaseStyle->"InformationGridLink",
              ButtonFunction:>FEPrivate`Set[Typeset`open$$, False],
@@ -329,9 +334,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-b6e8070d-4957-45da-9103-2d6d8466a68b", {
-                   "GetRuntimeInfo", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-396b9ec1-3501-4b82-adc6-71fbd875f37b", {
+                   "GetRuntimeInfo", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic], 
                 ButtonBox[
                  StyleBox["PlotLastSimulation", "InformationGridButton"],
@@ -339,9 +344,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-b6e8070d-4957-45da-9103-2d6d8466a68b", {
-                   "PlotLastSimulation", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-396b9ec1-3501-4b82-adc6-71fbd875f37b", {
+                   "PlotLastSimulation", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic], 
                 ButtonBox[
                  
@@ -351,9 +356,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-b6e8070d-4957-45da-9103-2d6d8466a68b", {
-                   "SimulateBoundedTauLeaping", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-396b9ec1-3501-4b82-adc6-71fbd875f37b", {
+                   "SimulateBoundedTauLeaping", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic], 
                 ButtonBox[
                  StyleBox["SimulateDirectSSA", "InformationGridButton"],
@@ -361,9 +366,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-b6e8070d-4957-45da-9103-2d6d8466a68b", {
-                   "SimulateDirectSSA", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-396b9ec1-3501-4b82-adc6-71fbd875f37b", {
+                   "SimulateDirectSSA", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic]}
               },
               DefaultBaseStyle->"Text",
@@ -389,8 +394,9 @@ Cell[BoxData[
         Offset[0.2]}}],
    BaseStyle->"InformationTitleFrame"], "InformationGridPlain"]], "Output",
  CellChangeTimes->{3.827827375751184*^9, 3.827831149700521*^9, 
-  3.8278637398839693`*^9, 3.827865045683563*^9, 3.827871708059447*^9},
- CellLabel->"Out[13]=",ExpressionUUID->"db98120b-8532-45f3-9623-c2cb7cd4ac20"]
+  3.8278637398839693`*^9, 3.827865045683563*^9, 3.827871708059447*^9, 
+  3.828140378722617*^9},
+ CellLabel->"Out[13]=",ExpressionUUID->"e16d5e41-56ab-49c0-94dd-026e3fde1f96"]
 }, Open  ]],
 
 Cell[TextData[{
@@ -443,15 +449,17 @@ Cell[BoxData[
      RowBox[{"{", 
       RowBox[{"x", ",", "y"}], "}"}], ",", "5"}], "]"}]}], "}"}]], "Output",
  CellChangeTimes->{3.8278273781837482`*^9, 3.8278311516875477`*^9, 
-  3.8278637418809447`*^9, 3.8278650520772467`*^9, 3.8278717110082273`*^9},
- CellLabel->"Out[14]=",ExpressionUUID->"7ea2fe4e-9af3-4a90-8ba1-a77d26b4ea52"],
+  3.8278637418809447`*^9, 3.8278650520772467`*^9, 3.8278717110082273`*^9, 
+  3.8281403816952877`*^9},
+ CellLabel->"Out[14]=",ExpressionUUID->"9609fdbb-c2fc-40ff-9285-1a3b832b0d2d"],
 
 Cell[BoxData[
  RowBox[{"{", 
   RowBox[{"x", ",", "y"}], "}"}]], "Output",
  CellChangeTimes->{3.8278273781837482`*^9, 3.8278311516875477`*^9, 
-  3.8278637418809447`*^9, 3.8278650520772467`*^9, 3.827871711010223*^9},
- CellLabel->"Out[15]=",ExpressionUUID->"3927597e-9bee-4ed0-a17c-efdff3666b29"]
+  3.8278637418809447`*^9, 3.8278650520772467`*^9, 3.8278717110082273`*^9, 
+  3.828140381698422*^9},
+ CellLabel->"Out[15]=",ExpressionUUID->"a2aaecbc-0708-420f-84f6-649bdb10fcea"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -475,10 +483,11 @@ Cell[BoxData[
    RowBox[{"{", 
     RowBox[{"{", 
      RowBox[{"0", ",", "1"}], "}"}], "}"}], ",", 
-   RowBox[{"{", "1.72031602577901`", "}"}]}], "}"}]], "Output",
+   RowBox[{"{", "1.3227533862439314`", "}"}]}], "}"}]], "Output",
  CellChangeTimes->{3.827827382739916*^9, 3.827831155031191*^9, 
-  3.827863744212141*^9, 3.8278650544142103`*^9, 3.8278717139980607`*^9},
- CellLabel->"Out[16]=",ExpressionUUID->"f21172d4-9008-44ea-ae1e-19059be9160e"]
+  3.827863744212141*^9, 3.8278650544142103`*^9, 3.8278717139980607`*^9, 
+  3.8281403846119785`*^9},
+ CellLabel->"Out[16]=",ExpressionUUID->"14f30701-9071-48ae-980b-52260cfb541f"]
 }, Open  ]]
 }, Open  ]]
 },
@@ -606,36 +615,36 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 221, 4, 97, "Title",ExpressionUUID->"4c0eacd2-d689-4e3a-90b5-2d666b6e6543"],
-Cell[804, 28, 552, 11, 56, "Text",ExpressionUUID->"950455de-c7d2-4e73-bbdd-36296d67d0a7"],
+Cell[580, 22, 249, 4, 97, "Title",ExpressionUUID->"4c0eacd2-d689-4e3a-90b5-2d666b6e6543"],
+Cell[832, 28, 595, 12, 56, "Text",ExpressionUUID->"950455de-c7d2-4e73-bbdd-36296d67d0a7"],
 Cell[CellGroupData[{
-Cell[1381, 43, 184, 2, 28, "Input",ExpressionUUID->"db78ec2f-a791-419d-9f93-b8b8b21d85b8"],
-Cell[1568, 47, 249, 3, 32, "Output",ExpressionUUID->"9d9c0fd4-3286-4fa7-896f-160d7269be58"]
+Cell[1452, 44, 184, 2, 28, "Input",ExpressionUUID->"db78ec2f-a791-419d-9f93-b8b8b21d85b8"],
+Cell[1639, 48, 276, 4, 32, "Output",ExpressionUUID->"41e47382-f35d-4830-a9ce-88edaaaea09f"]
 }, Open  ]],
-Cell[1832, 53, 438, 6, 34, "Text",ExpressionUUID->"f9ae4b93-3271-4901-8c7b-5154d71210c5"],
+Cell[1930, 55, 438, 6, 34, "Text",ExpressionUUID->"f9ae4b93-3271-4901-8c7b-5154d71210c5"],
 Cell[CellGroupData[{
-Cell[2295, 63, 1505, 31, 85, "Input",ExpressionUUID->"ec758e12-6837-4980-9082-75a77f70492c"],
-Cell[3803, 96, 340, 5, 32, "Output",ExpressionUUID->"31146227-9f4c-42a5-a348-67d31d1b95ef"]
+Cell[2393, 65, 1536, 32, 85, "Input",ExpressionUUID->"ec758e12-6837-4980-9082-75a77f70492c"],
+Cell[3932, 99, 368, 5, 32, "Output",ExpressionUUID->"4d377cd0-5a63-405d-afba-fe2a756e1633"]
 }, Open  ]],
-Cell[4158, 104, 1287, 24, 56, "Text",ExpressionUUID->"e6311312-7ab8-419a-a166-89ea718500da"],
+Cell[4315, 107, 1353, 23, 56, "Text",ExpressionUUID->"e6311312-7ab8-419a-a166-89ea718500da"],
 Cell[CellGroupData[{
-Cell[5470, 132, 269, 5, 47, "Input",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
-Cell[5742, 139, 4120, 101, 91, "Output",ExpressionUUID->"03a77859-2453-4a24-8e8c-876a9fd566c9"]
+Cell[5693, 134, 326, 6, 47, "Input",ExpressionUUID->"fc75a48e-0cd5-4616-9c80-3af22784ca0c"],
+Cell[6022, 142, 4184, 101, 91, "Output",ExpressionUUID->"a6b7c81b-534e-4e39-ab97-a621133c8681"]
 }, Open  ]],
-Cell[9877, 243, 409, 9, 34, "Text",ExpressionUUID->"14725567-84e2-414a-8129-28567df334bf"],
+Cell[10221, 246, 409, 9, 34, "Text",ExpressionUUID->"14725567-84e2-414a-8129-28567df334bf"],
 Cell[CellGroupData[{
-Cell[10311, 256, 1434, 33, 122, "Input",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
-Cell[11748, 291, 4137, 101, 91, "Output",ExpressionUUID->"db98120b-8532-45f3-9623-c2cb7cd4ac20"]
+Cell[10655, 259, 1498, 35, 122, "Input",ExpressionUUID->"cdfb912c-1576-4a21-8d28-77593c545c9b"],
+Cell[12156, 296, 4202, 102, 91, "Output",ExpressionUUID->"e16d5e41-56ab-49c0-94dd-026e3fde1f96"]
 }, Open  ]],
-Cell[15900, 395, 519, 11, 34, "Text",ExpressionUUID->"8872dfa3-38dc-489c-a312-90890b1566aa"],
+Cell[16373, 401, 519, 11, 34, "Text",ExpressionUUID->"8872dfa3-38dc-489c-a312-90890b1566aa"],
 Cell[CellGroupData[{
-Cell[16444, 410, 772, 18, 122, "Input",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
-Cell[17219, 430, 644, 16, 42, "Output",ExpressionUUID->"7ea2fe4e-9af3-4a90-8ba1-a77d26b4ea52"],
-Cell[17866, 448, 293, 5, 32, "Output",ExpressionUUID->"3927597e-9bee-4ed0-a17c-efdff3666b29"]
+Cell[16917, 416, 772, 18, 122, "Input",ExpressionUUID->"7028c93a-93a0-4895-a49b-8bddf4b62ed5"],
+Cell[17692, 436, 671, 17, 42, "Output",ExpressionUUID->"9609fdbb-c2fc-40ff-9285-1a3b832b0d2d"],
+Cell[18366, 455, 320, 6, 32, "Output",ExpressionUUID->"a2aaecbc-0708-420f-84f6-649bdb10fcea"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[18196, 458, 670, 11, 28, "Input",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
-Cell[18869, 471, 404, 9, 32, "Output",ExpressionUUID->"f21172d4-9008-44ea-ae1e-19059be9160e"]
+Cell[18723, 466, 670, 11, 28, "Input",ExpressionUUID->"bdafe20b-3b9c-4c0e-b892-cd074ff68bfc"],
+Cell[19396, 479, 433, 10, 32, "Output",ExpressionUUID->"14f30701-9071-48ae-980b-52260cfb541f"]
 }, Open  ]]
 }, Open  ]]
 }

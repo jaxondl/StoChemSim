@@ -10,33 +10,34 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     15143,        354]
-NotebookOptionsPosition[      8615,        221]
-NotebookOutlinePosition[     14528,        344]
-CellTagsIndexPosition[     14485,        341]
+NotebookDataLength[     15326,        356]
+NotebookOptionsPosition[      8798,        223]
+NotebookOutlinePosition[     14711,        346]
+CellTagsIndexPosition[     14668,        343]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 
 Cell[CellGroupData[{
-Cell["Sudoku CRN", "Title",
+Cell["Large Sudoku CRN", "Title",
  CellChangeTimes->{{3.8147292785447936`*^9, 3.8147292854487743`*^9}, {
   3.8242482560164833`*^9, 3.824248260176464*^9}, {3.8274130234854555`*^9, 
-  3.8274130257808332`*^9}},ExpressionUUID->"99313edb-9280-4a33-9415-\
+  3.8274130257808332`*^9}, {3.8281411232861032`*^9, 
+  3.8281411239338646`*^9}},ExpressionUUID->"99313edb-9280-4a33-9415-\
 fe73f5350fe5"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[{
  RowBox[{
-  RowBox[{"<<", "CRNSSA`"}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"?", "CRNSSA`*"}]}], "Input",
+  RowBox[{"<<", "StoChemSim`"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"?", "StoChemSim`*"}]}], "Input",
  CellChangeTimes->{{3.8121561693612485`*^9, 3.812156171593361*^9}, {
    3.8163745297158756`*^9, 3.816374532987081*^9}, 3.8163792638170104`*^9, {
    3.824248268170289*^9, 3.8242482684894447`*^9}, {3.8260784714912205`*^9, 
-   3.8260784758186455`*^9}},
- CellLabel->"In[29]:=",ExpressionUUID->"8acb8700-aa44-4b5e-a852-0474740d5f06"],
+   3.8260784758186455`*^9}, {3.8281411004208326`*^9, 3.828141102388135*^9}},
+ CellLabel->"In[24]:=",ExpressionUUID->"8acb8700-aa44-4b5e-a852-0474740d5f06"],
 
 Cell[BoxData[
  StyleBox[
@@ -49,7 +50,7 @@ Cell[BoxData[
           
           DynamicBox[FEPrivate`FrontEndResource[
            "FEBitmaps", "RightPointerOpener"]], " ", 
-          StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+          StyleBox["StoChemSim`", "InformationGridGroupHeader"]}],
          Appearance->None,
          BaseStyle->"InformationGridLink",
          ButtonFunction:>FEPrivate`Set[Typeset`open$$, True],
@@ -63,7 +64,7 @@ Cell[BoxData[
               DynamicBox[FEPrivate`FrontEndResource[
                "FEBitmaps", "DownPointerOpener"],
                ImageSizeCache->{11., {3., 8.}}], " ", 
-              StyleBox["CRNSSA`", "InformationGridGroupHeader"]}],
+              StyleBox["StoChemSim`", "InformationGridGroupHeader"]}],
              Appearance->None,
              BaseStyle->"InformationGridLink",
              ButtonFunction:>FEPrivate`Set[Typeset`open$$, False],
@@ -78,9 +79,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-ab83871b-2185-468c-8097-4d67a86b6364", {
-                   "GetRuntimeInfo", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-811cc437-cca4-4d24-8771-2b37d33a58c1", {
+                   "GetRuntimeInfo", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic], 
                 ButtonBox[
                  StyleBox["PlotLastSimulation", "InformationGridButton"],
@@ -88,9 +89,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-ab83871b-2185-468c-8097-4d67a86b6364", {
-                   "PlotLastSimulation", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-811cc437-cca4-4d24-8771-2b37d33a58c1", {
+                   "PlotLastSimulation", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic], 
                 ButtonBox[
                  
@@ -100,9 +101,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-ab83871b-2185-468c-8097-4d67a86b6364", {
-                   "SimulateBoundedTauLeaping", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-811cc437-cca4-4d24-8771-2b37d33a58c1", {
+                   "SimulateBoundedTauLeaping", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic], 
                 ButtonBox[
                  StyleBox["SimulateDirectSSA", "InformationGridButton"],
@@ -110,9 +111,9 @@ Cell[BoxData[
                  BaseStyle->"InformationGridLink",
                  
                  ButtonData:>{
-                  "Info-ab83871b-2185-468c-8097-4d67a86b6364", {
-                   "SimulateDirectSSA", "CRNSSA`"}, False},
-                 ButtonNote->"CRNSSA`",
+                  "Info-811cc437-cca4-4d24-8771-2b37d33a58c1", {
+                   "SimulateDirectSSA", "StoChemSim`"}, False},
+                 ButtonNote->"StoChemSim`",
                  Evaluator->Automatic]}
               },
               DefaultBaseStyle->"Text",
@@ -142,8 +143,9 @@ Cell[BoxData[
    3.826077757475362*^9, {3.826078525695257*^9, 3.826078537835821*^9}, {
    3.8268248747856145`*^9, 3.826824899655695*^9}, 3.8272404154344177`*^9, 
    3.827245165163039*^9, 3.8272501841895466`*^9, 3.8273445614656534`*^9, 
-   3.8274126850341043`*^9, 3.827863943259941*^9, 3.8280550837723045`*^9},
- CellLabel->"Out[30]=",ExpressionUUID->"cfe061fc-6b2d-4602-b6e8-4eb15f13ffb0"]
+   3.8274126850341043`*^9, 3.827863943259941*^9, 3.8280550837723045`*^9, 
+   3.8281411117873926`*^9},
+ CellLabel->"Out[25]=",ExpressionUUID->"da82a862-6156-40a2-9246-7c81a1a82b10"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -344,16 +346,16 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 258, 4, 107, "Title",ExpressionUUID->"99313edb-9280-4a33-9415-fe73f5350fe5"],
+Cell[580, 22, 317, 5, 107, "Title",ExpressionUUID->"99313edb-9280-4a33-9415-fe73f5350fe5"],
 Cell[CellGroupData[{
-Cell[863, 30, 452, 8, 52, "Input",ExpressionUUID->"8acb8700-aa44-4b5e-a852-0474740d5f06"],
-Cell[1318, 40, 4389, 105, 104, "Output",ExpressionUUID->"cfe061fc-6b2d-4602-b6e8-4eb15f13ffb0"]
+Cell[922, 31, 508, 8, 52, "Input",ExpressionUUID->"8acb8700-aa44-4b5e-a852-0474740d5f06"],
+Cell[1433, 41, 4457, 106, 104, "Output",ExpressionUUID->"da82a862-6156-40a2-9246-7c81a1a82b10"]
 }, Open  ]],
-Cell[5722, 148, 1178, 22, 52, "Input",ExpressionUUID->"8b417677-a446-4ab6-80dd-94d45d2a2df6"],
-Cell[6903, 172, 560, 12, 30, "Input",ExpressionUUID->"3c7922f0-452b-4b68-9312-428154e3504c"],
+Cell[5905, 150, 1178, 22, 52, "Input",ExpressionUUID->"8b417677-a446-4ab6-80dd-94d45d2a2df6"],
+Cell[7086, 174, 560, 12, 30, "Input",ExpressionUUID->"3c7922f0-452b-4b68-9312-428154e3504c"],
 Cell[CellGroupData[{
-Cell[7488, 188, 366, 8, 30, "Input",ExpressionUUID->"074956c8-2d41-4471-947d-bf2dfd608cd6"],
-Cell[7857, 198, 730, 19, 35, "Output",ExpressionUUID->"b2444489-6b6f-4ab4-ba82-85359901d2a5"]
+Cell[7671, 190, 366, 8, 30, "Input",ExpressionUUID->"074956c8-2d41-4471-947d-bf2dfd608cd6"],
+Cell[8040, 200, 730, 19, 35, "Output",ExpressionUUID->"b2444489-6b6f-4ab4-ba82-85359901d2a5"]
 }, Open  ]]
 }, Open  ]]
 }

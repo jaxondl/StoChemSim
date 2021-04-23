@@ -1,11 +1,11 @@
 (* ::Package:: *)
 
 (* ::Title:: *)
-(*CRNSSA Package*)
+(*StoChemSim Package*)
 
 
 Needs["CRNSimulator`"]
-BeginPackage["CRNSSA`", {"CRNSimulator`"}]
+BeginPackage["StoChemSim`", {"CRNSimulator`"}]
 
 
 SimulateDirectSSA::usage =
@@ -102,7 +102,7 @@ GetRates[rxnls_] := Cases[rxnls, rxnl[_, _, k_] :> k]
 
 
 (*Loads C++ library and loads interface functions with specified argument types*)
-library = LibraryLoad["CRNSSAInterface"]
+library = LibraryLoad["StoChemSimInterface"]
 
 (*Entire backend implementation for Direct SSA, has no return type*)
 DirectSSABackend = LibraryFunctionLoad[library, "directSSAInterface",
