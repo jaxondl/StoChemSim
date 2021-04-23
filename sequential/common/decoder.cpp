@@ -411,6 +411,9 @@ void decoder::updateStateChangeVector(int reactionNumber, std::string reactionSl
             }
             this->stateChangeVector[reactionNumber][pairIndex].second += stoi(moleculeCount);
         }
+        if (this->stateChangeVector[reactionNumber][pairIndex].second == 0) {
+            stateChangeVector[reactionNumber].erase(stateChangeVector[reactionNumber].begin() + pairIndex);
+        }
     }
 }
 

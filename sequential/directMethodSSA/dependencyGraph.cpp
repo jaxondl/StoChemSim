@@ -57,11 +57,18 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
     }
 
     vector<vector<int> > dummyGraph(stateChangeVector.size());
-
+    int size = stateChangeVector.size() * stateChangeVector.size();
+    int8_t* checkAdded = new int8_t[size];
+    memset(checkAdded, 0, size);
     for(int i = 0; i < stateChangeVector.size(); i++){
+        int index_base = stateChangeVector.size() * i;
         for(pair<int, int> element : stateChangeVector[i]){
             for(auto dep : dependsOn[element.first]){
-                dummyGraph[i].push_back(dep);
+                int index = index_base + dep;
+                if (checkAdded[index] == 0){
+                    checkAdded[index] = 1;
+                    dummyGraph[i].push_back(dep);
+                }
             }
         }
     }
