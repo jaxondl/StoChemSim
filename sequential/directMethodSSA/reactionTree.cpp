@@ -68,9 +68,6 @@ int reactionTree::searchForNode(double RV) {
             leftSumTotal -= checkNode.leftSum;
             if (checkNode.leftChild == -1){
                 return -1;
-                cout << "PROBLEM" << endl;
-                cout << "RV value: " << RV << endl;
-                cout << "Left Sum Total" << leftSumTotal << " Propensity: " << checkNode.propensity << endl;
                 break;
             }
             checkNode = reactionTreeArray[checkNode.leftChild];
@@ -80,9 +77,6 @@ int reactionTree::searchForNode(double RV) {
             leftSumTotal += checkNode.propensity;
             if (checkNode.rightChild == -1){
                 return -1;
-                cout << "PROBLEM" << endl;
-                cout << "RV value: " << RV << endl;
-                cout << "Left Sum Total" << leftSumTotal << " Propensity: " << checkNode.propensity << endl;
                 break;
             }
             checkNode = reactionTreeArray[checkNode.rightChild];
@@ -97,6 +91,9 @@ void reactionTree::updatePropensity(int index, double reactionRate, vector<int> 
     int currentIndex = index;
     double newPropensity = calculatePropensity(reactionRate, moleculeAmounts, reactants); //recalculate propensity for that index
     double propensityChange = newPropensity - reactionTreeArray[currentIndex].propensity; // determine change in propensity
+    if (propensityChange == 0){
+        return;
+    }
     reactionTreeArray[currentIndex].propensity = newPropensity;
     while (reactionTreeArray[currentIndex].parent != -1) { // update parents' left or right sums depending on if the child is the left or right child of its parent until you hit the root node
         if (currentIndex == reactionTreeArray[reactionTreeArray[currentIndex].parent].leftChild) {
