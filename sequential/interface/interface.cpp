@@ -88,6 +88,9 @@ static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint mo
 			if(out > 0) {
                 if (in > 0) {
 				    stateChangeArray_row.back().second += out;
+					if (stateChangeArray_row.back().second == 0) {
+						stateChangeArray_row.pop_back();
+					}
                 } else {
                     stateChangeArray_row.push_back(pair<T1, T2>(index, out));
                 }
