@@ -1,0 +1,6 @@
+﻿  driverBTL.cpp
+C:\Users\asada\Desktop\StoChemSim\sequential\driverBTL.cpp(56,31): warning C4018: '<': signed/unsigned mismatch
+C:\Users\asada\Desktop\StoChemSim\sequential\driverBTL.cpp(115,35): warning C4018: '<': signed/unsigned mismatch
+C:\Users\asada\Desktop\StoChemSim\sequential\driverBTL.cpp(135,35): warning C4018: '<': signed/unsigned mismatch
+C:\Users\asada\Desktop\StoChemSim\sequential\driverBTL.cpp(138,39): warning C4018: '<': signed/unsigned mismatch
+  SSABoost.vcxproj -> C:\Users\asada\Desktop\StoChemSim\sequential\Debug\SSABoost.exe

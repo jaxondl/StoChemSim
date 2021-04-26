@@ -2,14 +2,27 @@
 #include "common/inputVerifier.h"
 #include "boundedTauLeaping/boundedTauLeaping.h"
 
+#include <boost/program_options.hpp>
 #include <iostream>
 #include <iomanip>
 #include <string>
 #include <fstream>
 
 using namespace std;
+namespace po = boost::program_options;
+
 
 int main(int argc, char** argv) {
+    po::options_description desc("Allowed options");
+    desc.add_options()
+        ("help", "produce help message")
+        ("input-file", po::value< vector<string> >(), "input file")
+        ;
+
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
     inputVerifier *iv = new inputVerifier(); // create input verifier for validating input file
     string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\sample_input_SSA_file.txt
     string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\output.txt
