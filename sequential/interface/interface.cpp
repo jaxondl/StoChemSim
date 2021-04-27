@@ -303,7 +303,7 @@ EXTERN_C DLLEXPORT int getTimes(WolframLibraryData libData, mint Argc, MArgument
 
 	// output setup
 	MNumericArray Mout;
-	int out_size = allTimes.size();
+	mint out_size = allTimes.size();
 	const mint *dims_out = &out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
 	
@@ -342,9 +342,9 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 
 	// output setup
 	MNumericArray Mout;
-	int row = allStates.size();
-	int col = allStates[0].size();
-	int out_size[2] = {row, col};
+	mint row = allStates.size();
+	mint col = allStates[0].size();
+	mint out_size[2] = {row, col};
 	const mint *dims_out = out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Bit64, 2, dims_out, &Mout);
 	
@@ -381,7 +381,7 @@ EXTERN_C DLLEXPORT int getRuntimes(WolframLibraryData libData, mint Argc, MArgum
 
 	// output setup
 	MNumericArray Mout;
-	int out_size = 2;
+	mint out_size = 2;
 	const mint *dims_out = &out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
 	
