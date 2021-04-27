@@ -21,30 +21,12 @@ DLLEXPORT int WolframLibrary_initialize(WolframLibraryData libData) { return LIB
 /* Uninitialize Library */
 DLLEXPORT void WolframLibrary_uninitialize(WolframLibraryData libData) { return; }
 
-/* convert a 2-dimentional NumericArray to a 2-dimentional vector */
-template <typename Tin, typename Tout>
-static vector<vector<Tout> > numericMatrixtoVector(const void *in0, mint const *dims) {
-	const Tin *in = static_cast<const Tin *>(in0);
-	vector<vector<Tout> > out;
-	mint row = dims[0];
-	mint col = dims[1];
-	for (mint i = 0; i < row; i++) {
-		vector<Tout> out_row;
-		for (mint j = 0; j < col; j++) {
-			out_row.push_back(in[i*col + j]);
-		}
-		out.push_back(out_row);
-	}
-	return out;
-}
-
 /* convert a 1-dimentional NumericArray to a 1-dimentional vector */
 template <typename Tin, typename Tout>
-static vector<Tout> numericArraytoVector(const void *in0, mint const length) {
-	const Tin *in = static_cast<const Tin *>(in0);
+static vector<Tout> numericArraytoVector(const Tin *in0, const int length) {
     vector<Tout> out;
     for (mint i = 0; i < length; i++) {
-        out.push_back((Tout)in[i]);
+        out.push_back((Tout)in0[i]);
     }
 	return out;
 }
@@ -62,8 +44,8 @@ static void vectortoNumericArray(void *Mout0, vector<T> out) {
 template <typename Tin, typename Tout>
 static void matrixtoNumericArray(void *Mout0, vector<vector<Tin> > out) {
 	Tout *Mout = static_cast<Tout *>(Mout0);
-	int64_t row = out.size();
-	int64_t col = out[0].size();
+	int row = out.size();
+	int col = out[0].size();
 	for (mint i = 0; i < row; i++) {
 		for (mint j = 0; j < col; j++) {
 			Mout[i*col + j] = (Tout)out[i][j];
@@ -73,7 +55,7 @@ static void matrixtoNumericArray(void *Mout0, vector<vector<Tin> > out) {
 
 /* construct reactants and state_change array */
 template <typename T1, typename T2>
-static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint moleculeCount, const int64_t *reactIn, const int64_t *prodIn, vector<vector<pair<T1, T2> > >& reactantsArray, vector<vector<pair<T1, T2> > >& stateChangeArray) {
+static void reactantsAndStateChangeArrayConstruction(mint reactionCount, mint moleculeCount, const T2 *reactIn, const T2 *prodIn, vector<vector<pair<T1, T2> > >& reactantsArray, vector<vector<pair<T1, T2> > >& stateChangeArray) {
 	for (mint i = 0; i < reactionCount; i++) {
 		vector<pair<T1, T2> > reactantsArray_row;
 		vector<pair<T1, T2> > stateChangeArray_row;
@@ -123,7 +105,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
 	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
 	mint length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
-    const int64_t *initIn = static_cast<const int64_t *>(MinitCounts_in);
+    const int *initIn = static_cast<const int *>(MinitCounts_in);
 	vector<int> moleculeAmounts = numericArraytoVector<int, int>(initIn, length);
 
 	// convert reactantsArray & stateChangeArray
@@ -134,16 +116,17 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
 	mint moleculeCount = dims[1];
 	void* MreactCounts_in = naFuns->MNumericArray_getData(MreactCounts);
 	void* MprodCounts_in = naFuns->MNumericArray_getData(MprodCounts);
-	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in);
-	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);
+	const int *reactIn = static_cast<const int *>(MreactCounts_in);
+	const int *prodIn = static_cast<const int *>(MprodCounts_in);
     vector<vector<pair<int, int> > > reactantsArray;
 	vector<vector<pair<int, int> > > stateChangeArray;
     reactantsAndStateChangeArrayConstruction<int, int>(reactionCount, moleculeCount, reactIn, prodIn, reactantsArray, stateChangeArray);
 
 	// convert rates
 	MNumericArray Mrates = MArgument_getMNumericArray(Args[3]);
-	void* rateIn = naFuns->MNumericArray_getData(Mrates);
+	void* Mrate_in = naFuns->MNumericArray_getData(Mrates);
 	length = naFuns->MNumericArray_getFlattenedLength(Mrates);
+	const double* rateIn = static_cast<const double *>(Mrate_in);
 	vector<double> kValues = numericArraytoVector<double, double>(rateIn, length);
 
 	// extract timeEndR
@@ -222,7 +205,7 @@ EXTERN_C DLLEXPORT int BTLInterface(WolframLibraryData libData, mint Argc, MArgu
 	MNumericArray MinitCounts = MArgument_getMNumericArray(Args[0]);
 	void* MinitCounts_in = naFuns->MNumericArray_getData(MinitCounts);
 	mint length = naFuns->MNumericArray_getFlattenedLength(MinitCounts);
-    const int64_t *initIn = static_cast<const int64_t *>(MinitCounts_in);
+    const int *initIn = static_cast<const int *>(MinitCounts_in);
 	vector<int> moleculeAmounts = numericArraytoVector<int, int>(initIn, length);
 
 	// convert reactantsArray & stateChangeArray
@@ -233,16 +216,17 @@ EXTERN_C DLLEXPORT int BTLInterface(WolframLibraryData libData, mint Argc, MArgu
 	mint moleculeCount = dims[1];
 	void* MreactCounts_in = naFuns->MNumericArray_getData(MreactCounts);
 	void* MprodCounts_in = naFuns->MNumericArray_getData(MprodCounts);
-	const int64_t *reactIn = static_cast<const int64_t *>(MreactCounts_in);
-	const int64_t *prodIn = static_cast<const int64_t *>(MprodCounts_in);
+	const int *reactIn = static_cast<const int *>(MreactCounts_in);
+	const int *prodIn = static_cast<const int *>(MprodCounts_in);
     vector<vector<pair<int, int> > > reactantsArray;
 	vector<vector<pair<int, int> > > stateChangeArray;
     reactantsAndStateChangeArrayConstruction<int, int>(reactionCount, moleculeCount, reactIn, prodIn, reactantsArray, stateChangeArray);
 
 	// convert rates
 	MNumericArray Mrates = MArgument_getMNumericArray(Args[3]);
-	void* rateIn = naFuns->MNumericArray_getData(Mrates);
+	void* Mrate_in = naFuns->MNumericArray_getData(Mrates);
 	length = naFuns->MNumericArray_getFlattenedLength(Mrates);
+	const double* rateIn = static_cast<const double *>(Mrate_in);
 	vector<double> kValues = numericArraytoVector<double, double>(rateIn, length);
 
 	// extract timeEndR
@@ -319,7 +303,7 @@ EXTERN_C DLLEXPORT int getTimes(WolframLibraryData libData, mint Argc, MArgument
 
 	// output setup
 	MNumericArray Mout;
-	int64_t out_size = allTimes.size();
+	int out_size = allTimes.size();
 	const mint *dims_out = &out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
 	
@@ -358,9 +342,9 @@ EXTERN_C DLLEXPORT int getStates(WolframLibraryData libData, mint Argc, MArgumen
 
 	// output setup
 	MNumericArray Mout;
-	int64_t row = allStates.size();
-	int64_t col = allStates[0].size();
-	int64_t out_size[2] = {row, col};
+	int row = allStates.size();
+	int col = allStates[0].size();
+	int out_size[2] = {row, col};
 	const mint *dims_out = out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Bit64, 2, dims_out, &Mout);
 	
@@ -397,7 +381,7 @@ EXTERN_C DLLEXPORT int getRuntimes(WolframLibraryData libData, mint Argc, MArgum
 
 	// output setup
 	MNumericArray Mout;
-	int64_t out_size = 2;
+	int out_size = 2;
 	const mint *dims_out = &out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
 	
