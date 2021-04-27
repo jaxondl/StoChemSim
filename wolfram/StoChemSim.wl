@@ -5,7 +5,7 @@
 
 
 (* ::Text:: *)
-(*Installation instructions : Drop the XXX directory in the directory opened by SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]*)
+(*Installation instructions: Drop this package file and the "sequential" directory in the directory opened by SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]*)
 
 
 Needs["CRNSimulator`"];
@@ -60,7 +60,7 @@ Begin["`Private`"];
 packageDir = $InputFileName//DirectoryName;
 If[packageDir==="", packageDir=NotebookDirectory[]];
 pathInterface = 
- FileNameJoin[{packageDir, "..", "sequential", "interface", "interface.cpp"}, 
+ FileNameJoin[{packageDir, "sequential", "interface", "interface.cpp"}, 
   OperatingSystem -> $OperatingSystem];
 CreateLibrary[{pathInterface}, "StoChemSimInterface", "Language" -> "C++"];
 
