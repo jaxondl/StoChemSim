@@ -4,8 +4,12 @@
 (*StoChemSim Package*)
 
 
-Needs["CRNSimulator`"]
-BeginPackage["StoChemSim`", {"CRNSimulator`"}]
+(* ::Text:: *)
+(*Installation instructions : Drop the XXX directory in the directory opened by SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]*)
+
+
+Needs["CRNSimulator`"];
+BeginPackage["StoChemSim`", {"CRNSimulator`", "CCompilerDriver`"}];
 
 
 SimulateDirectSSA::usage =
@@ -40,16 +44,25 @@ See https://arxiv.org/pdf/0803.1030.pdf for more details";
 PlotLastSimulation::usage =
 "PlotLastSimulation[Options]
 Plots the last simulation ran
-Uses same Options as ListLinePlot"
+Uses same Options as ListLinePlot";
 
 GetRuntimeInfo::usage=
 "Retrieves runtime data collected from previous simulation as Association object
 Frontend runtime includes time spent converting rxnsys to NumericArray objects in Wolfram
 Interface runtime includes datatype conversion time in Library Link interface
-Backend runtime includes the simulation runtime in C++"
+Backend runtime includes the simulation runtime in C++";
 
 
-Begin["`Private`"]
+Begin["`Private`"];
+
+
+(*Compile C++ part of package*)
+packageDir = $InputFileName//DirectoryName;
+If[packageDir==="", packageDir=NotebookDirectory[]];
+pathInterface = 
+ FileNameJoin[{packageDir, "..", "sequential", "interface", "interface.cpp"}, 
+  OperatingSystem -> $OperatingSystem];
+CreateLibrary[{pathInterface}, "StoChemSimInterface", "Language" -> "C++"];
 
 
 (*Error given when timeEnd value is invalid*)
