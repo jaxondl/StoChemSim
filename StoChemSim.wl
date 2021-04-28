@@ -57,6 +57,7 @@ Begin["`Private`"];
 
 
 (*Compile C++ part of package*)
+Quiet@LibraryUnload["StoChemSimInterface"];
 packageDir = $InputFileName//DirectoryName;
 If[packageDir === "", packageDir = NotebookDirectory[]];
 pathInterface = FileNameJoin[
