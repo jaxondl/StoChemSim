@@ -5,7 +5,7 @@
 
 
 (* ::Text:: *)
-(*Installation instructions: Drop this package file and the "sequential" directory in the directory opened by SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]*)
+(*Installation instructions: Drop this package file, CRNSimulator.m, and the "StoChemSimSequential" directory in the directory opened by SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]*)
 
 
 Needs["CRNSimulator`"];
