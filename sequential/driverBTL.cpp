@@ -13,15 +13,25 @@ namespace po = boost::program_options;
 
 
 int main(int argc, char** argv) {
-    po::options_description desc("Allowed options");
+   po::options_description desc("Allowed options");
     desc.add_options()
-        ("help", "produce help message")
-        ("input-file", po::value< vector<string> >(), "input file")
+        ("help,h", "produce help message")
+        ("endtime,t", po::value<int>()->default_value(0), "specify endtime if ending by time, nonpositive value ends at inifinty")
+        ("enditer,i", po::value<int>(), "specify end iteration if ending by iteration, nonpositive value ends at inifinty")
+        ("finalonly,f", po::value<bool>()->default_value(false), "set to true to only save final state and time")
+        ("epsilon,e", po::value<double>()->default_value(0), "set epsilon value; default is calculated by default rho")
+        ("rho,p", po::value<double>()->default_value(0.25), "set rho value; used to calculate epsilon; default is 0.25")
+        ("out,o", po::value<string>(), "output file if specified")
+        ("input-file", po::value< vector<string> >(), "input file, must be specified")
         ;
-
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm);
+    po::notify(vm); 
+
+    if (vm.count("help")) {
+        cout << desc << "\n";
+        return 1;
+    }
 
     inputVerifier *iv = new inputVerifier(); // create input verifier for validating input file
     string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\sample_input_SSA_file.txt
@@ -151,5 +161,3 @@ int main(int argc, char** argv) {
     }
     return 0;
 }
-
-
