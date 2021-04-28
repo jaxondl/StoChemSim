@@ -16,25 +16,53 @@ int main(int argc, char** argv) {
    po::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "produce help message")
-        ("endtime,t", po::value<int>()->default_value(0), "specify endtime if ending by time, nonpositive value ends at inifinty")
-        ("enditer,i", po::value<int>(), "specify end iteration if ending by iteration, nonpositive value ends at inifinty")
+        ("endtime,t", po::value<double>()->default_value(0), "specify endtime if ending by time, nonpositive value ends at inifinty, do not set both this and enditer")
+        ("enditer,i", po::value<int>(), "specify end iteration if ending by iteration, nonpositive value ends at inifinty, do not set both this and endtime")
         ("finalonly,f", po::value<bool>()->default_value(false), "set to true to only save final state and time")
         ("epsilon,e", po::value<double>()->default_value(0), "set epsilon value; default is calculated by default rho")
         ("rho,p", po::value<double>()->default_value(0.25), "set rho value; used to calculate epsilon; default is 0.25")
         ("out,o", po::value<string>(), "output file if specified")
-        ("input-file", po::value< vector<string> >(), "input file, must be specified")
+        ("input-file", po::value<string>(), "input file, MUST be specified")
         ;
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
-    po::notify(vm); 
+//    po::notify(vm); 
+
+    bool endByTime = false;
+    bool endByIter = false;
 
     if (vm.count("help")) {
         cout << desc << "\n";
         return 1;
     }
-
+    if (vm.count("endtime")) {
+        cout << "Endtime: " << vm["endtime"].as< double >() << "\n";
+        endByTime = true;
+    }
+    if (vm.count("enditer")) {
+        cout << "End Iter: " << vm["enditer"].as< int >() << "\n";
+        endByIter = true;
+    }
+    if (vm.count("finalonly")) {
+        cout << "Final Only: " << vm["finalonly"].as< bool >() << "\n";
+        endByIter = true;
+    }
+    if (vm.count("epsilon")) {
+        cout << "Epsilon: " << vm["epsilon"].as< double >() << "\n";
+    }
+    if (vm.count("rho")) {
+        cout << "Rho: " << vm["rho"].as< double >() << "\n";
+    }
+    if (vm.count("input-file")) {
+        cout << "Input file path is: " << vm["input-file"].as< string >() << "\n";
+    }
+    else {
+        cout << "Input file path was not set.\n";
+        return 1;
+    }
     inputVerifier *iv = new inputVerifier(); // create input verifier for validating input file
     string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\sample_input_SSA_file.txt
+    //string inputFilePath = vm["input-file"].as< string >();
     string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\output.txt
     double endValue = stod(argv[3]); // a double used to specify the end time or iteration, depending on the user's flags
     bool safeToRun = iv->verifyFile(inputFilePath); // the input verifier will indicate whether the input file is valid and safe to run
