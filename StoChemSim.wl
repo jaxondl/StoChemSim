@@ -58,10 +58,10 @@ Begin["`Private`"];
 
 (*Compile C++ part of package*)
 packageDir = $InputFileName//DirectoryName;
-If[packageDir==="", packageDir=NotebookDirectory[]];
-pathInterface = 
- FileNameJoin[{packageDir, "sequential", "interface", "interface.cpp"}, 
-  OperatingSystem -> $OperatingSystem];
+If[packageDir === "", packageDir = NotebookDirectory[]];
+pathInterface = FileNameJoin[
+	{packageDir, "StoChemSimSequential", "interface.cpp"}, 
+	OperatingSystem -> $OperatingSystem];
 CreateLibrary[{pathInterface}, "StoChemSimInterface", "Language" -> "C++"];
 
 
@@ -178,9 +178,9 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	
 	frontendTime = Timing[Module[{},
 	(*Initialize global variables that are stored for PlotLastSimulation*)
-	concs = Quiet[Cases[ExpandConcs[rxnsys], conc[_, _]]];
-	rxnls = Quiet[Cases[RxnsToRxnls[rxnsys], rxnl[_List, _List, _]]];
-	spcs = Quiet[SpeciesInRxnsys[rxnsys]];
+	concs = Cases[ExpandConcs[rxnsys], conc[_, _]];
+	rxnls = Cases[RxnsToRxnls[rxnsys], rxnl[_List, _List, _]];
+	spcs = SpeciesInRxnsys[rxnsys];
 	timeEnd = OptionValue["timeEnd"];
 	iterEnd = OptionValue["iterEnd"];
 	useIter = OptionValue["useIter"];
@@ -190,7 +190,6 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	BTL = False;
 	
 	(*Exception handling block*)
-	CheckSyntaxErrors[rxnsys];
 	(*Set infTime flag if timeEnd is infinity or invalid*)
 	If[timeEnd === Infinity || timeEnd <= 0 || !NumericQ[timeEnd],
 		timeEndR = 1000000.0; infTime = True,
@@ -220,22 +219,22 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	prodCounts = GetProdCounts[rxnls, spcs];
 	rates = GetRates[rxnls];
 	initCountsNA = NumericArray[initCounts, "Integer32"];
-	reactCountsNA = NumericArray[reactCounts, "Integer64"];
-	prodCountsNA = NumericArray[prodCounts, "Integer64"];
+	reactCountsNA = NumericArray[reactCounts, "Integer32"];
+	prodCountsNA = NumericArray[prodCounts, "Integer32"];
 	ratesNA = NumericArray[rates, "Real64"];
 	];][[1]];
 	
 	(*Run simulation via C++ library*)
 	DirectSSABackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, statesOnly, finalOnly];
 	(*Output format depends on outputTS and statesOnly flags*)
-	If[outputTS,
+	If[outputTS && !finalOnly,
 		If[statesOnly,
 			simulationResult = TimeSeries[Normal[GetStates[]], {0, Length[Normal[GetStates[]]]-1}],
 			simulationResult = TimeSeries[Normal[GetStates[]], {Normal[GetTimes[]]}]
 		],
 		If[statesOnly,
 			simulationResult = Normal[GetStates[]],
-			simulationResult = {Normal[GetStates[]], Normal[GetTimes[]]}
+			simulationResult = {Normal[GetTimes[]], Normal[GetStates[]]}
 		]
 	];
 	runtimeInfo =  <| "frontend" -> frontendTime, "interface" -> Normal[GetRuntimes[]][[1]], "backend" -> Normal[GetRuntimes[]][[2]] |>;
@@ -263,9 +262,9 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	
 	frontendTime = Timing[Module[{},
 	(*Initialize global variables that are stored for PlotLastSimulation*)
-	concs = Quiet[Cases[ExpandConcs[rxnsys], conc[_, _]]];
-	rxnls = Quiet[Cases[RxnsToRxnls[rxnsys], rxnl[_List, _List, _]]];
-	spcs = Quiet[SpeciesInRxnsys[rxnsys]];
+	concs = Cases[ExpandConcs[rxnsys], conc[_, _]];
+	rxnls = Cases[RxnsToRxnls[rxnsys], rxnl[_List, _List, _]];
+	spcs = SpeciesInRxnsys[rxnsys];
 	timeEnd = OptionValue["timeEnd"];
 	iterEnd = OptionValue["iterEnd"];
 	useIter = OptionValue["useIter"];
@@ -284,7 +283,6 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	];
 	
 	(*Exception handling block*)
-	CheckSyntaxErrors[rxnsys];
 	(*Set infTime flag if timeEnd is infinity or invalid*)
 	If[timeEnd === Infinity || timeEnd <= 0 || !NumericQ[timeEnd],
 		timeEndR = 1000000.0; infTime = True,
@@ -320,17 +318,17 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	prodCounts = GetProdCounts[rxnls, spcs];
 	rates = GetRates[rxnls];
 	initCountsNA = NumericArray[initCounts, "Integer32"];
-	reactCountsNA = NumericArray[reactCounts, "Integer64"];
-	prodCountsNA = NumericArray[prodCounts, "Integer64"];
+	reactCountsNA = NumericArray[reactCounts, "Integer32"];
+	prodCountsNA = NumericArray[prodCounts, "Integer32"];
 	ratesNA = NumericArray[rates, "Real64"];
 	];][[1]];
 	
 	(*Run simulation via C++ library*)
 	BTLBackend[initCountsNA, reactCountsNA, prodCountsNA, ratesNA, timeEndR, iterEndI, inf, useIter, finalOnly, epsilon];
 	(*Output format depends on outputTS flag*)
-	If[outputTS,
+	If[outputTS && !finalOnly,
 		simulationResult = TimeSeries[Normal[GetStates[]], {Normal[GetTimes[]]}],
-		simulationResult = {Normal[GetStates[]], Normal[GetTimes[]]}
+		simulationResult = {Normal[GetTimes[]], Normal[GetStates[]]}
 	];
 	runtimeInfo =  <| "frontend" -> frontendTime, "interface" -> Normal[GetRuntimes[]][[1]], "backend" -> Normal[GetRuntimes[]][[2]] |>;
 	simulationResult
@@ -362,7 +360,7 @@ PlotLastSimulation[opts:OptionsPattern[ListLinePlot]] := Module[
 				(*Cases for formatting with times or no times*)
 				If[statesOnly === True,
 					ts = TimeSeries[simulationResult, {0, Length[simulationResult]-1}],
-					ts = TimeSeries[simulationResult[[1]], {simulationResult[[2]]}]
+					ts = TimeSeries[simulationResult[[2]], {simulationResult[[1]]}]
 				]
 			];
 			(*Set appropriate title*)

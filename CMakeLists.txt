@@ -3,6 +3,6 @@ project(SeniorDesign)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(SeniorDesign sequential/driverBTL.cpp sequential/directMethodSSA/directMethodSSA.cpp sequential/directMethodSSA/directMethodSSA.h sequential/common/decoder.cpp
-        sequential/common/decoder.h sequential/directMethodSSA/dependencyGraph.cpp sequential/directMethodSSA/dependencyGraph.h sequential/directMethodSSA/reactionTree.cpp sequential/directMethodSSA/reactionTree.h
-        sequential/common/inputVerifier.cpp sequential/common/inputVerifier.h parallel/common/gpuDecoder.cpp parallel/common/gpuDecoder.h sequential/boundedTauLeaping/boundedTauLeaping.h sequential/boundedTauLeaping/boundedTauLeaping.cpp)
+add_executable(SeniorDesign StoChemSimSequential/driverBTL.cpp StoChemSimSequential/directMethodSSA/directMethodSSA.cpp StoChemSimSequential/directMethodSSA/directMethodSSA.h StoChemSimSequential/common/decoder.cpp
+        StoChemSimSequential/common/decoder.h StoChemSimSequential/directMethodSSA/dependencyGraph.cpp StoChemSimSequential/directMethodSSA/dependencyGraph.h StoChemSimSequential/directMethodSSA/reactionTree.cpp StoChemSimSequential/directMethodSSA/reactionTree.h
+        StoChemSimSequential/common/inputVerifier.cpp StoChemSimSequential/common/inputVerifier.h StoChemSimParallel/common/gpuDecoder.cpp StoChemSimParallel/common/gpuDecoder.h StoChemSimSequential/boundedTauLeaping/boundedTauLeaping.h StoChemSimSequential/boundedTauLeaping/boundedTauLeaping.cpp)

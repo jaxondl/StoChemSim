@@ -1,7 +1,7 @@
 .idea/
+.vs/
+.vscode/
+.DS_Store
+sequential/a.exe
 cmake-build-debug
 cmake-build-debug-mingw
-.vs/
-.DS_Store
-.vscode/
-sequential/a.exe

@@ -1,14 +1,14 @@
 /* Include required headers */
 #include <cstdint>
 #include <vector>
-#include "../directMethodSSA/directMethodSSA.h"
-#include "../directMethodSSA/directMethodSSA.cpp"
-#include "../directMethodSSA/dependencyGraph.h"
-#include "../directMethodSSA/dependencyGraph.cpp"
-#include "../directMethodSSA/reactionTree.h"
-#include "../directMethodSSA/reactionTree.cpp"
-#include "../boundedTauLeaping/boundedTauLeaping.h"
-#include "../boundedTauLeaping/boundedTauLeaping.cpp"
+#include "directMethodSSA/directMethodSSA.h"
+#include "directMethodSSA/directMethodSSA.cpp"
+#include "directMethodSSA/dependencyGraph.h"
+#include "directMethodSSA/dependencyGraph.cpp"
+#include "directMethodSSA/reactionTree.h"
+#include "directMethodSSA/reactionTree.cpp"
+#include "boundedTauLeaping/boundedTauLeaping.h"
+#include "boundedTauLeaping/boundedTauLeaping.cpp"
 #include "WolframLibrary.h"
 #include "WolframNumericArrayLibrary.h"
 
@@ -176,10 +176,12 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
     // pass back rerults depends on result
     if (finalOnly) {
 		vector<vector<int> > current_state;
+		current_state.push_back(moleculeAmounts);
 		current_state.push_back(process->getCurrentState());
         allStates = current_state;
         if (!statesOnly) {
 			vector<double> current_time;
+			current_time.push_back(0);
 			current_time.push_back(process->getCurrentTime());
             allTimes = current_time;
         }
@@ -276,10 +278,12 @@ EXTERN_C DLLEXPORT int BTLInterface(WolframLibraryData libData, mint Argc, MArgu
     // pass back rerults depends on result
     if (finalOnly) {
 		vector<vector<int> > current_state;
+		current_state.push_back(moleculeAmounts);
 		current_state.push_back(process->getCurrentState());
         allStates = current_state;
 
         vector<double> current_time;
+		current_time.push_back(0);
         current_time.push_back(process->getCurrentTime());
         allTimes = current_time;
     }
