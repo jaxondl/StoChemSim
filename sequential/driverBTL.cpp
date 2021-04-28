@@ -13,6 +13,7 @@ namespace po = boost::program_options;
 
 
 int main(int argc, char** argv) {
+
    po::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "produce help message")
@@ -24,13 +25,23 @@ int main(int argc, char** argv) {
         ("out,o", po::value<string>(), "output file if specified")
         ("input-file", po::value<string>(), "input file, MUST be specified")
         ;
+    po::positional_options_description p;
+    p.add("input-file", 1);
     po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
+//    po::store(po::parse_command_line(argc, argv, desc), vm);
 //    po::notify(vm); 
 
     bool endByTime = false;
     bool endByIter = false;
 
+    if (vm.count("input-file")) {
+        cout << "Input file path is: " << vm["input-file"].as< string >() << "\n";
+    }
+    else {
+        cout << "Input file path was not set.\n";
+        return 1;
+    }
     if (vm.count("help")) {
         cout << desc << "\n";
         return 1;
@@ -53,13 +64,7 @@ int main(int argc, char** argv) {
     if (vm.count("rho")) {
         cout << "Rho: " << vm["rho"].as< double >() << "\n";
     }
-    if (vm.count("input-file")) {
-        cout << "Input file path is: " << vm["input-file"].as< string >() << "\n";
-    }
-    else {
-        cout << "Input file path was not set.\n";
-        return 1;
-    }
+    
     inputVerifier *iv = new inputVerifier(); // create input verifier for validating input file
     string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\sample_input_SSA_file.txt
     //string inputFilePath = vm["input-file"].as< string >();
