@@ -89,7 +89,8 @@ vector<double> allTimes;
 
 
 // ****** gloabl storage for runtimes *******
-double conversionTime; 
+double conversionTime;
+double preprocessTime;
 double algoTime;
 
 // ******** end of global storage ********
@@ -154,7 +155,7 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
     std::chrono::duration<double> elapsedSecondsConversion = endConversion - startConversion;
     conversionTime = elapsedSecondsConversion.count();
 
-    auto startAlgo = std::chrono::steady_clock::now();
+	auto startPreprocess = std::chrono::steady_clock::now();
 
 	// Direct SSA process: pass everything to backend
 	directMethodSSA* process = new directMethodSSA(
@@ -167,10 +168,13 @@ EXTERN_C DLLEXPORT int directSSAInterface(WolframLibraryData libData, mint Argc,
                     finalOnly,
                     inf,
                     useIter);
+	auto startAlgo = std::chrono::steady_clock::now();
 	process->start();
 
-    auto endAlgo = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsedSecondsAlgo = endAlgo - startAlgo;
+    auto endBackend = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSecondsPreprocess = startAlgo - startPreprocess;
+	preprocessTime = elapsedSecondsPreprocess.count();
+	std::chrono::duration<double> elapsedSecondsAlgo = endBackend - startAlgo;
     algoTime = elapsedSecondsAlgo.count();
 
     // pass back rerults depends on result
@@ -256,7 +260,7 @@ EXTERN_C DLLEXPORT int BTLInterface(WolframLibraryData libData, mint Argc, MArgu
     std::chrono::duration<double> elapsedSecondsConversion = endConversion - startConversion;
     conversionTime = elapsedSecondsConversion.count();
 
-    auto startAlgo = std::chrono::steady_clock::now();
+    auto startPreprocess = std::chrono::steady_clock::now();
 
 	// BTL process: pass everything to backend
 	boundedTauLeaping* process = new boundedTauLeaping(
@@ -269,10 +273,13 @@ EXTERN_C DLLEXPORT int BTLInterface(WolframLibraryData libData, mint Argc, MArgu
                     inf,
                     useIter,
 					epsilon);
+	auto startAlgo = std::chrono::steady_clock::now();
 	process->start();
 
-    auto endAlgo = std::chrono::steady_clock::now();
-    std::chrono::duration<double> elapsedSecondsAlgo = endAlgo - startAlgo;
+    auto endBackend = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSecondsPreprocess = startAlgo - startPreprocess;
+	preprocessTime = elapsedSecondsPreprocess.count();
+	std::chrono::duration<double> elapsedSecondsAlgo = endBackend - startAlgo;
     algoTime = elapsedSecondsAlgo.count();
 
     // pass back rerults depends on result
@@ -385,7 +392,7 @@ EXTERN_C DLLEXPORT int getRuntimes(WolframLibraryData libData, mint Argc, MArgum
 
 	// output setup
 	MNumericArray Mout;
-	mint out_size = 2;
+	mint out_size = 3;
 	const mint *dims_out = &out_size;
 	err = naFuns->MNumericArray_new(MNumericArray_Type_Real64, 1, dims_out, &Mout);
 	
@@ -403,7 +410,8 @@ EXTERN_C DLLEXPORT int getRuntimes(WolframLibraryData libData, mint Argc, MArgum
 	// convert output to a NumericArray
 	double *Mout0 = static_cast<double *>(data_out);
 	Mout0[0] = conversionTime;
-    Mout0[1] = algoTime;
+    Mout0[1] = preprocessTime;
+	Mout0[2] = algoTime;
 
 	// pass the result back
 	MArgument_setMNumericArray(res, Mout);

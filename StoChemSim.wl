@@ -173,9 +173,7 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 	(*Define local variables*)
 	{initCounts, reactCounts, prodCounts, rates,
 	initCountsNA, reactCountsNA, prodCountsNA, ratesNA,
-	infTime, infIter,
-	initTime, exceptionTime, initCountsTime, reactCountsTime,
-	prodCountsTime, ratesTime, naTime, backendTime, resultTime},
+	infTime, infIter, frontendTime, runtimes},
 	
 	frontendTime = Timing[Module[{},
 	(*Initialize global variables that are stored for PlotLastSimulation*)
@@ -238,7 +236,13 @@ SimulateDirectSSA[rxnsys_, OptionsPattern[]] := Module[
 			simulationResult = {Normal[GetTimes[]], Normal[GetStates[]]}
 		]
 	];
-	runtimeInfo =  <| "frontend" -> frontendTime, "interface" -> Normal[GetRuntimes[]][[1]], "backend" -> Normal[GetRuntimes[]][[2]] |>;
+	runtimes = Normal[GetRuntimes[]];
+	runtimeInfo =  <|
+		"frontend conversion" -> frontendTime,
+		"interface conversion" -> runtimes[[1]],
+		"backend preprocessing" -> runtimes[[2]],
+		"backend algorithm" -> runtimes[[3]]
+	|>;
 	simulationResult
 ]
 
@@ -259,7 +263,7 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 	(*Define local variables*)
 	{initCounts, reactCounts, prodCounts, rates,
 	initCountsNA, reactCountsNA, prodCountsNA, ratesNA,
-	infTime, infIter},
+	infTime, infIter, frontendTime, runtimes},
 	
 	frontendTime = Timing[Module[{},
 	(*Initialize global variables that are stored for PlotLastSimulation*)
@@ -331,7 +335,13 @@ SimulateBoundedTauLeaping[rxnsys_, OptionsPattern[]] := Module[
 		simulationResult = TimeSeries[Normal[GetStates[]], {Normal[GetTimes[]]}],
 		simulationResult = {Normal[GetTimes[]], Normal[GetStates[]]}
 	];
-	runtimeInfo =  <| "frontend" -> frontendTime, "interface" -> Normal[GetRuntimes[]][[1]], "backend" -> Normal[GetRuntimes[]][[2]] |>;
+	runtimes = Normal[GetRuntimes[]];
+	runtimeInfo =  <|
+		"frontend conversion" -> frontendTime,
+		"interface conversion" -> runtimes[[1]],
+		"backend preprocessing" -> runtimes[[2]],
+		"backend algorithm" -> runtimes[[3]]
+	|>;
 	simulationResult
 ]
 
