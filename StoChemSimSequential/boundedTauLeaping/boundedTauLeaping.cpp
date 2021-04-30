@@ -20,22 +20,6 @@ boundedTauLeaping::boundedTauLeaping(vector<int> initialState, vector<double> re
 
 // Draws from gamma distribution defined by a as alpha and b as beta, both must be positive
 double boundedTauLeaping::getGammaRandomVariable(double a, double b) {
-    //default_random_engine gen_gamma;
-    //gamma_distribution<double> dis(1, 0.000000001);
-    
-    //double g = dis(gen_gamma);
-
-    // cout << dis(gen_gamma) << endl;
-    // return 0;
-
-    // random_device rd_uni; // random seed
-    // mt19937 gen_uni(rd_uni()); // mersenne twister engine
-    // this->gen_uni = gen_uni;
-    // random_device rd_exp; // random seed
-    // mt19937 gen_exp(rd_exp()); 
-    // this->gen_exp = gen_exp; // mersenne twister engine
-    // uniform_real_distribution<double> dis(0.0, 1);
-    
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     default_random_engine generator (seed);
     //if (1/b <= -0){    cout << "ERROR" << endl;}
@@ -227,13 +211,6 @@ void boundedTauLeaping::start() {
             allTimes.push_back(currentTime);
             allStates.push_back(currentState);
         }
-
-        //cout << "iter and time: " << currentIteration << " " << currentTime << endl;
-        //cout << "state: ";
-        //for(int i=0; i < currentState.size(); i++)
-        //    cout << currentState.at(i) << ' ';
-        //cout << endl;
-        
         currentIteration++; // update iteration
         props = calculatePropensities(); // Step 1a, sets nonePossible
     }    

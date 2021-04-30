@@ -18,35 +18,6 @@ dependencyGraph::dependencyGraph(vector<vector<pair<int, int> > > stateChangeVec
 
     // draw an edge from reaction 1 to reaction 2 IFF dependsOn(2) has something in affects(1)
 
-    /**
-    int numReactions = stateChangeVector.size(); 
-    vector<set<int>> dependsOn(numReactions);  // each reaction has a set of dependent reactions and reactions it affects (as per Definitions 2 and 3)
-    vector<set<int>> affects(numReactions);
-
-    for(int i = 0; i < numReactions; i++){
-        for(pair<int, int> element : reactantsVector[i]){
-            dependsOn[i].insert(element.first); // each of the reactants in a reaction are placed in that reaction's depends on (Definition 2)
-        }
-        for(pair<int, int> element : stateChangeVector[i]){
-            affects[i].insert(element.first); // each of the species in the state change vector of each reaction (i.e. both reactants and products of the reaction) are placed in that reaction's affects (Definition 3)
-        }
-    }
-
-    vector<vector<int> > dummyGraph(numReactions); // create a "dummy" graph, with a vector representing the dependent reactions for each reaction
-
-    for(int i = 0; i < numReactions; i++){ // begin finding intersections to build the dummy dependency graph
-        dummyGraph[i].push_back(i); // start by putting the reaction itself in its designated vector of dependent reactions
-        for(int j = 0; j < numReactions; j++){
-            if(j != i && intersects(affects[i], dependsOn[j])){ // using the intersects function: for any other reaction j, if reaction i's reactants or products (stored in affects[i]) has any overlap/intersection with the reactants used in reaction j (stored in dependsOn[j]), then reaction j depends on reaction i
-                dummyGraph[i].push_back(j); // since reaction j depends on reaction i, j will be added to i's designated vector
-            }
-        }
-    }
-
-    dependencyGraphStructure = dummyGraph; // assign the "dummy" graph to the actual dependencyGraphStructure within the class
-    **/
-
-
     //no need for an affects vector if just going to use state change molecules
     int numMolecules = moleculeAmounts.size();
     vector<vector<int> > dependsOn(numMolecules);  // each molecule index will have a set of the reaction indices of which have the molecule as a reactant

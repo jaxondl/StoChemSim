@@ -11,8 +11,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
     inputVerifier *iv = new inputVerifier(); // create input verifier for validating input file
-    string inputFilePath = argv[1]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\inputs\\sample_input_SSA_file.txt
-    string outputFilePath = argv[2]; // example: C:\\Users\\Isaac\\CLionProjects\\SeniorDesign\\crn-ssa-wolfram-pkg\\sequential\\output.txt
+    string inputFilePath = argv[1];
+    string outputFilePath = argv[2];
     double endValue = stod(argv[3]); // a double used to specify the end time or iteration, depending on the user's flags
     bool safeToRun = iv->verifyFile(inputFilePath); // the input verifier will indicate whether the input file is valid and safe to run
     if (safeToRun) {
@@ -105,18 +105,6 @@ int main(int argc, char** argv) {
                     outfile << "\t";
                 }
             }
-//        else if(so){ // states only (no time)
-//            outfile << "Iteration" << "\t\t\tState" << endl;
-//            for(int i = 0; i < allStates.size(); i++){
-//                outfile << left << setw(iterationWidth) << setfill(separator) << i << "\t\t";
-//                for(int j = 0; j < allStates[i].size(); j++){
-//                    outfile << speciesList[j];
-//                    outfile << ": " << allStates[i][j];
-//                    outfile << "\t";
-//                }
-//                outfile << endl;
-//            }
-//        }
             else { // all states and all times
                 outfile << "Iteration" << "\t\t\tTime(s)" << "\t\t\tState" << endl;
                 for (int i = 0; i < allTimes.size(); i++) {
