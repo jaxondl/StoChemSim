@@ -15,7 +15,18 @@ This directory can be opened with "SystemOpen@FileNameJoin[{$UserBaseDirectory, 
 Demo notebooks can be found in the Wolfram directory.
 
 ## Sequential Command Line Tool Setup Instructions
-TODO
+
+**Step 1:** Using a command line front end, navigate to the StoChemSimSequential directory.
+
+**Step 2:** Assuming C++ 11 is installed, compile the relevant .cpp files.
+
+For direct SSA, enter the following command: g++ =std=c++11 driverSSA.cpp ./common/\*.cpp ./directMethodSSA/\*.cpp
+
+For BTL, enter the following command: g++ =std=c++11 driverBTL.cpp ./common/\*.cpp ./boundedTauLeaping/\*.cpp
+
+**Step 3:** Run the executable. The command line arguments should be entered in the following order: input file path, output file path, tEnd, flag(s).
+
+Example: ./a.out ./inputs/large_crn.txt ./output.txt 0 -fo
 
 ## Parallel Command Line Tool Setup Instructions
 TODO
