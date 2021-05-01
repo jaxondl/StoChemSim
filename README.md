@@ -12,7 +12,7 @@ Installation instructions: Drop StoChemSim.wl, CRNSimulator.m, and the "StoChemS
 
 This directory can be opened with "SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]" in Mathematica.
 
-Demo notebooks can be found in the Wolfram directory.
+Demo notebooks can be found in the WolframNotebooks directory.
 
 ## Sequential Command Line Tool Setup Instructions
 
