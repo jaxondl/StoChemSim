@@ -1,16 +1,14 @@
+#pragma warning( disable : 4267)
+
 #include "inputParser.h"
 #include "DirectMethod.cuh"
-#include "utils.h"
-#include "cudaUtils.h"
+#include "ArgParser.h"
 #include <chrono>
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <boost\program_options.hpp>
 
 #define MAX_SIMS 65535 // This is the maximum dimension of the y/z dimension of a cuda block grid (2^31 - 1). TODO: Increase by using the z dimension for simulations as well.
-
-namespace po = boost::program_options;
 
 // Program options
 // -h --help = output help string
@@ -28,118 +26,39 @@ namespace po = boost::program_options;
 // --partial-copy = a list of integer indicating the species indices to copy, rather than the whole confmat
 // -g --gpus = number of GPUs to use (default 1) [NI]
 int main(int argc, char* argv[]) {
-	// Command option variables
-	std::string infile;
-	std::string rng;
-	std::vector<int> partial_copy_indices;
-	int sims;
-	int iters;
-	unsigned long long seed;
-	bool verbose = false;
-	bool debug = false;
-	bool time = false;
-	bool all_confs = false;
-	bool stability_only = false;
-	bool early_stop = false;
-	bool states_only = false;
+	ArgParser* parser = new ArgParser(argc, argv);
+
+	arg_status_t status = parser->parse();
+
+	if (status == ERROR || status == HELP) {
+		std::cout << std::endl;
+		return 0;
+	}
+
+	std::string infile = parser->getInfile();
+	std::string rng = parser->getRNG();
+	std::vector<int> partial_copy_indices = parser->getPartialCopyIndices();
+	int sims = parser->getSims();
+	int iters = parser->getIters();
+	int max_reactants = parser->getMaxReactants();
+	unsigned long long seed = parser->getSeed();
+	bool verbose = parser->hasVerbose();
+	bool debug = parser->hasDebug();
+	bool time = parser->hasTime();
+	bool all_confs = parser->hasAllConfs();
+	bool stability_only = parser->hasStabilityOnly();
+	bool early_stop = parser->hasEarlyStop();
+	bool states_only = parser->hasStatesOnly();
 
 	// Timing variables
 	std::chrono::time_point<std::chrono::high_resolution_clock> start_algo, stop_algo, start_overall;
 	start_overall = std::chrono::high_resolution_clock::now();
 
-	// Perform command line parsing
-	po::options_description desc = create_opts_desc(&sims, &iters, &seed, &infile, &rng, &partial_copy_indices);
-	po::positional_options_description pos_desc = create_pos_opts_desc();
-	po::variables_map vm = create_varmap(argc, argv, desc, pos_desc);
-
-	// If help flag is set, output description and quit.
-	if (vm.count("help")) {
-		std::cout << desc << std::endl;
-		return 0;
-	}
-
-	fill_implicit_vars(vm, &verbose, &time, &all_confs, &stability_only, &early_stop, &debug, &states_only);
-
-	// Output banner
-	if (verbose) {
-		std::ifstream banner_file;
-		banner_file.open("banner_logo.txt");
-
-		std::string line;
-		while (std::getline(banner_file, line)) {
-			std::cout << line << std::endl;
-		}
-		std::cout << std::endl;
-
-		std::cout << "Decoding input file... " << std::endl;
-	}
-
-	arg_status_t infile_status = validate_infile(vm);
-	if (infile_status == ERROR) {
-		print_error_message();
-		return 0;
-	}
-
-	gpuDecoderPrototype* decoder = new gpuDecoderPrototype();
-	bool s_found = decoder->decode(infile);
-
-	int s = decoder->getNumSimulations();
-	int m = decoder->getNumReactions();
-	int n = decoder->getNumSpecies();
-
-	if (verbose) {
-		std::cout << "Validating commands... " << std::endl << std::endl;
-	}
-
-	// Will generate a log of errors and warnings. Execution halts in the presence of errors, 
-	// but prompts user to continue if there are warnings
-	arg_status_t status = validate_args(vm, s, n, m);
-
-	// if sims was input, use it instead of the input file
-	if (sims) {
-		s = sims;
-	}
-
-	if (s > MAX_SIMS) {
-		std::cout << "[ERROR]: Maximum number of simulations exceeded. Only 2^31 - 1 = 65535 simulations are allowed." << std::endl;
-		status = ERROR;
-	}
-
-	if (status == ERROR) {
-		print_error_message();
-		return 0;
-	}
-	else if (status == WARNING) {
-		bool proceed = print_warning_message();
-		if (!proceed) { return 0; }
-	}
-	else if (status == ALERT || status == SAFE) {
-		print_safe_message();
-	}
-	std::cout << std::endl;
-
-	// time should only be true if verbose is true
-	if (!verbose) {
-		time = false;
-	}
-
-	// If we are not saving the configs, do not transfer the partials back since there is no point
-	if (!all_confs) {
-		partial_copy_indices.clear();
-	}
-
-	std::vector<double> rrc_vector_v = decoder->getRRCVector();
-	std::vector<int> state_change_matrix_v = decoder->getStateChangeMatrix();
-	std::vector<int> reactants_table_v = decoder->getReactantsTableVector();
-	std::vector<int> configuration_matrix_v;
-	std::vector<double> propensity_matrix_v;
-
-	// The decoder uses the number of simulations to copy the initial configuration and propensity values s times, 
-	// so if the command line is used instead then this must be passed to the decoder.
-	configuration_matrix_v = decoder->getConfigurationMatrix(s);
-	propensity_matrix_v = decoder->getPropensityMatrix(s);
-
-	int max_reactants = reactants_table_v.size() / (2 * m); // reactants table is of shape max_reacants * 2 * m
+	std::vector<double> rrc_vector_v = parser->getRRCVector();
+	std::vector<int> state_change_matrix_v = parser->getStateChangeMatrix();
+	std::vector<int> reactants_table_v = parser->getReactantsTable();
+	std::vector<int> configuration_matrix_v = parser->getConfigurationMatrix();
+	std::vector<double> propensity_matrix_v = parser->getPropensityMatrix();
 
 	// Cast vector to raw data pointers
 	double* rrc_vector = rrc_vector_v.data();
@@ -147,6 +66,9 @@ int main(int argc, char* argv[]) {
 	int* configuration_matrix = configuration_matrix_v.data();
 	int* reactants_table = reactants_table_v.data();
 	double* propensity_matrix = propensity_matrix_v.data();
+
+	int n = parser->getNumSpecies();
+	int m = parser->getNumReactions();
 
 	if (verbose) {
 		std::cout << "Beginning simulation..." << std::endl << std::endl;
@@ -160,7 +82,7 @@ int main(int argc, char* argv[]) {
 				 configuration_matrix, 
 				 propensity_matrix, 
 				 reactants_table, 
-				 s, 
+				 sims, 
 				 n, 
 				 m, 
 				 max_reactants, 

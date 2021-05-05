@@ -2,6 +2,8 @@
 // Created by user on 3/5/2021.
 //
 
+#pragma warning( disable : 4267)
+
 #ifndef INPUT_PARSER_H
 #define INPUT_PARSER_H
 
