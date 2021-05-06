@@ -1,0 +1,329 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     14338,        321]
+NotebookOptionsPosition[      7711,        187]
+NotebookOutlinePosition[     13630,        310]
+CellTagsIndexPosition[     13587,        307]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Sudoku CRN Simulation with StoChemSim", "Title",
+ CellChangeTimes->{{3.8147292785447936`*^9, 3.8147292854487743`*^9}, {
+   3.8242482560164833`*^9, 3.824248260176464*^9}, {3.8274130234854555`*^9, 
+   3.8274130257808332`*^9}, {3.8281411232861032`*^9, 3.8281411239338646`*^9}, 
+   3.828571907848483*^9, {3.8285725990566626`*^9, 3.8285726028084435`*^9}, {
+   3.828574404071436*^9, 
+   3.8285744159361563`*^9}},ExpressionUUID->"99313edb-9280-4a33-9415-\
+fe73f5350fe5"],
+
+Cell["\<\
+This notebook uses functions from Erik Winfree\[CloseCurlyQuote]s Sudoku \
+Mathematica Notebook
+https://www.dna.caltech.edu/SupplementaryMaterial/CRNSAT/\
+\>", "Text",
+ CellChangeTimes->{{3.828574472198387*^9, 3.8285745070700707`*^9}, {
+  3.828574550926365*^9, 
+  3.8285745547270746`*^9}},ExpressionUUID->"464517cf-ced0-4e6f-8a67-\
+43121850dc7c"],
+
+Cell[BoxData[
+ RowBox[{"<<", "StoChemSim`"}]], "Input",
+ CellChangeTimes->{{3.8121561693612485`*^9, 3.812156171593361*^9}, {
+   3.8163745297158756`*^9, 3.816374532987081*^9}, 3.8163792638170104`*^9, {
+   3.824248268170289*^9, 3.8242482684894447`*^9}, {3.8260784714912205`*^9, 
+   3.8260784758186455`*^9}, {3.8281411004208326`*^9, 3.828141102388135*^9}, {
+   3.8281907722819514`*^9, 3.8281907751106987`*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"8acb8700-aa44-4b5e-a852-0474740d5f06"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "Loads", " ", "CRN", " ", "that", " ", "encodes", " ", "Sudoku", " ", 
+    "puzzle"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"notebookPath", "=", 
+     RowBox[{"NotebookDirectory", "[", "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"rxnsys", "=", 
+     RowBox[{"Import", "[", 
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"notebookPath", ",", "\"\<large_crn.m\>\""}], "}"}], ",", 
+        RowBox[{"OperatingSystem", "\[Rule]", "$OperatingSystem"}]}], "]"}], 
+      "]"}]}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.8209405871178603`*^9, 3.8209405988669605`*^9}, {
+   3.8209406574982576`*^9, 3.8209407094906034`*^9}, 3.820940849034672*^9, {
+   3.8209410857557325`*^9, 3.8209410908423715`*^9}, {3.821200285878623*^9, 
+   3.821200286957405*^9}, {3.821202484758175*^9, 3.8212025179974904`*^9}, 
+   3.8212883891020403`*^9, {3.822410910964633*^9, 3.8224109164136114`*^9}, 
+   3.8260772806438694`*^9, {3.8260773415150213`*^9, 3.826077378945899*^9}, {
+   3.8260784799296474`*^9, 3.826078488504716*^9}, {3.8268248487737036`*^9, 
+   3.8268248489883647`*^9}, {3.827344612120017*^9, 3.8273446126628923`*^9}, {
+   3.827412744255362*^9, 3.827412744653832*^9}, {3.8285749684327283`*^9, 
+   3.828574984879648*^9}, {3.828575045950929*^9, 3.8285750635274677`*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"8b417677-a446-4ab6-80dd-94d45d2a2df6"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "Simulates", " ", "Sudoku", " ", "CRN", " ", "via", " ", "Direct", " ", 
+    "SSA"}], "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"realTime", ",", 
+       RowBox[{"{", 
+        RowBox[{"times", ",", "states"}], "}"}]}], "}"}], "=", 
+     RowBox[{"Timing", "[", 
+      RowBox[{"SimulateDirectSSA", "[", 
+       RowBox[{"rxnsys", ",", 
+        RowBox[{"finalOnly", "\[Rule]", "True"}]}], "]"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"{", 
+    RowBox[{"realTime", ",", 
+     RowBox[{"GetRuntimeInfo", "[", "]"}]}], "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.8272511310711412`*^9, 3.827251161493308*^9}, {
+   3.8272512836938868`*^9, 3.8272512863664637`*^9}, 3.8273445302308383`*^9, {
+   3.8274129126067705`*^9, 3.82741291986934*^9}, {3.828143904355219*^9, 
+   3.8281439143233147`*^9}, {3.8281442511432056`*^9, 
+   3.8281442590544233`*^9}, {3.828144446729833*^9, 3.8281444503764763`*^9}, {
+   3.8284703971526375`*^9, 3.82847041371579*^9}, {3.828571573796749*^9, 
+   3.8285716079947615`*^9}, {3.828571716042994*^9, 3.8285717243054466`*^9}, {
+   3.82857498816943*^9, 3.8285750105115337`*^9}, {3.8285750439036603`*^9, 
+   3.828575061126982*^9}, {3.828896490870785*^9, 3.828896490998508*^9}},
+ CellLabel->"In[4]:=",ExpressionUUID->"3c7922f0-452b-4b68-9312-428154e3504c"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"19.09375`", ",", 
+   RowBox[{"\[LeftAssociation]", 
+    RowBox[{
+     RowBox[{"\<\"frontend conversion\"\>", "\[Rule]", "14.890625`"}], ",", 
+     RowBox[{"\<\"interface conversion\"\>", "\[Rule]", "0.2050862`"}], ",", 
+     RowBox[{"\<\"backend preprocessing\"\>", "\[Rule]", "2.5589332`"}], ",", 
+     RowBox[{"\<\"backend algorithm\"\>", "\[Rule]", "3.0678106`"}]}], 
+    "\[RightAssociation]"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.8288965402096863`*^9},
+ CellLabel->"Out[5]=",ExpressionUUID->"23f688ed-6213-49d6-b90b-c2cc3fdc8361"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Uses", " ", "functions", " ", "from", " ", "Erik", " ", 
+    RowBox[{"Winfree", "'"}], "s", " ", 
+    RowBox[{"Sudoku", ".", "nb"}], " ", "to", " ", "print", " ", "puzzle"}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"startbrain", ",", "finishbrain"}], "}"}], "=", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"DrawSudokuState", "[", 
+         RowBox[{"rxnsys", ",", "DepthFirstLogicSSI", ",", "#"}], "]"}], 
+        "&"}], " ", "/@", " ", "states"}], ")"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", 
+     RowBox[{
+     "\"\<Puzzle: \>\"", ",", "startbrain", ",", "\"\<\\n\\nSolution: \>\"", 
+      ",", "finishbrain"}], "]"}], ";"}]}]}]], "Input",
+ CellChangeTimes->{{3.8285746363701553`*^9, 3.8285746845834208`*^9}, 
+   3.8285748423603525`*^9, {3.8285750193916154`*^9, 
+   3.828575022158939*^9}},ExpressionUUID->"f5989360-09a7-42fd-bd4b-\
+1a4161ecb169"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"Puzzle: \"\>", 
+   "\[InvisibleSpace]", "\<\"\\n5 3 . . 7 . . . . \\n6 . . 1 9 5 . . . \\n. 9 \
+8 . . . . 6 . \\n8 . . . 6 . . . 3 \\n4 . . 8 . 3 . . 1 \\n7 . . . 2 . . . 6 \
+\\n. 6 . . . . 2 8 . \\n. . . 4 1 9 . . 5 \\n. . . . 8 . . 7 9 \"\>", 
+   "\[InvisibleSpace]", "\<\"\\n\\nSolution: \"\>", 
+   "\[InvisibleSpace]", "\<\"\\n5 3 4 6 7 8 9 1 2 \\n6 7 2 1 9 5 3 4 8 \\n1 9 \
+8 3 4 2 5 6 7 \\n8 5 9 7 6 1 4 2 3 \\n4 2 6 8 5 3 7 9 1 \\n7 1 3 9 2 4 8 5 6 \
+\\n9 6 1 5 3 7 2 8 4 \\n2 8 7 4 1 9 6 3 5 \\n3 4 5 2 8 6 1 7 9 \"\>"}],
+  SequenceForm[
+  "Puzzle: ", 
+   "\n5 3 . . 7 . . . . \n6 . . 1 9 5 . . . \n. 9 8 . . . . 6 . \n8 . . . 6 . \
+. . 3 \n4 . . 8 . 3 . . 1 \n7 . . . 2 . . . 6 \n. 6 . . . . 2 8 . \n. . . 4 1 \
+9 . . 5 \n. . . . 8 . . 7 9 ", "\n\nSolution: ", 
+   "\n5 3 4 6 7 8 9 1 2 \n6 7 2 1 9 5 3 4 8 \n1 9 8 3 4 2 5 6 7 \n8 5 9 7 6 1 \
+4 2 3 \n4 2 6 8 5 3 7 9 1 \n7 1 3 9 2 4 8 5 6 \n9 6 1 5 3 7 2 8 4 \n2 8 7 4 1 \
+9 6 3 5 \n3 4 5 2 8 6 1 7 9 "],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.828574824794598*^9, 3.8285748484516516`*^9}, 
+   3.8285749477656775`*^9},
+ CellLabel->
+  "During evaluation of \
+In[91]:=",ExpressionUUID->"28b6368b-8713-4955-96cc-3dd4f0b46115"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{960., 478.5},
+WindowMargins->{{Automatic, -4.875}, {-4.875, Automatic}},
+TaggingRules->{
+ "WelcomeScreenSettings" -> {"FEStarting" -> False}, "TryRealOnly" -> False},
+InputAliases->{"intt" -> RowBox[{"\[Integral]", 
+     RowBox[{"\[SelectionPlaceholder]", 
+       RowBox[{"\[DifferentialD]", "\[Placeholder]"}]}]}], "dintt" -> RowBox[{
+     SubsuperscriptBox[
+     "\[Integral]", "\[SelectionPlaceholder]", "\[Placeholder]"], 
+     RowBox[{"\[Placeholder]", 
+       RowBox[{"\[DifferentialD]", "\[Placeholder]"}]}]}], "rintt" -> RowBox[{
+     UnderscriptBox["\[Integral]", 
+      RowBox[{"\[SelectionPlaceholder]", "\[Element]", "\[Placeholder]"}]], 
+     "\[Placeholder]"}], "sumt" -> RowBox[{
+     UnderoverscriptBox["\[Sum]", 
+      RowBox[{"\[SelectionPlaceholder]", "=", "\[Placeholder]"}], 
+      "\[Placeholder]"], "\[Placeholder]"}], "prodt" -> RowBox[{
+     UnderoverscriptBox["\[Product]", 
+      RowBox[{"\[SelectionPlaceholder]", "=", "\[Placeholder]"}], 
+      "\[Placeholder]"], "\[Placeholder]"}], "dt" -> RowBox[{
+     SubscriptBox["\[PartialD]", "\[Placeholder]"], " ", 
+     "\[SelectionPlaceholder]"}], "cbrt" -> 
+  RadicalBox[
+   "\[SelectionPlaceholder]", "3", SurdForm -> True, MultilineFunction -> 
+    None], "surd" -> 
+  RadicalBox[
+   "\[SelectionPlaceholder]", "\[Placeholder]", SurdForm -> True, 
+    MultilineFunction -> None], "ket" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "Ket"], "bra" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "Bra"], "braket" -> 
+  TemplateBox[{"\[SelectionPlaceholder]", "\[Placeholder]"}, "BraKet"], 
+  "delay" -> TemplateBox[{"\[SelectionPlaceholder]"}, "SystemsModelDelay"], 
+  "grad" -> RowBox[{
+     SubscriptBox["\[Del]", "\[SelectionPlaceholder]"], "\[Placeholder]"}], 
+  "del." -> RowBox[{
+     SubscriptBox["\[Del]", "\[SelectionPlaceholder]"], ".", 
+     "\[Placeholder]"}], "delx" -> RowBox[{
+     SubscriptBox["\[Del]", "\[SelectionPlaceholder]"], "\[Cross]", 
+     "\[Placeholder]"}], "del2" -> RowBox[{
+     SubsuperscriptBox["\[Del]", "\[SelectionPlaceholder]", 2], 
+     "\[Placeholder]"}], "kd" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "KroneckerDeltaSeq"], "algs" -> 
+  TemplateBox[{}, "Algebraics"], "bools" -> TemplateBox[{}, "Booleans"], 
+  "comps" -> TemplateBox[{}, "Complexes"], "ints" -> 
+  TemplateBox[{}, "Integers"], "pris" -> TemplateBox[{}, "Primes"], "rats" -> 
+  TemplateBox[{}, "Rationals"], "reals" -> TemplateBox[{}, "Reals"], "pints" -> 
+  TemplateBox[{}, "PositiveIntegers"], "npints" -> 
+  TemplateBox[{}, "NonPositiveIntegers"], "nnints" -> 
+  TemplateBox[{}, "NonNegativeIntegers"], "nints" -> 
+  TemplateBox[{}, "NegativeIntegers"], "prats" -> 
+  TemplateBox[{}, "PositiveRationals"], "nprats" -> 
+  TemplateBox[{}, "NonPositiveRationals"], "nnrats" -> 
+  TemplateBox[{}, "NonNegativeRationals"], "nrats" -> 
+  TemplateBox[{}, "NegativeRationals"], "preals" -> 
+  TemplateBox[{}, "PositiveReals"], "npreals" -> 
+  TemplateBox[{}, "NonPositiveReals"], "nnreals" -> 
+  TemplateBox[{}, "NonNegativeReals"], "nreals" -> 
+  TemplateBox[{}, "NegativeReals"], "dlim" -> RowBox[{
+     UnderscriptBox["\[Limit]", 
+      RowBox[{"\[SelectionPlaceholder]", 
+        UnderscriptBox["\[Rule]", 
+         TemplateBox[{}, "Integers"]], "\[Infinity]"}]], "\[Placeholder]"}], 
+  "dMlim" -> RowBox[{
+     UnderscriptBox["\[MaxLimit]", 
+      RowBox[{"\[SelectionPlaceholder]", 
+        UnderscriptBox["\[Rule]", 
+         TemplateBox[{}, "Integers"]], "\[Infinity]"}]], "\[Placeholder]"}], 
+  "dmlim" -> RowBox[{
+     UnderscriptBox["\[MinLimit]", 
+      RowBox[{"\[SelectionPlaceholder]", 
+        UnderscriptBox["\[Rule]", 
+         TemplateBox[{}, "Integers"]], "\[Infinity]"}]], "\[Placeholder]"}], 
+  "tue" -> OverscriptBox["\[UndirectedEdge]", "\[Placeholder]"], "tde" -> 
+  OverscriptBox["\[DirectedEdge]", "\[Placeholder]"], "notation" -> 
+  RowBox[{"Notation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], " ", 
+       "\[DoubleLongLeftRightArrow]", " ", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "notation>" -> RowBox[{"Notation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], " ", 
+       "\[DoubleLongRightArrow]", " ", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "notation<" -> RowBox[{"Notation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], " ", 
+       "\[DoubleLongLeftArrow]", " ", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "symb" -> RowBox[{"Symbolize", "[", 
+     TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], "]"}], 
+  "infixnotation" -> RowBox[{"InfixNotation", "[", 
+     RowBox[{
+       TemplateBox[{"\[SelectionPlaceholder]"}, "NotationTemplateTag"], ",", 
+       "\[Placeholder]"}], "]"}], "addia" -> RowBox[{"AddInputAlias", "[", 
+     RowBox[{"\"\[SelectionPlaceholder]\"", "\[Rule]", 
+       TemplateBox[{"\[Placeholder]"}, "NotationTemplateTag"]}], "]"}], 
+  "pattwraper" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "NotationPatternTag"], 
+  "madeboxeswraper" -> 
+  TemplateBox[{"\[SelectionPlaceholder]"}, "NotationMadeBoxesTag"], "rxn" -> 
+  RowBox[{"\[Placeholder]", " ", 
+     OverscriptBox["\[RightArrow]", 
+      RowBox[{" ", "\[Placeholder]", " "}]], " ", "\[Placeholder]", " "}], 
+  "revrxn" -> RowBox[{"\[Placeholder]", " ", 
+     UnderoverscriptBox[
+     "\[RightArrowLeftArrow]", "\[Placeholder]", "\[Placeholder]"], " ", 
+     "\[Placeholder]", " "}]},
+Magnification:>1.2 Inherited,
+FrontEndVersion->"12.2 for Microsoft Windows (64-bit) (December 12, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"8a9966d4-13ea-4f76-9a73-3ff830b13d05"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 469, 7, 190, "Title",ExpressionUUID->"99313edb-9280-4a33-9415-fe73f5350fe5"],
+Cell[1052, 31, 356, 8, 67, "Text",ExpressionUUID->"464517cf-ced0-4e6f-8a67-43121850dc7c"],
+Cell[1411, 41, 485, 7, 34, "Input",ExpressionUUID->"8acb8700-aa44-4b5e-a852-0474740d5f06"],
+Cell[1899, 50, 1475, 29, 105, "Input",ExpressionUUID->"8b417677-a446-4ab6-80dd-94d45d2a2df6"],
+Cell[CellGroupData[{
+Cell[3399, 83, 1391, 30, 82, "Input",ExpressionUUID->"3c7922f0-452b-4b68-9312-428154e3504c"],
+Cell[4793, 115, 581, 11, 63, "Output",ExpressionUUID->"23f688ed-6213-49d6-b90b-c2cc3fdc8361"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5411, 131, 1027, 27, 82, "Input",ExpressionUUID->"f5989360-09a7-42fd-bd4b-1a4161ecb169"],
+Cell[6441, 160, 1242, 23, 449, "Print",ExpressionUUID->"28b6368b-8713-4955-96cc-3dd4f0b46115"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
