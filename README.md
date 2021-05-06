@@ -35,6 +35,8 @@ Example: ./a.out ./inputs/large_crn.txt ./output.txt 0 -fo
 
 **Step 3:** Ensure that TARGET_CUDA is set to ON and then build with CMake.
 
+**TROUBLESHOOTING** You may be missing CMake configuration files for Thrust and CUB. If CMake throws an error because of this, you can find the necessary files in StoChemSimParallel/external.
+
 ## Contributors
 
 Ahad Ahmed
