@@ -1,0 +1,43 @@
+﻿{
+  "configurations": [
+    {
+      "name": "x64-Debug (default)",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "-DBoost_NO_BOOST_CMAKE=ON",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "Boost_INCLUDE_DIR",
+          "value": "C:/Program Files/Boost",
+          "type": "PATH"
+        },
+        {
+          "name": "Thrust_DIR",
+          "value": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/include/thrust/cmake",
+          "type": "PATH"
+        },
+        {
+          "name": "CUDA_SDK_ROOT_DIR",
+          "value": "C:/Program Files/NVIDIA GPU Computing Toolkit",
+          "type": "PATH"
+        },
+        {
+          "name": "CUDA_SEPARABLE_COMPILATION",
+          "value": "True",
+          "type": "BOOL"
+        },
+        {
+          "name": "CUB_DIR",
+          "value": "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v11.2/include/cub/CMake",
+          "type": "PATH"
+        }
+      ],
+      "cmakeExecutable": "C:/Program Files/CMake/bin/cmake.exe"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+# computes the function f(x1, x2) = x1 if x1 > x2 and 0 otherwise
+10 1
+X1 -> G I0 1
+X2 -> L I2 1
+I0 -> Z I1 1
+G L -> 0 1
+I1 I2 -> E B 1
+I1 E -> I1 N 1
+I2 E-> I2 N 1
+G Z -> G Y 1
+L Y -> L Z 1
+E Y -> E Z 1
+
+X1 2
+X2 6
