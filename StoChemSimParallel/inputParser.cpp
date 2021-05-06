@@ -14,7 +14,7 @@ bool gpuDecoderPrototype::decode(string iFile) {
     ifstream inputFile;
     inputFile.open(iFile);
     if (!inputFile) {
-        cerr << "Unable to open file";
+        cout << "Unable to open file" << endl;
         exit(1);   // call system to stop
     }
 

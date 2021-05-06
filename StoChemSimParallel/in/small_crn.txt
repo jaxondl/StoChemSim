@@ -1,0 +1,9 @@
+# computes the maximum funtion max(a, b)
+4 1
+X1 -> Y L1 1
+X2 -> Y L2 1
+L1 L2 -> K 1
+K Y -> 0 1
+
+X1 3
+X2 5

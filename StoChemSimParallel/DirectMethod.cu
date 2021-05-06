@@ -191,7 +191,10 @@ __host__ void directMethod(int* state_change_matrix, double* rrc_vector, int* co
 	}
 
 	// build full list of copy indices for --partial-copy
-	thrust::host_vector<int> h_full_pci = build_full_pci(pci, s);
+	thrust::host_vector<int> h_full_pci;
+	if (partial) {
+		h_full_pci = build_full_pci(pci, s);
+	}
 
 	// Move input data to device
 	thrust::device_vector<int> scm(state_change_matrix, state_change_matrix + n * m);
@@ -318,7 +321,7 @@ __host__ void directMethod(int* state_change_matrix, double* rrc_vector, int* co
 			save_config("out/config0_" + timestamp + fext, std::vector<int>(h_partial_confmat.begin(), h_partial_confmat.end()));
 		}
 		else {
-			save_config("out/config0_" + timestamp + fext, std::vector<int>(state_change_matrix, state_change_matrix + s * n));
+			save_config("out/config0_" + timestamp + fext, std::vector<int>(h_confmat.begin(), h_confmat.end()));
 		}
 
 		if (!states_only) {

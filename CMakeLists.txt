@@ -1,8 +1,19 @@
-cmake_minimum_required(VERSION 3.13)
-project(SeniorDesign)
+# Root CMakeLists
+cmake_minimum_required(VERSION 3.9)
+project(StoChemSim LANGUAGES CXX)
+
+option(TARGET_CUDA "Compile CUDA code" ON)
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(SeniorDesign StoChemSimSequential/driverBTL.cpp StoChemSimSequential/directMethodSSA/directMethodSSA.cpp StoChemSimSequential/directMethodSSA/directMethodSSA.h StoChemSimSequential/common/decoder.cpp
-        StoChemSimSequential/common/decoder.h StoChemSimSequential/directMethodSSA/dependencyGraph.cpp StoChemSimSequential/directMethodSSA/dependencyGraph.h StoChemSimSequential/directMethodSSA/reactionTree.cpp StoChemSimSequential/directMethodSSA/reactionTree.h
-        StoChemSimSequential/common/inputVerifier.cpp StoChemSimSequential/common/inputVerifier.h StoChemSimParallel/common/gpuDecoder.cpp StoChemSimParallel/common/gpuDecoder.h StoChemSimSequential/boundedTauLeaping/boundedTauLeaping.h StoChemSimSequential/boundedTauLeaping/boundedTauLeaping.cpp)
+add_subdirectory(StoChemSimSequential)
+message("Found Boost .lib direcetory at ${Boost_INCLUDE_DIR}/stage/lib/")
+link_directories("${Boost_INCLUDE_DIR}/stage/lib/")
+
+if(TARGET_CUDA)
+	enable_language(CUDA)
+	message("Found CUDA includes at $ENV{CUDA_PATH}/include")
+	include_directories("$ENV{CUDA_PATH}/include")
+	add_subdirectory(StoChemSimParallel)
+endif()

@@ -6,8 +6,7 @@
 #include <fstream>
 #include <boost/program_options.hpp>
 
-// Macro sets status to new status only if new status > status (ERROR > WARNING > ALERT)
-#define priority(status, new_status) ((status==NULL || (status == ALERT && new_status == ALERT) || (status != ERROR && new_status == WARNING)) ? new_status : status)
+
 
 namespace po = boost::program_options;
 

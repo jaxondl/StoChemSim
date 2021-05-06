@@ -48,7 +48,6 @@ __global__ void updatePropsKernel(int s, int n, int m, int max_reactants, int* s
 	int rid = blockIdx.x * blockDim.x + threadIdx.x;
 
 	if (rid < m) {
-		int sim = blockIdx.y; // gid / m;
 		int reaction_num = rid; // gid % m;
 		int reactants_starting_idx = reaction_num * max_reactants * 2;
 		double propensity = reaction_rates[reaction_num];
