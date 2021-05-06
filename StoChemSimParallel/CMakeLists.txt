@@ -1,11 +1,4 @@
 # Parallel CMakeLists
-#include(FindCUDA)
-
-# Gencode parameters based on system
-#cuda_select_nvcc_arch_flags(CUDA_ARCH_FLAGS_TMP Auto)
-#set(CUDA_ARCH_FLAGS ${CUDA_ARCH_FLAGS_TMP} CACHE STRING "CUDA -gencode parameters")
-#string(REPLACE ";" " " CUDA_ARCH_FLAGS_STR "${CUDA_ARCH_FLAGS}")
-#set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} ${CUDA_ARCH_FLAGS_STR}")
 
 add_library(gpu_ssa STATIC
 			cudaUtils.cpp
@@ -24,6 +17,7 @@ add_library(gpu_ssa STATIC
 
 # Find boost and thrust (bundled with CUDA)
 find_package(Boost REQUIRED)
+message("Found Boost include directories at ${Boost_INCLUDE_DIR}")
 include_directories(${Boost_INCLUDE_DIR})
 
 find_package(Thrust REQUIRED CONFIG)
@@ -44,6 +38,6 @@ set_property(TARGET stochemsim_gpu PROPERTY CUDA_ARCHITECTURES 61)
 
 target_include_directories(stochemsim_gpu PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-link_directories(${Boost_INCLUDE_DIR}/stage/lib/)
+link_directories("${Boost_INCLUDE_DIR}/stage/lib/")
 target_link_libraries(stochemsim_gpu gpu_ssa Thrust ${CUDA_curand_LIBRARY})
 target_link_libraries(gpu_ssa Thrust)
