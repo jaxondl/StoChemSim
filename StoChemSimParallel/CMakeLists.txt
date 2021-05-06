@@ -16,7 +16,7 @@ add_library(gpu_ssa STATIC
 			)
 
 # Find boost and thrust (bundled with CUDA)
-find_package(Boost REQUIRED)
+find_package(Boost 1.75.0 REQUIRED)
 message("Found Boost include directories at ${Boost_INCLUDE_DIR}")
 include_directories(${Boost_INCLUDE_DIR})
 

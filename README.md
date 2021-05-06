@@ -29,7 +29,11 @@ For BTL, enter the following command: g++ =std=c++11 driverBTL.cpp ./common/\*.c
 Example: ./a.out ./inputs/large_crn.txt ./output.txt 0 -fo
 
 ## Parallel Command Line Tool Setup Instructions
-TODO
+**Step 1:** Download Boost version 1.75.0 and install it. Ensure that Boost's root is on your system's PATH variable.
+
+**Step 2:** Download CUDA v11.2 and install it. Ensure that CUDA's root directory is given as CUDA_PATH in your system variables.
+
+**Step 3:** Ensure that TARGET_CUDA is set to ON and then build with CMake.
 
 ## Contributors
 
