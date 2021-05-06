@@ -41,3 +41,6 @@ target_include_directories(stochemsim_gpu PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 link_directories("${Boost_INCLUDE_DIR}/stage/lib/")
 target_link_libraries(stochemsim_gpu gpu_ssa Thrust ${CUDA_curand_LIBRARY})
 target_link_libraries(gpu_ssa Thrust)
+
+file(COPY "${CMAKE_CURRENT_SOURCE_DIR}/banner_logo.txt"
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
