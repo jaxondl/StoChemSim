@@ -31,14 +31,14 @@ thrust_create_target(Thrust)
 
 # Set seperable compilation on the library and the executable
 set_target_properties(gpu_ssa PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
-set_target_properties(gpu_ssa PROPERTIES CUDA_ARCHITECTURES 70-real)
+set_target_properties(gpu_ssa PROPERTIES CUDA_ARCHITECTURES 61)
 
 # Tell CMake to compile Main with NVCC so that thrust can be compiled.
 # set_source_files_properties(Main.cpp PROPERTIES LANGUAGE CUDA)
 add_executable(stochemsim_gpu Main.cpp)
 
 set_property(TARGET stochemsim_gpu PROPERTY CUDA_SEPARABLE_COMPILATION ON)
-set_property(TARGET stochemsim_gpu PROPERTY CUDA_ARCHITECTURES 70-real)
+set_property(TARGET stochemsim_gpu PROPERTY CUDA_ARCHITECTURES 61)
 
 # Link the boost, thrust (in CUDA), and in-house libraries to the executable
 

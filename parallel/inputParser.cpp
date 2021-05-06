@@ -58,7 +58,6 @@ bool gpuDecoderPrototype::decode(string iFile) {
         //cout << "numReactions is " << numReactions << endl;
     }
 
-    cout << "Got here" << endl;
     this->numberOfReactions = 0;
     for (int r = 0; r < numReactions; r++) {
         reactionNumber++;
@@ -171,7 +170,6 @@ bool gpuDecoderPrototype::decode(string iFile) {
 
     } // done checking reaction definitions now
 
-    cout << "Got here" << endl;
     //next check the initial population sizes
     for (string x : this->listOfSpecies) {
         this->populationSizes.push_back(0); //these 2 vectors should be the same length,
@@ -192,7 +190,6 @@ bool gpuDecoderPrototype::decode(string iFile) {
         }
     }
 
-    cout << "Got here" << endl;
     // The remaining lines should define molecule populations
     while (inputFile.peek() != EOF) { // check all remaining lines
         //cout << "Now checking line " << lineNumber << endl;
@@ -249,7 +246,6 @@ bool gpuDecoderPrototype::decode(string iFile) {
 
     }
 
-    cout << "Got here" << endl;
     inputFile.close(); //done parsing and creating the needed data structures
 
 //    cout << "List of species:" << endl;
