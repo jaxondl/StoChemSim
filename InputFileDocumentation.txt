@@ -1,0 +1,62 @@
+Pre-data Lines
+Before the first line of input, any number of lines can appear, but they must all be fully commented lines, except for up to 3 completely blank lines. No non-comment text can appear on these lines at all.
+
+First Line
+The first non-comment line of the input file will contain exactly 1 number. This number refers to the total number of reactions defined in the system, meaning there will be exactly that many lines below the first line that each define 1 reaction (forwards-only or reversible), and any lines below those lines will define the starting population sizes. This number should be an integer with no decimal.
+
+Reaction Definition Lines
+The next lines each define a reaction by specifying its reactants, productions, and reaction rate (two reaction rates if the reaction is reversible).
+
+To specify a single reactant or product molecule, two things are required: the number of reactant/product molecules, and the name of that molecule. These two things are typed adjacent to each other, with no space in between, and the number comes first. Molecule names can include any type of character EXCEPT the pound sign (#), but must start with an alphabet character. Examples are “3b”, “438Uj0+”, or “78J[1,2]”.
+Alternatively, you can just type the name of the molecule without a number in front, in which case it will be treated as if the number 1 was in front of it. In other words, “A 2B” is equivalent to “1A 2B”.
+
+On each of these lines, the reactants are specified as described above, with a space separating each reactant. Then there should be a space, and then a “->” if the reaction is not reversible, or a “<->” if the reaction is reversible, followed by another space. Next, the products should be listed in the same manner as the reactants, with a space separating each product, and a space after the last product. Finally, there should be 1 real number if the reaction is not reversible, or 2 real numbers separated by a space if the reaction is reversible. The first number is the reaction rate of the “forward” direction of the reaction, and the second number (if any) is the reaction rate of the reverse direction of the reaction. These reaction rates can contain up to 1 decimal. A reaction rate cannot be 0.
+
+Note: If a reaction has no products, put the number 0 where its products would have been. If a reaction has no reactants, put the number 0 where its reactants would have been.
+
+Example reaction definition lines:
+2A 3B -> 4z 4.2
+438Uj0+ B <-> 3A 1.1 2.3
+0 -> 2A 3B 7
+3z -> 0 4.3
+
+Blank Lines
+After the final reaction definition line, but before the initial population lines, there can be any number of blank lines (including 0). If any of these blank lines contain a comment, then the pound symbol MUST be the first character on the line.
+
+Initial Population Lines
+The remaining lines of the document should all be initial population sizes for the molecule types. Each line should define one initial population size. Each line should begin with the name of a molecule type in the system, followed by a space, followed by an integer. Any molecules whose names exist in the reaction definition lines, but do not have a population size line, will have an initial population size of 0 by default.
+
+Example initial population lines:
+Uj0+ 22918
+B23 32000
+
+Comments
+Any line (even the blank ones between the reaction definition and initial population lines) can contain comments. To type comments, first type #, and then everything on that line after the # will be ignored by the input processor. Because of this, make sure all comments are placed after the required input information. This also means molecule names cannot include a # at all.
+
+Any line that includes a comment must have exactly 0 or 1 spaces between the # and the last non-space character that appears before the #.
+Examples:
+2A 3B -> 4Z 4.2 # reaction rate of 4.2
+Uj0+ 22918 #initial population size
+
+Faulty example:
+2A 3B -> 4Z 4.2    # this is not valid, because there is more than 1 space before the #
+
+Example Input File
+##pre-data comments
+### pre-data comments
+#Up to *three* complete empty lines (meaning no text at all, comments or otherwise) are
+#allowed before the data, like so:
+
+
+
+4 #comment
+2A 3B -> 4z 5.2 #reaction index is 0 for this reaction
+4Uj0+ B <-> 3A 1.1 2.3 #since this is a reversible reaction, its forward direction will be reaction index 1, and its reverse direction will be reaction index 2
+0 -> 2A 3B 7
+3z -> 0 4.3
+#comment
+
+#comment
+
+Uj0+ 228 #comment
+B 320

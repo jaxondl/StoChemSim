@@ -23,6 +23,8 @@ Demo notebooks can be found in the WolframNotebooks directory.
 
 **Step 2:** Run the executable. The command line arguments should be entered in the following order: executable name, input file path, output file path, tEnd, flag(s).
 
+**Note:** Information on how to format input files can be found in InputFileDocumentation.txt.
+
 Example: ./stochemsim_direct ./inputs/large_crn.txt ./output.txt 0 -fo
 
 ## Parallel Command Line Tool Setup Instructions
