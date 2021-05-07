@@ -32,12 +32,7 @@ bool inputVerifier::verifyFile(string iFile) {
         bool valid = true;
 
         lineNumber++;
-        //cout << fullReactionDefLine << endl;
         fullReactionDefLine = chopOffComments(fullReactionDefLine); //get rid of the comments, if any
-        //cout << "line without comments is <" << fullReactionDefLine << ">" << endl;
-
-        //cout << "Now checking line " << lineNumber << endl;
-        //cout << fullReactionDefLine.length() << endl;
 
         int numCompleteEmptyLinesBeforeData = 0;
 
@@ -53,26 +48,11 @@ bool inputVerifier::verifyFile(string iFile) {
                     }
                 }
                 fullReactionDefLine = chopOffComments(fullReactionDefLine);
-                //cout << "line without comments is <" << fullReactionDefLine << ">" << endl;
-                //cout << fullReactionDefLine.length() << endl;
             }
-            //cout << "line number " << lineNumber << " is the first non-empty line" << endl;
         }
 
-//        int spaceIndex = fullReactionDefLine.find(" ");
-//        if(spaceIndex == std::string::npos) {
-//            cout << "Warning: Your first non-comment line is incomplete." << endl;
-//            return false;
-//        }
-//        for (int i = 0; i < spaceIndex; i++) {
-//            reactionSlice += fullReactionDefLine.at(
-//                    i); // copy the string up to the next space (and don't include that space)
-//        } //this should be the number of reactions, an integer
-
         reactionSlice = fullReactionDefLine;
-        //cout << reactionSlice.length() << endl;
         for (int i = 0; i < reactionSlice.length(); i++) {
-            //cout << "checking index " << i << " of line " << lineNumber << " which is <" << reactionSlice.at(i) << ">" << endl;
             if (!(isdigit(reactionSlice.at(i))) && !errorExists) {
                 cout << "Warning: Your first line contains a non-int number of reactions" << endl;
                 cout << "[[" << reactionSlice << "]]" << endl;
@@ -80,31 +60,9 @@ bool inputVerifier::verifyFile(string iFile) {
                 errorExists = true;
             }
         }
-        //cout << (fullReactionDefLine.at(fullReactionDefLine.length() - 1)) << endl;
         if (valid) {
-            //cout << "number of reactions is: " << fullReactionDefLine << endl;
             numReactions = stoi(reactionSlice);
-            //cout << numReactions << endl;
         }
-
-//        reactionSlice = "";
-//        for (int i = spaceIndex + 1; i < fullReactionDefLine.length(); i++) {
-//            reactionSlice += fullReactionDefLine.at(
-//                    i); // copy the rest of the line, after the space
-//        } //now check tEnd, which can contain up to 1 decimal, and only digits otherwise
-//        int numDecimals = 0;
-//        for (int i = 0; i < reactionSlice.length(); i++) {
-//            if(reactionSlice.at(i) == '.') numDecimals++;
-//            else if (!(isdigit(reactionSlice.at(i)))) {
-//                cout << "Warning: Your first line contains an invalid tEnd value." << endl;
-//                cout << reactionSlice.at(i) << endl;
-//                errorExists = true;
-//            }
-//        }
-//        if (numDecimals > 1) {
-//            cout << "Warning: Your first line contains too many decimals in the tEnd value." << endl;
-//            errorExists = true;
-//        }
 
     } else {
         errorExists = true;
@@ -113,7 +71,6 @@ bool inputVerifier::verifyFile(string iFile) {
 
     if (errorExists) {
         inputFile.close();
-        //cout << "got here" << endl;
         if(errorExists) {
             cout << "Input file contains errors, so the SSA was not executed." << endl;
         } else {
@@ -123,8 +80,6 @@ bool inputVerifier::verifyFile(string iFile) {
         return false; //there's an error, so stop checking
     }
 
-    //cout << endl;
-
     // 2) next lines should start with a reaction definition; number of lines like this should equal the number in the firs tline
     // formatting: should contain either -> or <->
     // molecule names are separated by spaces
@@ -133,12 +88,10 @@ bool inputVerifier::verifyFile(string iFile) {
     bool alreadyWarnedAboutReactionCount = false;
     for (int r = 0; r < numReactions; r++) {
         if (!notEnoughReactionsDefined) {
-            //cout << "got here" << endl;
             if (inputFile.peek() != EOF) {
                 getline(inputFile, fullReactionDefLine);
                 bool alreadyWarnedAboutValidReactantOrProduct = false;
                 lineNumber++;
-                //cout << "Now checking line " << lineNumber << endl;
 
                 //chop off the comments, if any (denoted by the first instance of #)
                 fullReactionDefLine = chopOffComments(fullReactionDefLine);
@@ -150,10 +103,8 @@ bool inputVerifier::verifyFile(string iFile) {
                     int numReactionRates = 0;
 
                     int j = 0;
-                    //cout << "fullReactionDefLine is " << fullReactionDefLine << endl;
                     while (fullReactionDefLine.find(" ", j) !=
                            std::string::npos) { // while there is still a space in the line on or after index j
-                        //cout << "entering while loop on line 188" << endl;
                         reactionSlice = "";
                         //find the next space
                         int spaceIndex = fullReactionDefLine.find(" ", j);
@@ -161,7 +112,6 @@ bool inputVerifier::verifyFile(string iFile) {
                             reactionSlice += fullReactionDefLine.at(
                                     i); // copy the string up to the next space (and don't include that space)
                         }
-                        //cout << reactionSlice << " is about to be checked" << endl;
                         if (checkReactionSlice(reactionSlice, lineNumber, errorExists, alreadyWarnedAboutValidReactantOrProduct)) { //if there is an error
                             errorExists = true;
                             alreadyWarnedAboutValidReactantOrProduct = true;
@@ -180,7 +130,6 @@ bool inputVerifier::verifyFile(string iFile) {
 
                         //increase j until it's at the index after the space
                         j = spaceIndex + 1;
-                        //cout << j << endl;
                     }
                     //now we have reached the fencepost
                     //everything after the last space should be a reaction rate (the 2nd if the line contains "<->", or the first if it contains "->")
@@ -188,7 +137,6 @@ bool inputVerifier::verifyFile(string iFile) {
                     for (int i = j; i < fullReactionDefLine.length(); i++) {
                         reactionSlice += fullReactionDefLine.at(i); // copy the remaining characters
                     }
-                    //cout << "now checking " << reactionSlice << endl;
 
                     if (!isValidReactionRate(reactionSlice, lineNumber)) {
                         errorExists = true;
@@ -239,7 +187,6 @@ bool inputVerifier::verifyFile(string iFile) {
 
     if (errorExists) {
         inputFile.close();
-        //cout << "got here" << endl;
         if(errorExists) {
             cout << "Input file contains errors, so the SSA was not executed." << endl;
         } else {
@@ -254,12 +201,11 @@ bool inputVerifier::verifyFile(string iFile) {
 
     while (true) {
         lineNumber++;
-        //cout << "Now checking line " << lineNumber << endl;
         if (inputFile.peek() != EOF) {
             getline(inputFile, moleculeDefLine); //break if this line is not blank after removing comments
             moleculeDefLine = chopOffComments(moleculeDefLine);
             if (!moleculeDefLine.empty()) break;
-        } else { // they didn't give the initial molecule populations
+        } else {
             cout << "Warning: Your input pile doesn't provide the initial molecule populations." << endl;
             errorExists = true;
         }
@@ -270,7 +216,6 @@ bool inputVerifier::verifyFile(string iFile) {
     // formatted as follows: molecule name, then a space, then a number
     while (inputFile.peek() != EOF) { // check all remaining lines
         lineNumber++;
-        //cout << "Now checking line " << lineNumber << endl;
         if (!firstEntry) getline(inputFile, moleculeDefLine); //the first time we enter, the line has already been read
         firstEntry = false;
         moleculeDefLine = chopOffComments(moleculeDefLine);
@@ -303,7 +248,6 @@ bool inputVerifier::verifyFile(string iFile) {
                 if (!isdigit(moleculeNameOrCount.at(i))) {
                     cout << "Warning: Line " << lineNumber
                          << " contains a non-digit character in its population name or size, namely the character '" << moleculeNameOrCount.at(i) << "'." << endl;
-                    //cout << "moleculeNameOrCount is '" << moleculeNameOrCount << "'." << endl;
                     errorExists = true;
                 }
             }
@@ -317,7 +261,6 @@ bool inputVerifier::verifyFile(string iFile) {
 
     // Close the file
     inputFile.close();
-    //cout << "got here" << endl;
     if(errorExists) {
         cout << "Input file contains errors, so the SSA was not executed." << endl;
     } else {
@@ -332,8 +275,6 @@ bool inputVerifier::verifyFile(string iFile) {
 //returns true if there is an error, false if there isn't
 //only gets called on a slice that starts with a digit and contains a non-digit, non-decimal character
 bool inputVerifier::checkSingleMolecule(string molNumAndName, int lineNumber, bool errorExists) {
-
-    //cout << "Now checking " << molNumAndName << " which has length " << molNumAndName.length() << endl;
     bool anyErrors = false;
     string moleculeCount = "";
     int i = 0;
@@ -347,10 +288,8 @@ bool inputVerifier::checkSingleMolecule(string molNumAndName, int lineNumber, bo
 
     //parse until first non-digit character
     while (i < molNumAndName.length()) {
-        //cout << i << endl;
         if (isdigit(molNumAndName.at(i))) {
             moleculeCount += molNumAndName.at(i); //copy the digits into a new string (this string will be returned later)
-            //cout << "moleculeCount is now " << moleculeCount << endl;
         }
         else break;
         if (i == molNumAndName.length()) { // if the entire line was digits
@@ -361,16 +300,12 @@ bool inputVerifier::checkSingleMolecule(string molNumAndName, int lineNumber, bo
         }
         i++;
     }
-    //if (!anyErrors) cout << "number parsed successfully" << endl;
-    //i--;
-    //cout << "i is " << i << endl;
 
     string moleculeName = "";
     if (i < molNumAndName.length() && i > 0) { //at least one character remains unchecked so far, and the string started with a digit
         for (int k = i; k < molNumAndName.length(); k++) {
             moleculeName += molNumAndName.at(k); //copy the remaining letters into another string
         }
-        //cout << "moleculeName is " << moleculeName << "." << endl;
     }
 
     if (!isalpha(moleculeName.at(0))) { //molecule name MUST start with an alphabet character
@@ -379,14 +314,12 @@ bool inputVerifier::checkSingleMolecule(string molNumAndName, int lineNumber, bo
         errorExists = true;
     }
 
-    //if (!anyErrors) cout << molNumAndName << " parsed succesfully" << endl;
     return errorExists;
 }
 
 //returns true if there is an error, false if there isn't
 bool inputVerifier::checkReactionSlice(string reactionSlice, int lineNumber, bool errorExists, bool alreadyWarned) {
     //determine what type of slice this is (reactant/product, ->, <->, or reaction rate)
-    //cout << "checking reaction slice " << reactionSlice << " on line " << lineNumber << endl;
     if (reactionSlice.at(0) == 0 && reactionSlice.length() == 1) {
         //if it's just the number 0, this is fine because it's an empty reactant or product
         return false;
@@ -423,7 +356,6 @@ bool inputVerifier::isReactionRate(string reactionSlice) {
             if (containsNonDigitNonDecimal(reactionSlice)) { //it's a reactant/product definition
                 return false;
             } else { //it's a reaction rate, so it should contain up to 1 decimal and the rest digits
-                //cout << reactionSlice << " is a reaction rate" << endl;
                 return true;
             }
         }
@@ -436,7 +368,6 @@ bool inputVerifier::isReactionRate(string reactionSlice) {
 bool inputVerifier::containsNonDigitNonDecimal(string reactionSlice) {
     for (int i = 0; i < reactionSlice.length(); i++) {
         if (!(isdigit(reactionSlice.at(i))) && reactionSlice.at(i) != '.') {
-            //cout << reactionSlice.at(i) << " is not a digit or decimal." << endl;
             return true;
         }
     }
@@ -480,60 +411,3 @@ string inputVerifier::chopOffComments(string line) {
 
     return line;
 }
-
-////////////////////////////////////////////////////////////////////////////these methods aren't needed anymore
-//int checkReactionDefLine(ifstream inputFile, string reactionDefLine) {
-//    return 0;
-//}
-//
-//bool InputVerifier::checkReactantsOrProducts(string reactionDefLine, int lineNumber, bool errorExists) {
-//    //fencepost problem
-//    string moleculeDecl = "";
-//    int j = 0;
-//
-//    //reactionDefLine must end with a character
-//    if (!isalpha(reactionDefLine.at(reactionDefLine.length() - 1))) {
-//        cout << "Warning: Line " << lineNumber << " is formatted incorrectly." << endl;
-//        errorExists = true;
-//    }
-//
-//    if(!errorExists) {
-//        while (reactionDefLine.find(" ", j) != std::string::npos) { // while string contains a space at or after j
-//            //cout << "reactionDefLine in checkReactantsOrProducts is " << reactionDefLine << "." << endl;
-//
-//            while (reactionDefLine.at(j) != ' ') {
-//                moleculeDecl += reactionDefLine.at(j); //copy the line up until the first space
-//                j++;
-//            } //when this while loop gets left, j will point to a space
-//            //cout << moleculeDecl << " being checked in while loop" << endl;
-//            if(checkSingleMolecule(moleculeDecl, lineNumber, errorExists) == true) {
-//                errorExists = true;
-//            }
-//            moleculeDecl = "";
-//            //cout << "got here" << endl;
-//            j++; //j now points to the next character after the space, which should be a number
-//            if (!isdigit(reactionDefLine.at(j))) {
-//                cout << "Warning: The reactants or products in line " << lineNumber << " are formatted incorrectly."
-//                     << endl;
-//                errorExists = true;
-//                break;
-//            }
-//
-//            // while loop will repeat if there is still another space; otherwise, check the remaining characters
-//        }
-//    }
-//    if(!errorExists) {
-//        moleculeDecl = "";
-//        //cout << j << " " << reactionDefLine.length() << endl;
-//        while (j < reactionDefLine.length()) {
-//            moleculeDecl += reactionDefLine.at(j);
-//            j++;
-//        }
-//        //cout << "moleculeDecl is " << moleculeDecl << "." << endl;
-//
-//        if(checkSingleMolecule(moleculeDecl, lineNumber, errorExists) == true) {
-//            errorExists = true;
-//        } //the final molecule to check
-//    }
-//    return errorExists;
-//}
