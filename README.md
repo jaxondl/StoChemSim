@@ -23,9 +23,9 @@ Demo notebooks can be found in the WolframNotebooks directory.
 
 **Step 2:** Run the executable. The command line arguments should be entered in the following order: executable name, input file path, output file path, tEnd, flag(s).
 
-**Note:** Information on how to format input files can be found in InputFileDocumentation.txt.
-
 Example: ./stochemsim_direct ./inputs/large_crn.txt ./output.txt 0 -fo
+
+**Note:** Information on how to format input files can be found in InputFileDocumentation.txt.
 
 ## Parallel Command Line Tool Setup Instructions
 **Step 1:** Download Boost version 1.75.0 and install it. Ensure that Boost's root is on your system's PATH variable.
@@ -34,7 +34,7 @@ Example: ./stochemsim_direct ./inputs/large_crn.txt ./output.txt 0 -fo
 
 **Step 3:** Ensure that TARGET_CUDA is set to ON and then build with CMake.
 
-**TROUBLESHOOTING** You may be missing CMake configuration files for Thrust and CUB. If CMake throws an error because of this, you can find the necessary files in StoChemSimParallel/external.
+**Troubleshooting:** You may be missing CMake configuration files for Thrust and CUB. If CMake throws an error because of this, you can find the necessary files in StoChemSimParallel/external.
 
 ## Contributors
 
