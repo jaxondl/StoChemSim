@@ -8,25 +8,22 @@ Dependent on Dr. Soloveichik's CRNSimulator package.
 
 ## Wolfram Language Package Setup Instructions
 
-Installation instructions: Drop StoChemSim.wl, CRNSimulator.m, and the "StoChemSimSequential" directory in the Mathematica Applications directory.
+**Note:** requires Wolfram Mathematica version 12.
 
-This directory can be opened with "SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]" in Mathematica.
+**Installation instructions:** Drop StoChemSim.wl, CRNSimulator.m, and the "StoChemSimSequential" directory in the Mathematica Applications directory.
+This will allow the package to be loaded using "<<StoChemSim`" in Mathematica.
+
+The Mathematica Applications directory can be opened with "SystemOpen@FileNameJoin[{$UserBaseDirectory, "Applications"}]" in Mathematica.
 
 Demo notebooks can be found in the WolframNotebooks directory.
 
 ## Sequential Command Line Tool Setup Instructions
 
-**Step 1:** Using a command line front end, navigate to the StoChemSimSequential directory.
+**Step 1:** Ensure that TARGET_CUDA is set to OFF and then build with CMake.
 
-**Step 2:** Assuming C++ 11 is installed, compile the relevant .cpp files.
+**Step 2:** Run the executable. The command line arguments should be entered in the following order: executable name, input file path, output file path, tEnd, flag(s).
 
-For direct SSA, enter the following command: g++ =std=c++11 driverSSA.cpp ./common/\*.cpp ./directMethodSSA/\*.cpp
-
-For BTL, enter the following command: g++ =std=c++11 driverBTL.cpp ./common/\*.cpp ./boundedTauLeaping/\*.cpp
-
-**Step 3:** Run the executable. The command line arguments should be entered in the following order: input file path, output file path, tEnd, flag(s).
-
-Example: ./a.out ./inputs/large_crn.txt ./output.txt 0 -fo
+Example: ./stochemsim_direct ./inputs/large_crn.txt ./output.txt 0 -fo
 
 ## Parallel Command Line Tool Setup Instructions
 **Step 1:** Download Boost version 1.75.0 and install it. Ensure that Boost's root is on your system's PATH variable.
